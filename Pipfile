@@ -5,6 +5,12 @@ name = "pypi"
 
 [packages]
 spleeter = "*"
+pandas = "*"
+numpy = "*"
+pytorch = "*"
+
+[spleeter]
+pandas = "1.5.3"
 
 [dev-packages]
 
