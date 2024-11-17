@@ -1,4 +1,4 @@
-from prepare_raw_data import *
+from clean_data import *
 
 if __name__ == '__main__':
     data_dir = '../data'
@@ -9,3 +9,5 @@ if __name__ == '__main__':
     ignore_times_file_path = f'{data_dir}/ignore_times.txt'
     clean_subtitle_data_path = f'{data_dir}/subtitles_clean'
     index_file_path = f'{data_dir}/index.tsv'
+
+    split_raw_audio(raw_audio_data_path, vocal_audio_data_path)
