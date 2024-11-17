@@ -8,3 +8,5 @@ def find_segments(cleaned_subtitle_data_path: str, segments_data_path: str) -> i
 
     Returns: 0 if successful, -1 otherwise.
     """
+
+    return -1  # TODO: Implement this function
