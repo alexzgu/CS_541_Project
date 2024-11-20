@@ -184,17 +184,12 @@ def remove_hemisphere(df: pd.DataFrame) -> pd.DataFrame:
                          "but I decided not to deal with this until becomes an actual issue."
                          "I.e., now it is an issue. Please contact Alex."))
 
-    # remove the group with fewer hiragana characters, except the entries with is_overlap = False
-    # TODO: (optional) come up with a more sophisticated way to remove rows (to minimize unnecessary removals)
-
     if A_count < B_count:
-        # remove A
-        if c_belongs_with == 'A':
+        if c_belongs_with == 'A':  # remove A
             df = df[~((df['line'] >= 0) & (df['line'] < 50) & df['overlap'])]
         else:
             df = df[~((df['line'] < 50) & df['overlap'])]
-    else:
-        # remove B
+    else: # remove B
         if c_belongs_with == 'B':
             df = df[~(((df['line'] >= 50) | (df['line'] == -1)) & df['overlap'])]
         else:
