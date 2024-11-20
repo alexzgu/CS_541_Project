@@ -1,7 +1,9 @@
-import pandas as pd
 from typing import Set, List, Tuple, Dict
 from dataclasses import dataclass
 import os
+
+import pandas as pd
+import unicodedata
 
 @dataclass
 class TimeRange:
@@ -77,24 +79,16 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> pd.
     Returns: Cleaned DataFrame.
     """
     try:
-
-        # drop unformatted column
         df = df.drop(columns=['unformatted'])
+        df['cleaned_token'] = df['token'].apply(lambda x: ''.join([char for char in x if '\u3040' <= char <= '\u309F']))
 
-        df = df.sort_values(by=['start', 'end'])
+        silence_ranges = compute_silence_ranges(df)
+        df = compute_overlaps(df)
+        df = remove_hemisphere(df)
+        df = compute_overlaps(df)
 
-        df = augment_characters(df)
+        df = insert_silence_and_excluded(df)
 
-        # decide whether to remove 'top' or 'bottom' rows
-
-        # after going through the entire dataset, do the following:
-        # 1. group the aggregated rows with line>=0 by whether line>=50 or not. for rows with line=-1, lump them with the
-        #    group with the smaller total count of hiragana characters
-        # 2. find which rows have overlapping time ranges.
-        # 3. see which of the two groups has the smaller total count of hiragana characters. this group will be called group A.
-        # 4. all rows belonging group A and with overlap = True are removed from the dataset
-
-        # 5. recompute which rows have overlapping time ranges
         # 6. with the set of time ranges, insert rows with token = <silence> where there are gaps in the time ranges
         # 7. set the token of a row to <excluded> if any of the below conditions are met:
         #   - the row has overlap = True
@@ -107,6 +101,7 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> pd.
     except Exception as e:
         print(f"Error in clean_subtitles: {str(e)}")
         return pd.DataFrame()
+
 
 def get_hiragana_set() -> Set[str]:
     """Return the set of hiragana characters."""
@@ -140,10 +135,21 @@ def get_hiragana_set() -> Set[str]:
     }
 
 
-def augment_characters(df: pd.DataFrame) -> pd.DataFrame:
+def insert_silence_and_excluded(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Feature engineer the characters (e.g., remove, add, or modify characters within the tokens).
+    Args:
+        df: DataFrame containing subtitle data.
 
+    Returns: DataFrame with rows inserted for silence and excluded segments.
+    """
+
+    return df  # TODO: IMPLEMENT ME
+
+
+def remove_hemisphere(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Decides which set of rows to remove (separated by line>=50 or line<50),
+    where the removed set has fewer hiragana characters.
     Args:
         df: DataFrame containing subtitle data.
 
@@ -152,50 +158,18 @@ def augment_characters(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
 
-    # def classify_character(char):
-    #     if '\u3040' <= char <= '\u309F':
-    #         return "Japanese Hiragana"
-    #     elif '\u30A0' <= char <= '\u30FF':
-    #         return "Japanese Katakana"
-    #     elif '\u4E00' <= char <= '\u9FFF':
-    #         return "Chinese Character"
-    #     elif char.isascii() and char.isalpha():
-    #         return "English Alphabet"
-    #     elif unicodedata.category(char).startswith('P'):
-    #         return "Punctuation"
-    #     else:
-    #         return "Miscellaneous"
-    #
-
-    # remove punctuation, change 々 to repeat the previous character, etc.
-
-
-    return df
-
-
-def which_rows_to_remove(df: pd.DataFrame) -> str:
-    """
-    Args:
-        df: DataFrame containing subtitle data.
-
-    Returns: 'top' or 'bottom' depending on which rows to remove.
-    """
-
-    df = df.copy()
-
-    df['has_hiragana'] = df['hiragana'].apply(lambda x: any(c in get_hiragana_set() for c in x))
-
     A = df[df['line'] >= 50]
     B = df[(df['line'] >= 0) & (df['line'] < 50)]
     C = df[df['line'] == -1]
 
+    # deciding which group (A or B) to lump group C with
     if A.shape[0] < B.shape[0]:
         A = pd.concat([A, C])
     else:
         B = pd.concat([B, C])
 
-    A_count = A['has_hiragana'].sum()  # top
-    B_count = B['has_hiragana'].sum()  # bottom
+    A_count = A['cleaned_token'].apply(len).sum()  # top
+    B_count = B['cleaned_token'].apply(len).sum()  # bottom
 
     # if equal
     if A_count == B_count:
@@ -203,8 +177,13 @@ def which_rows_to_remove(df: pd.DataFrame) -> str:
                          "but I decided not to deal with this until becomes an actual issue."
                          "I.e., now it is an issue. Please contact Alex."))
 
-    return 'top' if A_count < B_count else 'bottom'
-
+    # remove the group with fewer hiragana characters, except the entries with is_overlap = False
+    # TODO: (optional) come up with a more sophisticated way to remove rows (to minimize unnecessary removals)
+    if A_count < B_count:
+        df = df[~((df['line'] >= 50) & df['overlap'])]
+    else:
+        df = df[~((df['line'] >= 0) & (df['line'] < 50) & df['overlap'])]
+    return df
 
 
 def compute_silence_ranges(df: pd.DataFrame) -> List[TimeRange]:
@@ -219,7 +198,7 @@ def compute_silence_ranges(df: pd.DataFrame) -> List[TimeRange]:
         The last TimeRange will have -1 as its end time.
     """
     # Sort by start time and reset index to ensure proper ordering
-    df = df.sort_values('start').reset_index(drop=True)
+    df = df.sort_values(['start', 'end']).reset_index(drop=True)
 
     # Initialize result list
     silence_ranges = []
