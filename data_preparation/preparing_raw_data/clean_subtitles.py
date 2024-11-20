@@ -24,10 +24,12 @@ def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle
     # iterates through files in the raw_subtitle_data_path
     for file in os.listdir(raw_subtitle_dir):
         if file.endswith(".csv"):
-            time_ranges_to_ignore = read_ignore_times(os.path.join(ignore_times_dir, f"{file}.csv"))
+            time_ranges_to_ignore = read_ignore_times(os.path.join(ignore_times_dir, f"{file[:-4]}.txt"))
             raw_subtitles = pd.read_csv(os.path.join(raw_subtitle_dir, file))
             cleaned_subtitles = clean_subtitles_file(raw_subtitles, time_ranges_to_ignore)
             cleaned_subtitles.to_csv(os.path.join(clean_subtitle_dir, file), index=False)
+            if cleaned_subtitles.empty:
+                print(f"Error cleaning subtitle file: {file}")
             return 0  # testing only one file for now
 
     return -1 # TODO: IMPLEMENT
@@ -81,11 +83,11 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> pd.
     try:
         df = df.drop(columns=['unformatted'])
         df['cleaned_token'] = df['token'].apply(lambda x: ''.join([char for char in x if '\u3040' <= char <= '\u309F']))
-
         silence_ranges = compute_silence_ranges(df)
-        df = compute_overlaps(df)
+        df['overlap'] = compute_overlaps(df)
         df = remove_hemisphere(df)
-        df = compute_overlaps(df)
+        # df = df.drop(columns=['line'])  # TODO: uncomment this
+        df['overlap'] = compute_overlaps(df)
 
         df = insert_silence_and_excluded(df)
 
@@ -158,15 +160,20 @@ def remove_hemisphere(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
 
-    A = df[df['line'] >= 50]
-    B = df[(df['line'] >= 0) & (df['line'] < 50)]
+    A = df[(df['line'] >= 0) & (df['line'] < 50)]
+    B = df[df['line'] >= 50]
     C = df[df['line'] == -1]
 
     # deciding which group (A or B) to lump group C with
+
+    c_belongs_with = None
+
     if A.shape[0] < B.shape[0]:
         A = pd.concat([A, C])
+        c_belongs_with = 'A'
     else:
         B = pd.concat([B, C])
+        c_belongs_with = 'B'
 
     A_count = A['cleaned_token'].apply(len).sum()  # top
     B_count = B['cleaned_token'].apply(len).sum()  # bottom
@@ -179,11 +186,21 @@ def remove_hemisphere(df: pd.DataFrame) -> pd.DataFrame:
 
     # remove the group with fewer hiragana characters, except the entries with is_overlap = False
     # TODO: (optional) come up with a more sophisticated way to remove rows (to minimize unnecessary removals)
+
     if A_count < B_count:
-        df = df[~((df['line'] >= 50) & df['overlap'])]
+        # remove A
+        if c_belongs_with == 'A':
+            df = df[~((df['line'] >= 0) & (df['line'] < 50) & df['overlap'])]
+        else:
+            df = df[~((df['line'] < 50) & df['overlap'])]
     else:
-        df = df[~((df['line'] >= 0) & (df['line'] < 50) & df['overlap'])]
-    return df
+        # remove B
+        if c_belongs_with == 'B':
+            df = df[~(((df['line'] >= 50) | (df['line'] == -1)) & df['overlap'])]
+        else:
+            df = df[~((df['line'] >= 50) & df['overlap'])]
+
+    return df.reset_index(drop=True)
 
 
 def compute_silence_ranges(df: pd.DataFrame) -> List[TimeRange]:
@@ -224,7 +241,7 @@ def compute_silence_ranges(df: pd.DataFrame) -> List[TimeRange]:
     return silence_ranges
 
 
-def compute_overlaps(df):
+def compute_overlaps(df) -> pd.Series:
     """
     Compute overlapping subtitle segments in a DataFrame.
 
