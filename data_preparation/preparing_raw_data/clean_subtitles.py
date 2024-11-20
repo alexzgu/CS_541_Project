@@ -1,9 +1,7 @@
-from typing import Set, List, Tuple, Dict
+from typing import Set, List
 from dataclasses import dataclass
 import os
-
 import pandas as pd
-import unicodedata
 
 @dataclass
 class TimeRange:
@@ -84,12 +82,14 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> pd.
         df = df.drop(columns=['unformatted'])
         df['cleaned_token'] = df['token'].apply(lambda x: ''.join([char for char in x if '\u3040' <= char <= '\u309F']))
         silence_ranges = compute_silence_ranges(df)
+
         df['overlap'] = compute_overlaps(df)
         df = remove_hemisphere(df)
-        # df = df.drop(columns=['line'])  # TODO: uncomment this
-        df['overlap'] = compute_overlaps(df)
+        df = df.drop(columns=['line'])  # TODO: uncomment this
 
-        df = insert_silence_and_excluded(df)
+        df['overlap'] = compute_overlaps(df)
+        df = df[~df['overlap']]
+        df = insert_silence_and_excluded(df, ignore_times, silence_ranges)
 
         # 6. with the set of time ranges, insert rows with token = <silence> where there are gaps in the time ranges
         # 7. set the token of a row to <excluded> if any of the below conditions are met:
@@ -137,10 +137,12 @@ def get_hiragana_set() -> Set[str]:
     }
 
 
-def insert_silence_and_excluded(df: pd.DataFrame) -> pd.DataFrame:
+def insert_silence_and_excluded(df: pd.DataFrame, ig_times: List[TimeRange], sil_times: List[TimeRange]) -> pd.DataFrame:
     """
     Args:
         df: DataFrame containing subtitle data.
+        ig_times: List of TimeRange objects representing time ranges to ignore.
+        sil_times: List of TimeRange objects representing silent periods.
 
     Returns: DataFrame with rows inserted for silence and excluded segments.
     """
@@ -165,8 +167,6 @@ def remove_hemisphere(df: pd.DataFrame) -> pd.DataFrame:
     C = df[df['line'] == -1]
 
     # deciding which group (A or B) to lump group C with
-
-    c_belongs_with = None
 
     if A.shape[0] < B.shape[0]:
         A = pd.concat([A, C])
