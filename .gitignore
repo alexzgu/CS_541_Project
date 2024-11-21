@@ -1,4 +1,4 @@
 .idea/
 *.pyc
 
-data/clean/audio/
+data/processed/audio/
