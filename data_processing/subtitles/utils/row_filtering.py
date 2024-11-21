@@ -36,13 +36,14 @@ def remove_hemisphere(df: pd.DataFrame) -> pd.DataFrame:
                          "I.e., now it is an issue. Please contact Alex."))
 
     if A_count < B_count:
+        print("A less than B")
         if c_belongs_with == 'A':  # remove A
-            df = df[~((df['line'] >= 0) & (df['line'] < 50) & df['overlap'])]
+            df = df[~((df['line'] < 50) & df['overlap'])]  # also remove C
         else:
-            df = df[~((df['line'] < 50) & df['overlap'])]
+            df = df[~((df['line'] >= 0) & (df['line'] < 50) & df['overlap'])]
     else: # remove B
         if c_belongs_with == 'B':
-            df = df[~(((df['line'] >= 50) | (df['line'] == -1)) & df['overlap'])]
+            df = df[~(((df['line'] >= 50) | (df['line'] == -1)) & df['overlap'])]  # also remove C
         else:
             df = df[~((df['line'] >= 50) & df['overlap'])]
 

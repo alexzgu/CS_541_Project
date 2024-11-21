@@ -10,6 +10,7 @@ if __name__ == '__main__':
     ignore_times_path = f'{raw_subtitles_dir}/clips_to_exclude'
     index_file_path = f'{raw_subtitles_dir}/index.tsv'
 
+
     print("Cleaning raw subtitle data...")
     clean_subtitles(raw_subtitles_path, ignore_times_path, clean_subtitles_path)
     print("Cleaned subtitle data.")
