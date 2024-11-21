@@ -2,13 +2,13 @@ from data_processing.clean_subtitles import clean_subtitles
 
 if __name__ == '__main__':
     data_dir = '../data'
-
+    clean_subtitles_path = f'{data_dir}/clean/subtitles/subtitle_files'
+    tokens_file_path = f'{data_dir}/config/tokens.txt'
+    
     raw_subtitles_dir = f'{data_dir}/raw/subtitles'
     raw_subtitles_path = f'{raw_subtitles_dir}/subtitle_files'
     ignore_times_path = f'{raw_subtitles_dir}/clips_to_exclude'
     index_file_path = f'{raw_subtitles_dir}/index.tsv'
-
-    clean_subtitles_path = f'{data_dir}/clean/subtitles/subtitle_files'
 
 
     print("Cleaning raw subtitle data...")

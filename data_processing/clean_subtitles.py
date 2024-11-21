@@ -105,36 +105,21 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> pd.
         return pd.DataFrame()
 
 
-def get_hiragana_set() -> Set[str]:
-    """Return the set of hiragana characters."""
-    return {
-        'あ', 'い', 'う', 'え', 'お',
-        'か', 'き', 'く', 'け', 'こ',
-        'さ', 'し', 'す', 'せ', 'そ',
-        'た', 'ち', 'つ', 'て', 'と',
-        'な', 'に', 'ぬ', 'ね', 'の',
-        'は', 'ひ', 'ふ', 'へ', 'ほ',
-        'ま', 'み', 'む', 'め', 'も',
-        'や', 'ゆ', 'よ',
-        'ら', 'り', 'る', 'れ', 'ろ',
-        'わ', 'を', 'ん',
-        'が', 'ぎ', 'ぐ', 'げ', 'ご',
-        'ざ', 'じ', 'ず', 'ぜ', 'ぞ',
-        'だ', 'ぢ', 'づ', 'で', 'ど',
-        'ば', 'び', 'ぶ', 'べ', 'ぼ',
-        'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ',
-        'きゃ', 'きゅ', 'きょ',
-        'しゃ', 'しゅ', 'しょ',
-        'ちゃ', 'ちゅ', 'ちょ',
-        'にゃ', 'にゅ', 'にょ',
-        'ひゃ', 'ひゅ', 'ひょ',
-        'みゃ', 'みゅ', 'みょ',
-        'りゃ', 'りゅ', 'りょ',
-        'ぎゃ', 'ぎゅ', 'ぎょ',
-        'じゃ', 'じゅ', 'じょ',
-        'びゃ', 'びゅ', 'びょ',
-        'ぴゃ', 'ぴゅ', 'ぴょ',
-    }
+def get_tokens(tokens_path: str) -> Set[str]:
+    """
+    Args:
+        tokens_path: Path to .txt file containing tokens.
+
+    Returns: Set of tokens.
+    """
+
+    with open(tokens_path, 'r') as file:
+        data = file.read()
+
+    data = data.replace(' ', '').replace('\t', '')
+    data = data.split(',')
+
+    return set(data)
 
 
 def insert_silence_and_excluded(df: pd.DataFrame, ig_times: List[TimeRange], sil_times: List[TimeRange]) -> pd.DataFrame:
