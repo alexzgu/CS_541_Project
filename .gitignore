@@ -1,4 +1,4 @@
 .idea/
-/data/raw/audio_raw
-/data/song_vocals
 *.pyc
+
+data/clean/audio/
