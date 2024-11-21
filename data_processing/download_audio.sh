@@ -13,8 +13,8 @@ fi
 #fi
 
 # Input TSV file and download directory
-TSV_FILE="../data/index.tsv"
-DOWNLOAD_DIR="../data/raw/audio_raw"
+TSV_FILE="../data/raw/subtitles/index.tsv"
+DOWNLOAD_DIR="../data/raw/audio"
 
 # Ensure the download directory exists
 if [ ! -d "$DOWNLOAD_DIR" ]; then
