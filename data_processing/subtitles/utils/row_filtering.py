@@ -73,4 +73,4 @@ def compute_overlaps(df) -> pd.Series:
             is_overlap[j] = True
             j += 1
 
-    return pd.Series(is_overlap)
+    return pd.Series(is_overlap, dtype=bool)

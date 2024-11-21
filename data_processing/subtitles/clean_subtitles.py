@@ -7,28 +7,29 @@ from data_processing.subtitles.utils.time_ranges import TimeRange, read_ignore_t
 from data_processing.subtitles.utils.row_filtering import remove_hemisphere, compute_overlaps
 from data_processing.subtitles.utils.tokens import get_tokens
 
-def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle_dir: str) -> int:
+
+def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle_dir: str):
     """
     Args:
         raw_subtitle_dir: Directory containing raw subtitle data.
         ignore_times_dir: Directory containing time ranges to ignore.
         clean_subtitle_dir: Directory to store the cleaned subtitle data.
-
-    Returns: 0 if successful, -1 otherwise.
     """
 
     # iterates through files in the raw_subtitle_data_path
     for file in os.listdir(raw_subtitle_dir):
         if file.endswith(".csv"):
-            time_ranges_to_ignore = read_ignore_times(os.path.join(ignore_times_dir, f"{file[:-4]}.txt"))
-            raw_subtitles = pd.read_csv(os.path.join(raw_subtitle_dir, file))
+            ignore_times_file = os.path.join(ignore_times_dir, f"{file[:-4]}.txt")
+            raw_subtitles_file = os.path.join(raw_subtitle_dir, file)
+            cleaned_subtitles_file = os.path.join(clean_subtitle_dir, file)
+
+            time_ranges_to_ignore = read_ignore_times(ignore_times_file)
+            raw_subtitles = pd.read_csv(raw_subtitles_file)
             cleaned_subtitles = clean_subtitles_file(raw_subtitles, time_ranges_to_ignore)
-            cleaned_subtitles.to_csv(os.path.join(clean_subtitle_dir, file), index=False)
+            cleaned_subtitles.to_csv(cleaned_subtitles_file, index=False)
+
             if cleaned_subtitles.empty:
                 print(f"Error cleaning subtitle file: {file}")
-            return 0  # testing only one file for now
-
-    return -1 # TODO: IMPLEMENT
 
 
 def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> pd.DataFrame:
