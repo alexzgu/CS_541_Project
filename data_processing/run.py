@@ -1,4 +1,4 @@
-from data_preparation.clean_subtitles import clean_subtitles
+from data_processing.clean_subtitles import clean_subtitles
 
 if __name__ == '__main__':
     data_dir = '../data'
