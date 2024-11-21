@@ -279,7 +279,7 @@ start,end,token,cleaned_token,overlap
 92.776,92.91,べ,べ,False
 92.91,93.077,き,き,False
 93.077,93.243,は,は,False
-93.243,93.41,ー,,False
+93.243,93.41,ー,ー,False
 93.41,93.577,ど,ど,False
 93.577,93.744,る,る,False
 93.744,94.244,が,が,False

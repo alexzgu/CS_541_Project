@@ -13,7 +13,7 @@ start,end,token,cleaned_token,overlap
 10.761,11.662,え,え,False
 11.662,12.563,ぴ,ぴ,False
 12.563,14.431,ろ,ろ,False
-14.431,15.399,ー,,False
+14.431,15.399,ー,ー,False
 15.399,15.899,ぐ,ぐ,False
 47.931,48.198,し,し,False
 48.198,48.499,ず,ず,False

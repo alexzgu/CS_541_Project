@@ -96,7 +96,7 @@ start,end,token,cleaned_token,overlap
 49.867,50.2,が,が,False
 50.2,50.801,ら,ら,False
 50.801,50.968,げ,げ,False
-50.968,51.135,ー,,False
+50.968,51.135,ー,ー,False
 51.135,51.301,む,む,False
 51.301,51.635,を,を,False
 51.635,52.436,し,し,False
@@ -207,7 +207,7 @@ start,end,token,cleaned_token,overlap
 85.002,85.469,く,く,False
 85.469,85.636,る,る,False
 85.636,86.57,よ,よ,False
-95.245,96.213,せーっ,せっ,False
+95.245,96.213,せーっ,せーっ,False
 96.213,96.513,の！,の,False
 96.513,96.98,で,で,False
 96.98,97.514,か,か,False

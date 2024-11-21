@@ -28,7 +28,7 @@ start,end,token,cleaned_token,overlap
 5.556,5.756,し,し,False
 5.756,6.223,て,て,False
 6.223,6.523,いっ,いっ,False
-6.523,6.89,せー,せ,False
+6.523,6.89,せー,せー,False
 6.89,7.458,の、,の,False
 7.458,7.958,せ！,せ,False
 14.898,15.032,ま,ま,False

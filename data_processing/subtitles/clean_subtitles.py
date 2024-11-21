@@ -3,9 +3,9 @@ import os
 
 import pandas as pd
 
+from data_processing.subtitles.utils.character_filtering import to_kana
 from data_processing.subtitles.utils.time_ranges import TimeRange, read_ignore_times, compute_silence_ranges
 from data_processing.subtitles.utils.row_filtering import remove_hemisphere, compute_overlaps
-from data_processing.subtitles.utils.tokens import get_tokens
 
 
 def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle_dir: str):
@@ -42,15 +42,17 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> pd.
     """
     try:
         df = df.drop(columns=['unformatted'])
-        df['cleaned_token'] = df['token'].apply(lambda x: ''.join([char for char in x if '\u3040' <= char <= '\u309F']))
+        df['cleaned_token'] = df['token'].apply(lambda x: to_kana(x))
         silence_ranges = compute_silence_ranges(df)
 
         df['overlap'] = compute_overlaps(df)
         df = remove_hemisphere(df)
-        df = df.drop(columns=['line'])  # TODO: uncomment this
+        df = df.drop(columns=['line'])
+        df['cleaned_token'] = df['token'].apply(lambda x: to_kana(x, include_katakana=True))
 
         df['overlap'] = compute_overlaps(df)
         df = df[~df['overlap']]
+
         df = insert_silence_and_excluded(df, ignore_times, silence_ranges)
 
         # 6. with the set of time ranges, insert rows with token = <silence> where there are gaps in the time ranges
