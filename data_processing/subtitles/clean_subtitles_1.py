@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 from data_processing.subtitles.utils.character_filtering import to_kana
-from data_processing.subtitles.utils.time_ranges import TimeRange, read_ignore_times, compute_silence_ranges
+from data_processing.subtitles.utils.time_ranges import TimeRange, read_time_range_data, compute_silence_ranges
 from data_processing.subtitles.utils.row_filtering import remove_hemisphere, compute_overlaps
 
 
@@ -26,7 +26,7 @@ def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle
             raw_subtitles_file = os.path.join(raw_subtitle_dir, file)
             cleaned_subtitles_file = os.path.join(clean_subtitle_dir, file)
 
-            time_ranges_to_ignore = read_ignore_times(ignore_times_file)
+            time_ranges_to_ignore = read_time_range_data(ignore_times_file)
             raw_subtitles = pd.read_csv(raw_subtitles_file)
             cleaned_subtitles, silence_ranges = clean_subtitles_file(raw_subtitles, time_ranges_to_ignore)
             cleaned_subtitles.to_csv(cleaned_subtitles_file, index=False)
@@ -42,10 +42,10 @@ def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle
 
                 with open(silence_file, 'w') as f:
                     for time_range in silence_ranges:
-                        f.write(f"{time_range.start}:{time_range.end}\n")
+                        f.write(f"{time_range.start}:{time_range.end},")
                 with open(ignore_file, 'w') as f:
                     for time_range in time_ranges_to_ignore:
-                        f.write(f"{time_range.start}:{time_range.end}\n")
+                        f.write(f"{time_range.start}:{time_range.end},")
 
 
 def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> (pd.DataFrame, List[TimeRange]):

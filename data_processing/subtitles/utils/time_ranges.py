@@ -10,17 +10,18 @@ class TimeRange:
     end: float
 
 
-def read_ignore_times(ignore_times_file_path: str) -> List[TimeRange]:
+def read_time_range_data(text_file_dir: str) -> List[TimeRange]:
     """
-    Reads the ignore_times data from the ignore_times_file_path.
+    Reads the time range data from the given text file.
     Args:
-        ignore_times_file_path: Path to file containing time ranges to ignore.
+        text_file_dir: Path to file containing time range data. Between time ranges is comma-separated,
+        and within each time range is colon-separated.
 
     Returns: List of TimeRange objects.
     """
 
     # read in text file as a single string
-    with open(ignore_times_file_path, 'r') as file:
+    with open(text_file_dir, 'r') as file:
         data = file.read()
 
     # remove whitespace and tabs
