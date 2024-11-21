@@ -1,4 +1,4 @@
-from data_processing.subtitles.clean_subtitles import clean_subtitles
+from data_processing.subtitles.clean_subtitles_1 import clean_subtitles
 
 if __name__ == '__main__':
     data_dir = '../data'
@@ -10,7 +10,9 @@ if __name__ == '__main__':
     ignore_times_path = f'{raw_subtitles_dir}/clips_to_exclude'
     index_file_path = f'{raw_subtitles_dir}/index.tsv'
 
+    stage_1_dir = f'{data_dir}/processed/subtitles/stage_1'
 
     print("Cleaning raw subtitle data...")
-    clean_subtitles(raw_subtitles_path, ignore_times_path, clean_subtitles_path)
+    clean_subtitles(raw_subtitles_path, ignore_times_path, f'{stage_1_dir}/subtitle_files',
+                    output_intermediates=True, intermediate_dir=f'{stage_1_dir}/time_ranges')
     print("Cleaned subtitle data.")
