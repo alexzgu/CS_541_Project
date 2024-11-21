@@ -1,7 +1,9 @@
 import os
-
 from spleeter.separator import Separator
 
+# NOTE: YOU CAN SWAP THIS OUT FOR THE OTHER OFF-THE-SHELF
+# OPTION YOU ARE CURRENTLY WORKING WITH;
+# I'm just putting this here to show what has been done already
 
 def split_raw_audio(raw_audio_data_path: str, vocal_audio_data_path: str) -> int:
     """

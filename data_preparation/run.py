@@ -1,5 +1,4 @@
-from data_preparation.preparing_raw_data.split_audio import split_raw_audio
-from data_preparation.preparing_raw_data.clean_subtitles import clean_subtitles, read_ignore_times
+from data_preparation.clean_subtitles import clean_subtitles
 
 if __name__ == '__main__':
     data_dir = '../data'
