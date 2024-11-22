@@ -1,5 +1,5 @@
 start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
-0.0,21.839,<silence>,<silence>,False,True,False,False,True
+0.0,21.839,<silence>,<ignore>,False,True,False,False,True
 21.839,22.406,も,も,False,False,False,False,False
 22.406,23.04,ど,ど,False,False,False,False,False
 23.04,23.607,ら,ら,False,False,False,False,False
@@ -156,8 +156,8 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 105.589,105.823,の,の,False,False,False,False,False
 105.823,106.156,な,な,False,False,False,False,False
 106.156,107.091,か,か,False,False,False,False,False
-107.091,124.0,<silence>,<silence>,False,False,False,False,False
-124.0,125.075,<silence>,<ignore>,False,True,False,False,True
+107.091,124.0,<silence>,<ignore>,False,True,False,False,True
+124.0,125.075,<silence>,<silence>,False,False,False,False,False
 125.075,125.375,よ,よ,False,False,False,False,False
 125.375,125.876,ぎ,ぎ,False,False,False,False,False
 125.876,126.376,る,る,False,False,False,False,False

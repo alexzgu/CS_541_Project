@@ -439,7 +439,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 153.337,153.504,せ,せ,False,False,False,False,False
 153.504,153.637,て!,て,False,True,False,False,True
 153.637,154.037,ね?,ね,False,True,False,False,True
-154.037,154.571,<silence>,<silence>,False,True,False,False,True
+154.037,154.571,<silence>,<ignore>,False,True,False,False,True
 154.571,154.705,は,は,False,True,False,False,True
 154.705,154.838,な,な,False,True,False,False,True
 154.838,155.005,し,し,False,True,False,False,True
@@ -540,8 +540,8 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 179.163,179.396,ぜ,ぜ,False,False,False,False,False
 179.396,179.563,ん,ん,False,False,False,False,False
 179.563,180.797,と,と,False,False,False,False,False
-180.797,198.0,<silence>,<ignore>,False,True,False,False,True
-198.0,198.215,<silence>,<silence>,False,False,False,False,False
+180.797,198.0,<silence>,<silence>,False,False,False,False,False
+198.0,198.215,<silence>,<ignore>,False,True,False,False,True
 198.215,198.382,「な,な,False,True,False,False,True
 198.382,198.549,ん,ん,False,True,False,False,True
 198.549,198.682,と,と,False,True,False,False,True

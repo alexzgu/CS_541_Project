@@ -377,7 +377,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 137.054,137.254,う,う,False,False,False,False,False
 137.254,137.421,ひ,ひ,False,False,False,False,False
 137.421,138.322,と,と,False,False,False,False,False
-138.322,149.433,<silence>,<silence>,False,True,False,False,True
+138.322,149.433,<silence>,<ignore>,False,True,False,False,True
 149.433,149.6,ひ,ひ,False,False,False,False,False
 149.6,149.766,と,と,False,False,False,False,False
 149.766,149.9,ひ,ひ,False,False,False,False,False

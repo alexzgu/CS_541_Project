@@ -16,8 +16,8 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 8.792,9.159,lar,,False,False,False,True,True
 9.159,9.46,stel,,False,False,False,True,True
 9.46,9.893,lar,,False,False,False,True,True
-9.893,18.0,<silence>,<silence>,False,False,False,False,False
-18.0,26.377,<silence>,<ignore>,False,True,False,False,True
+9.893,13.0,<silence>,<silence>,False,False,False,False,False
+13.0,26.377,<silence>,<ignore>,False,True,False,False,True
 26.377,26.577,き,き,False,False,False,False,False
 26.577,26.744,っ,っ,False,False,False,False,False
 26.744,27.244,と,と,False,False,False,False,False

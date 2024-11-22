@@ -1,5 +1,5 @@
 start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
-0.0,0.985,<silence>,<silence>,False,True,False,False,True
+0.0,0.985,<silence>,<ignore>,False,True,False,False,True
 0.985,1.385,e,,False,True,False,True,True
 1.385,1.852,la,,False,True,False,True,True
 1.852,2.453,ci,,False,True,False,True,True
@@ -32,7 +32,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 20.237,20.771,ta,,False,True,False,True,True
 20.771,20.938,wa,,False,True,False,True,True
 20.938,22.539,ku,,False,True,False,True,True
-22.539,24.274,<silence>,<silence>,False,True,False,False,True
+22.539,24.274,<silence>,<ignore>,False,True,False,False,True
 24.274,24.475,ま,ま,False,False,False,False,False
 24.475,24.675,ど,ど,False,False,False,False,False
 24.675,24.875,ろ,ろ,False,False,False,False,False

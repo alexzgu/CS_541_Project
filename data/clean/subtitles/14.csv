@@ -362,7 +362,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 158.065,158.399,う,う,False,False,False,False,False
 158.399,158.566,だ,だ,False,False,False,False,False
 158.566,159.031,もん,もん,False,False,False,False,False
-159.031,165.973,<silence>,<silence>,False,True,False,False,True
+159.031,165.973,<silence>,<ignore>,False,True,False,False,True
 165.973,166.173,そ,そ,False,False,False,False,False
 166.173,166.34,う,う,False,False,False,False,False
 166.34,166.407,い,い,False,False,False,False,False

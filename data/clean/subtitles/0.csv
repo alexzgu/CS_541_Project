@@ -249,7 +249,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 59.943,60.144,た,た,False,False,False,False,False
 60.144,60.31,い,い,False,False,False,False,False
 60.31,61.145,だ,だ,False,False,False,False,False
-61.145,71.955,<silence>,<silence>,False,True,False,False,True
+61.145,71.955,<silence>,<ignore>,False,True,False,False,True
 71.955,72.056,ぷ,ぷ,False,False,False,False,False
 72.056,72.256,りー,りー,False,False,False,False,False
 72.256,72.356,ず、,ず,False,False,False,False,False

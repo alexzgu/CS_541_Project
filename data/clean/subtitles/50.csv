@@ -85,7 +85,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 14.098,14.565,it\'s,,False,False,False,True,True
 14.565,14.932,show,,False,False,False,True,True
 14.932,15.84,time!!,,False,False,False,True,True
-15.84,16.667,<silence>,<silence>,False,True,False,False,True
+15.84,16.667,<silence>,<ignore>,False,True,False,False,True
 16.667,16.867,な,な,False,False,False,False,False
 16.867,16.9,に,に,False,False,False,False,False
 16.9,16.934,が,が,False,False,False,False,False
@@ -104,7 +104,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 18.635,18.736,あ,あ,False,False,False,False,False
 18.736,18.836,げ,げ,False,False,False,False,False
 18.836,19.07,る,る,False,False,False,False,False
-19.07,19.837,<silence>,<silence>,False,True,False,False,True
+19.07,19.837,<silence>,<ignore>,False,True,False,False,True
 19.837,20.037,わ,わ,False,False,False,False,False
 20.037,20.17,た,た,False,False,False,False,False
 20.17,20.304,し,し,False,False,False,False,False

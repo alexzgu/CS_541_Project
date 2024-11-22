@@ -317,8 +317,8 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 96.01,96.42,v,,False,False,False,True,True
 96.42,96.8,tu,,False,False,False,True,True
 96.8,97.62,ber,,False,False,False,True,True
-97.62,118.0,<silence>,<silence>,False,False,False,False,False
-118.0,119.43,<silence>,<ignore>,False,True,False,False,True
+97.62,100.0,<silence>,<silence>,False,False,False,False,False
+100.0,119.43,<silence>,<ignore>,False,True,False,False,True
 119.43,119.61,マン,マン,False,False,False,False,False
 119.61,119.82,ガ・,ガ・,False,False,False,False,False
 119.82,119.93,フィ,フィ,False,False,False,False,False

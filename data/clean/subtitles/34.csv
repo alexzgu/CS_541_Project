@@ -20,8 +20,8 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 5.756,5.923,ふ,ふ,False,False,False,False,False
 5.923,6.09,ぶ,ぶ,False,False,False,False,False
 6.09,6.79,き,き,False,False,False,False,False
-6.79,10.0,<silence>,<ignore>,False,True,False,False,True
-10.0,17.768,<silence>,<silence>,False,False,False,False,False
+6.79,10.0,<silence>,<silence>,False,False,False,False,False
+10.0,17.768,<silence>,<ignore>,False,True,False,False,True
 17.768,18.302,ぱっ,ぱっ,False,False,False,False,False
 18.302,18.469,と,と,False,False,False,False,False
 18.469,18.635,さ,さ,False,False,False,False,False
@@ -441,8 +441,8 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 142.893,143.06,ふ,ふ,False,False,False,False,False
 143.06,143.26,ぶ,ぶ,False,False,False,False,False
 143.26,143.927,き,き,False,False,False,False,False
-143.927,158.0,<silence>,<ignore>,False,True,False,False,True
-158.0,165.883,<silence>,<silence>,False,False,False,False,False
+143.927,158.0,<silence>,<silence>,False,False,False,False,False
+158.0,165.883,<silence>,<ignore>,False,True,False,False,True
 165.883,166.583,ひ,ひ,False,False,False,False,False
 166.583,166.95,ふ,ふ,False,False,False,False,False
 166.95,167.251,み,み,False,False,False,False,False
@@ -450,7 +450,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 167.618,167.784,ぞ,ぞ,False,False,False,False,False
 167.784,167.951,え,え,False,False,False,False,False
 167.951,168.652,て,て,False,False,False,False,False
-168.652,171.388,<silence>,<silence>,False,True,False,False,True
+168.652,171.388,<silence>,<ignore>,False,True,False,False,True
 171.388,172.055,こ,こ,False,False,False,False,False
 172.055,172.422,こ,こ,False,False,False,False,False
 172.422,172.756,に,に,False,False,False,False,False
@@ -459,7 +459,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 173.09,173.257,お,お,False,False,False,False,False
 173.257,173.457,い,い,False,False,False,False,False
 173.457,174.191,で,で,False,False,False,False,False
-174.191,177.194,<silence>,<silence>,False,True,False,False,True
+174.191,177.194,<silence>,<ignore>,False,True,False,False,True
 177.194,177.528,あ,あ,False,False,False,False,False
 177.528,177.861,か,か,False,False,False,False,False
 177.861,178.228,つ,つ,False,False,False,False,False

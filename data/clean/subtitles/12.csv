@@ -80,7 +80,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 29.646,29.68,ん,ん,False,False,False,False,False
 29.68,29.78,だ,だ,False,False,False,False,False
 29.78,30.21,もん。,もん,False,False,False,False,False
-30.21,46.43,<silence>,<silence>,False,True,False,False,True
+30.21,46.43,<silence>,<ignore>,False,True,False,False,True
 46.43,46.53,い,い,False,True,False,False,True
 46.53,46.663,が,が,False,False,False,False,False
 46.663,46.864,い,い,False,False,False,False,False
@@ -90,7 +90,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 47.498,47.698,し,し,False,False,False,False,False
 47.698,47.865,ん,ん,False,False,False,False,False
 47.865,48.41,ぼ,ぼ,False,True,False,False,True
-48.41,50.0,<silence>,<silence>,False,True,False,False,True
+48.41,50.0,<silence>,<ignore>,False,True,False,False,True
 50.0,50.1,い,い,False,False,False,False,False
 50.1,50.2,が,が,False,False,False,False,False
 50.2,50.434,い,い,False,False,False,False,False
@@ -100,7 +100,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 51.035,51.201,え,え,False,False,False,False,False
 51.201,51.335,ん,ん,False,False,False,False,False
 51.335,51.95,ぼ,ぼ,False,True,False,False,True
-51.95,53.537,<silence>,<silence>,False,True,False,False,True
+51.95,53.537,<silence>,<ignore>,False,True,False,False,True
 53.537,53.637,い,い,False,False,False,False,False
 53.637,53.771,が,が,False,False,False,False,False
 53.771,53.971,い,い,False,False,False,False,False
@@ -110,7 +110,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 54.538,54.805,て,て,False,False,False,False,False
 54.805,54.938,ん,ん,False,False,False,False,False
 54.938,55.51,ぼ,ぼ,False,True,False,False,True
-55.51,57.107,<silence>,<silence>,False,True,False,False,True
+55.51,57.107,<silence>,<ignore>,False,True,False,False,True
 57.107,57.207,い,い,False,False,False,False,False
 57.207,57.307,が,が,False,False,False,False,False
 57.307,57.541,い,い,False,False,False,False,False
@@ -118,7 +118,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 57.775,58.142,て,て,False,False,False,False,False
 58.142,58.442,れ,れ,False,False,False,False,False
 58.442,59.08,や,や,False,True,False,False,True
-59.08,60.644,<silence>,<silence>,False,True,False,False,True
+59.08,60.644,<silence>,<ignore>,False,True,False,False,True
 60.644,60.878,ま,ま,False,False,False,False,False
 60.878,61.078,る,る,False,False,False,False,False
 61.078,61.211,い,い,False,False,False,False,False
@@ -127,7 +127,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 61.678,61.979,き,き,False,True,False,False,True
 61.979,62.146,ぐ,ぐ,False,True,False,False,True
 62.146,62.64,も,も,False,True,False,False,True
-62.64,64.181,<silence>,<silence>,False,True,False,False,True
+62.64,64.181,<silence>,<ignore>,False,True,False,False,True
 64.181,64.314,と,と,False,False,False,False,False
 64.314,64.415,び,び,False,False,False,False,False
 64.415,64.515,だ,だ,False,False,False,False,False
@@ -137,7 +137,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 65.049,65.249,ぷ,ぷ,False,False,False,False,False
 65.249,65.516,けー,けー,False,False,False,False,False
 65.516,66.19,き,き,False,True,False,False,True
-66.19,67.718,<silence>,<silence>,False,True,False,False,True
+66.19,67.718,<silence>,<ignore>,False,True,False,False,True
 67.718,67.985,さん,さん,False,False,False,False,False
 67.985,68.218,かい,かい,False,False,False,False,False
 68.218,68.419,め,め,False,False,False,False,False
@@ -146,7 +146,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 68.786,69.086,でぃ,でぃ,False,False,False,False,False
 69.086,69.253,しょ,しょ,False,True,False,False,True
 69.253,69.76,なー,なー,False,True,False,False,True
-69.76,71.288,<silence>,<silence>,False,True,False,False,True
+69.76,71.288,<silence>,<ignore>,False,True,False,False,True
 71.288,71.522,あ,あ,False,False,False,False,False
 71.522,71.755,ま,ま,False,False,False,False,False
 71.755,71.955,る,る,False,False,False,False,False
@@ -260,7 +260,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 114.865,115.065,の,の,False,True,False,False,True
 115.065,115.299,に,に,False,False,False,False,False
 115.299,116.41,なぁ。,なぁ,False,True,False,False,True
-116.41,120.871,<silence>,<silence>,False,True,False,False,True
+116.41,120.871,<silence>,<ignore>,False,True,False,False,True
 120.871,121.305,あい,あい,False,False,False,False,False
 121.305,121.738,まい,まい,False,False,False,False,False
 121.738,121.972,な,な,False,False,False,False,False
@@ -280,7 +280,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 125.742,125.976,じゃ,じゃ,False,True,False,False,True
 125.976,126.743,な,な,False,True,False,False,True
 126.743,127.08,い,い,False,True,False,False,True
-127.08,128.212,<silence>,<silence>,False,True,False,False,True
+127.08,128.212,<silence>,<ignore>,False,True,False,False,True
 128.212,128.312,ゆ,ゆ,False,False,False,False,False
 128.312,128.445,び,び,False,False,False,False,False
 128.445,128.645,き,き,False,False,False,False,False
@@ -288,7 +288,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 128.846,129.113,げ,げ,False,False,False,False,False
 129.113,129.279,ん,ん,False,False,False,False,False
 129.279,129.75,まん,まん,False,False,False,False,False
-129.75,131.748,<silence>,<silence>,False,True,False,False,True
+129.75,131.748,<silence>,<ignore>,False,True,False,False,True
 131.748,132.015,か,か,False,False,False,False,False
 132.015,132.249,な,な,False,False,False,False,False
 132.249,132.416,り,り,False,False,False,False,False
@@ -296,7 +296,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 132.749,133.117,じ,じ,False,False,False,False,False
 133.117,133.283,っこ,っこ,False,False,False,False,False
 133.283,133.74,で,で,False,True,False,False,True
-133.74,135.352,<silence>,<silence>,False,True,False,False,True
+133.74,135.352,<silence>,<ignore>,False,True,False,False,True
 135.352,135.586,ゆう,ゆう,False,False,False,False,False
 135.586,135.786,じゅ,じゅ,False,False,False,False,False
 135.786,135.986,う,う,False,False,False,False,False
@@ -305,7 +305,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 136.386,136.553,ん,ん,False,False,False,False,False
 136.553,136.653,で,で,False,False,False,False,False
 136.653,137.31,も,も,False,True,False,False,True
-137.31,138.889,<silence>,<silence>,False,True,False,False,True
+137.31,138.889,<silence>,<ignore>,False,True,False,False,True
 138.889,139.123,ぜっ,ぜっ,False,False,False,False,False
 139.123,139.256,た,た,False,False,False,False,False
 139.256,139.389,い,い,False,False,False,False,False
@@ -314,7 +314,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 139.89,140.09,い,い,False,False,False,False,False
 140.09,140.29,に,に,False,False,False,False,False
 140.29,140.88,ち,ち,False,True,False,False,True
-140.88,142.426,<silence>,<silence>,False,True,False,False,True
+140.88,142.426,<silence>,<ignore>,False,True,False,False,True
 142.426,142.559,あ,あ,False,False,False,False,False
 142.559,142.693,い,い,False,False,False,False,False
 142.693,142.826,に,に,False,False,False,False,False
@@ -325,7 +325,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 143.327,143.46,る,る,False,False,False,False,False
 143.46,143.594,よ,よ,False,False,False,False,False
 143.594,143.98,ねぇ？,ねぇ,False,False,False,False,False
-143.98,145.996,<silence>,<silence>,False,True,False,False,True
+143.98,145.996,<silence>,<ignore>,False,True,False,False,True
 145.996,146.196,ほん,ほん,False,False,False,False,False
 146.196,146.43,ら,ら,False,False,False,False,False
 146.43,146.63,い,い,False,False,False,False,False
@@ -334,14 +334,14 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 146.964,147.297,びょ,びょ,False,False,False,False,False
 147.297,147.464,う,う,False,False,False,False,False
 147.464,147.98,で,で,False,True,False,False,True
-147.98,149.533,<silence>,<silence>,False,True,False,False,True
+147.98,149.533,<silence>,<ignore>,False,True,False,False,True
 149.533,149.766,あん,あん,False,False,False,False,False
 149.766,149.967,がい,がい,False,False,False,False,False
 149.967,150.2,な,な,False,False,False,False,False
 150.2,150.534,き,き,False,False,False,False,False
 150.534,150.901,む,む,False,False,False,False,False
 150.901,151.53,し,し,False,True,False,False,True
-151.53,153.07,<silence>,<silence>,False,True,False,False,True
+151.53,153.07,<silence>,<ignore>,False,True,False,False,True
 153.07,153.303,ぜん,ぜん,False,False,False,False,False
 153.303,153.537,ぜ,ぜ,False,False,False,False,False
 153.537,153.737,ん,ん,False,False,False,False,False
@@ -350,7 +350,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 154.104,154.371,ら,ら,False,False,False,False,False
 154.371,154.505,ず,ず,False,False,False,False,False
 154.505,155.09,に,に,False,True,False,False,True
-155.09,156.64,<silence>,<silence>,False,True,False,False,True
+155.09,156.64,<silence>,<ignore>,False,True,False,False,True
 156.64,156.874,がん,がん,False,False,False,False,False
 156.874,157.141,ら,ら,False,False,False,False,False
 157.141,157.307,い,い,False,False,False,False,False
@@ -404,7 +404,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 171.722,171.955,ちゃ,ちゃ,False,False,False,False,False
 171.955,172.222,う,う,False,False,False,False,False
 172.222,172.87,なぁ。,なぁ,False,True,False,False,True
-172.87,177.761,<silence>,<silence>,False,True,False,False,True
+172.87,177.761,<silence>,<ignore>,False,True,False,False,True
 177.761,178.195,こう,こう,False,True,False,False,True
 178.195,178.662,かい,かい,False,True,False,False,True
 178.662,179.096,ばっ,ばっ,False,True,False,False,True
@@ -424,7 +424,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 182.499,182.633,し,し,False,True,False,False,True
 182.633,182.9,ちゃ,ちゃ,False,True,False,False,True
 182.9,183.97,え,え,False,True,False,False,True
-183.97,185.102,<silence>,<silence>,False,True,False,False,True
+183.97,185.102,<silence>,<ignore>,False,True,False,False,True
 185.102,185.202,こ,こ,False,False,False,False,False
 185.202,185.302,の,の,False,False,False,False,False
 185.302,185.502,ゆ,ゆ,False,False,False,False,False
@@ -551,7 +551,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 258.875,259.309,ない,ない,False,False,False,False,False
 259.309,259.543,か,か,False,True,False,False,True
 259.543,261.3,も,も,False,True,False,False,True
-261.3,264.848,<silence>,<silence>,False,True,False,False,True
+261.3,264.848,<silence>,<ignore>,False,True,False,False,True
 264.848,265.315,あい,あい,False,False,False,False,False
 265.315,265.749,まい,まい,False,False,False,False,False
 265.749,266.183,なん,なん,False,False,False,False,False
@@ -567,7 +567,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 269.119,269.72,み,み,False,False,False,False,False
 269.72,269.953,て,て,False,False,False,False,False
 269.953,274.65,て！,て,False,True,False,False,True
-274.65,275.559,<silence>,<silence>,False,True,False,False,True
+274.65,275.559,<silence>,<ignore>,False,True,False,False,True
 275.559,275.792,ゆ,ゆ,False,False,False,False,False
 275.792,275.959,び、,び,False,False,False,False,False
 275.959,276.393,きっ,きっ,False,False,False,False,False

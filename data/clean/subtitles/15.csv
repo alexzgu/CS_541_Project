@@ -710,7 +710,7 @@ start,end,token,cleaned_token,overlap,ignore,gap,other,exclude
 164.314,164.481,お,お,False,False,False,False,False
 164.481,164.681,い,い,False,False,False,False,False
 164.681,165.415,で,で,False,False,False,False,False
-165.415,174.191,<silence>,<silence>,False,True,False,False,True
+165.415,174.191,<silence>,<ignore>,False,True,False,False,True
 174.191,174.391,ぜ,ぜ,False,False,False,False,False
 174.391,174.558,っ,っ,False,False,False,False,False
 174.558,174.758,た,た,False,False,False,False,False
