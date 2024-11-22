@@ -5,14 +5,15 @@ import pandas as pd
 from data_processing.subtitles.utils.time_ranges import TimeRange
 
 
-def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_times: List[TimeRange]) -> pd.DataFrame:
+def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_times: List[TimeRange], debug: bool = False) -> pd.DataFrame:
     """
     Args:
         df: DataFrame containing subtitle data.
         i_times: List of TimeRange objects representing time ranges to ignore.
         s_times: List of TimeRange objects representing silent periods.
+        debug: If True, include intermediate columns in the output DataFrame.
 
-    Returns: DataFrame with rows inserted for silence and excluded segments.
+    Returns: DataFrame with rows inserted for silence and excluded segments. New column: 'exclude'.
     """
 
     silence_token = '<silence>'
@@ -131,5 +132,8 @@ def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_ti
 
     # 5.) for any rows with ignore, gap, or other, set 'exclude' to true
     df['exclude'] = df['ignore'] | df['gap'] | df['other']
+
+    if not debug:
+        df = df.drop(columns=['ignore', 'gap', 'other'])
 
     return df
