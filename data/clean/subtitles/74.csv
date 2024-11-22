@@ -344,4 +344,5 @@ start,end,token,exclude
 221.672,221.738,い,False
 221.738,222.139,だ,False
 222.139,225.042,け,True
-225.042,-1.0,<silence>,False
+225.042,238.0,<silence>,True
+238.0,inf,<silence>,False

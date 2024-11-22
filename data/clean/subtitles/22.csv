@@ -370,4 +370,4 @@ start,end,token,exclude
 222.105,222.406,る,False
 222.406,222.906,ま,False
 222.906,223.507,で,False
-223.507,-1.0,<silence>,False
+223.507,inf,<silence>,False

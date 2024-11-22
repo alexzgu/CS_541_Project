@@ -601,4 +601,4 @@ start,end,token,exclude
 213.83,214.164,ポ,False
 214.164,214.464,ル,False
 214.464,215.232,カ,False
-215.232,-1.0,<silence>,False
+215.232,inf,<silence>,False

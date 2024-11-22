@@ -406,4 +406,4 @@ start,end,token,exclude
 190.107,190.474,れ,False
 190.474,190.707,っ,False
 190.707,196.78,と,False
-196.78,-1.0,<silence>,False
+196.78,inf,<silence>,False

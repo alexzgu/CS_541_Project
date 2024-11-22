@@ -754,4 +754,4 @@ start,end,token,exclude
 193.31,193.744,,True
 193.744,195.445,<silence>,False
 195.445,195.946,,True
-195.946,-1.0,<silence>,False
+195.946,inf,<silence>,False

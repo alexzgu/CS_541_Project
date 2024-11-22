@@ -682,4 +682,4 @@ start,end,token,exclude
 163.914,164.114,と,False
 164.114,164.248,く,False
 164.248,164.615,ね,False
-164.615,-1.0,<silence>,False
+164.615,inf,<silence>,False

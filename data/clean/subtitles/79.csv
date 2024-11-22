@@ -243,4 +243,4 @@ start,end,token,exclude
 86.37,86.537,け,False
 86.537,86.703,よ,False
 86.703,87.638,う,False
-87.638,-1.0,<silence>,False
+87.638,inf,<silence>,False

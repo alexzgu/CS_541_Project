@@ -692,4 +692,4 @@ start,end,token,exclude
 245.829,245.996,あ,False
 245.996,246.163,お,False
 246.163,248.365,う,False
-248.365,-1.0,<silence>,False
+248.365,inf,<silence>,False

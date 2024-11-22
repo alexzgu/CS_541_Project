@@ -22,6 +22,10 @@ def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_ti
     # 1.) with s_times, insert rows of silence according to s_times (if any)
     # note that none of the silence rows will overlap with any of the existing rows and with each other
 
+    # if end attribute of the last s_time is -1, then change it to float('inf')
+    if s_times[-1].end == -1:
+        s_times[-1].end = float('inf')
+
     for s_time in s_times:
         ignored_silence_row = {
             'start': s_time.start,
@@ -30,6 +34,7 @@ def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_ti
             'token': silence_token,
             'cleaned_token': silence_token,
         }
+
         df = df.append(ignored_silence_row, ignore_index=True)
 
     # sort the dataframe by 'start', 'end' time

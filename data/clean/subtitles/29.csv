@@ -648,4 +648,4 @@ start,end,token,exclude
 148.499,148.799,うー,False
 148.799,149.066,にゃ,False
 149.066,149.299,お,False
-149.299,-1.0,<silence>,False
+149.299,inf,<silence>,False

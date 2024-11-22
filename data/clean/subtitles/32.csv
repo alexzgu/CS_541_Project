@@ -412,4 +412,4 @@ start,end,token,exclude
 249.399,250.2,ず,False
 250.2,250.934,っ,False
 250.934,254.037,と,False
-254.037,-1.0,<silence>,False
+254.037,inf,<silence>,False

@@ -719,4 +719,4 @@ start,end,token,exclude
 175.092,175.292,け,False
 175.292,175.459,る,False
 175.459,176.793,よ,False
-176.793,-1.0,<silence>,False
+176.793,inf,<silence>,False

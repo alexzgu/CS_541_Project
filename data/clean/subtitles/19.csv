@@ -973,4 +973,4 @@ start,end,token,exclude
 202.92,203.353,,True
 203.353,203.754,,True
 203.754,204.188,,True
-204.188,-1.0,<silence>,False
+204.188,inf,<silence>,False

@@ -578,4 +578,4 @@ start,end,token,exclude
 243.86,244.161,あ,False
 244.161,244.394,け,False
 244.394,246.93,て,False
-246.93,-1.0,<silence>,False
+246.93,inf,<silence>,False

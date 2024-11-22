@@ -549,4 +549,5 @@ start,end,token,exclude
 266.016,266.95,た,False
 266.95,267.618,お,False
 267.618,270.22,う,True
-270.22,-1.0,<silence>,False
+270.22,289.0,<silence>,True
+289.0,inf,<silence>,False

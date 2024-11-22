@@ -512,4 +512,4 @@ start,end,token,exclude
 215.899,216.4,く,False
 216.4,216.567,る,False
 216.567,218.468,よ,False
-218.468,-1.0,<silence>,False
+218.468,inf,<silence>,False

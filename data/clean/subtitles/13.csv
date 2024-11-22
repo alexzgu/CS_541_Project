@@ -599,4 +599,4 @@ start,end,token,exclude
 230.437,230.704,あ,False
 230.704,230.971,る,False
 230.971,232.106,く,False
-232.106,-1.0,<silence>,False
+232.106,inf,<silence>,False

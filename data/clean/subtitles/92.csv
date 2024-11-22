@@ -583,4 +583,4 @@ start,end,token,exclude
 196.01,196.42,,True
 196.42,196.8,,True
 196.8,197.21,,True
-197.21,-1.0,<silence>,False
+197.21,inf,<silence>,False

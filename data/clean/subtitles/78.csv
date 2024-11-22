@@ -256,4 +256,4 @@ start,end,token,exclude
 94.778,95.045,ー,False
 95.045,95.312,ジ,False
 95.312,97.381,へ,False
-97.381,-1.0,<silence>,False
+97.381,inf,<silence>,False

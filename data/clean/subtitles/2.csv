@@ -272,4 +272,4 @@ start,end,token,exclude
 98.115,98.348,な,False
 98.348,98.749,ごう,False
 98.749,99.483,,True
-99.483,-1.0,<silence>,False
+99.483,inf,<silence>,False

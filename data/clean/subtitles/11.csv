@@ -681,4 +681,4 @@ start,end,token,exclude
 227.044,227.177,,True
 227.177,227.511,,True
 227.511,227.978,,True
-227.978,-1.0,<silence>,False
+227.978,inf,<silence>,False

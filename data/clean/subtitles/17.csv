@@ -788,4 +788,4 @@ start,end,token,exclude
 264.147,264.348,は,False
 264.348,264.514,な,False
 264.514,265.415,さ,False
-265.415,-1.0,<silence>,False
+265.415,inf,<silence>,False

@@ -697,4 +697,5 @@ start,end,token,exclude
 283.867,284.201,,True
 284.201,284.501,,True
 284.501,285.736,,True
-285.736,-1.0,<silence>,False
+285.736,295.0,<silence>,True
+295.0,inf,<silence>,False

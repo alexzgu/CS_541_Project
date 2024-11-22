@@ -430,4 +430,4 @@ start,end,token,exclude
 196.48,196.78,き,False
 196.78,196.914,だ,False
 196.914,198.83,よ,False
-198.83,-1.0,<silence>,False
+198.83,inf,<silence>,False

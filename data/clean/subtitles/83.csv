@@ -205,4 +205,4 @@ start,end,token,exclude
 81.565,81.865,,True
 81.865,82.132,,True
 82.132,83.067,,True
-83.067,-1.0,<silence>,False
+83.067,inf,<silence>,False

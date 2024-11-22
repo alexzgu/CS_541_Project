@@ -716,4 +716,4 @@ start,end,token,exclude
 229.136,229.236,ま,False
 229.236,229.37,し,False
 229.37,229.737,た,False
-229.737,-1.0,<silence>,False
+229.737,inf,<silence>,False

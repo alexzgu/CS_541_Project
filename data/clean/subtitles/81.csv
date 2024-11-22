@@ -258,4 +258,4 @@ start,end,token,exclude
 101.852,102.219,く,False
 102.219,102.386,か,False
 102.386,104.521,ら,False
-104.521,-1.0,<silence>,False
+104.521,inf,<silence>,False

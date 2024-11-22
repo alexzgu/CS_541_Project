@@ -488,4 +488,4 @@ start,end,token,exclude
 237.854,238.088,て,False
 238.088,238.222,い,False
 238.222,241.291,く,False
-241.291,-1.0,<silence>,False
+241.291,inf,<silence>,False

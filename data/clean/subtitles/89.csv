@@ -611,4 +611,4 @@ start,end,token,exclude
 242.559,242.826,ひ,False
 242.826,243.327,か,False
 243.327,245.24,り,False
-245.24,-1.0,<silence>,False
+245.24,inf,<silence>,False

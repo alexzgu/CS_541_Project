@@ -570,4 +570,4 @@ start,end,token,exclude
 193.61,194.678,,True
 194.678,195.512,,True
 195.512,198.649,,True
-198.649,-1.0,<silence>,False
+198.649,inf,<silence>,False

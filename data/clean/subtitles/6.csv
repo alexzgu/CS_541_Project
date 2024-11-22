@@ -614,4 +614,4 @@ start,end,token,exclude
 189.673,189.806,い,False
 189.806,190.007,か,False
 190.007,191.408,な,False
-191.408,-1.0,<silence>,False
+191.408,inf,<silence>,False
