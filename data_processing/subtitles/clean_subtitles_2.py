@@ -43,9 +43,12 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange], silenc
     Returns: Cleaned DataFrame.
     """
     try:
-
-        df = insert_silence_and_excluded(df, ignore_times, silence_ranges)
-        df = df.drop(columns=['overlap'])
+        debug = False
+        df = insert_silence_and_excluded(df, ignore_times, silence_ranges, debug=debug)
+        if not debug:
+            df = df.drop(columns=['overlap'])
+            # remove 'token' and rename 'cleaned_token' to 'token'
+            df = df.drop(columns=['token']).rename(columns={'cleaned_token': 'token'})
         return df
 
     except Exception as e:

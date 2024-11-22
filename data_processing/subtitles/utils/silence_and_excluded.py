@@ -17,7 +17,6 @@ def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_ti
     """
 
     silence_token = '<silence>'
-    ignore_token = '<ignore>'
     gap_token = '<gap>'
 
     # 1.) with s_times, insert rows of silence according to s_times (if any)
@@ -63,7 +62,7 @@ def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_ti
                 i_start_before = i_time.start <= row['start']
                 i_end_after = i_time.end >= row['end']
                 if i_start_before and i_end_after:
-                    df.at[index, 'cleaned_token'] = ignore_token
+                    df.at[index, 'cleaned_token'] = silence_token  # this is intentional
                     df.at[index, 'ignore'] = True
 
                 else:  # split the silence row (i_start_before != i_end_after)
@@ -79,7 +78,7 @@ def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_ti
                             'end': i_time.end,
                             'overlap': False,
                             'token': silence_token,
-                            'cleaned_token': ignore_token,
+                            'cleaned_token': silence_token,
                             'ignore': True,
                         }
                         df = df.append(ignored_silence_row, ignore_index=True)
@@ -97,7 +96,7 @@ def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_ti
                             'end': row['end'],
                             'overlap': False,
                             'token': silence_token,
-                            'cleaned_token': ignore_token,
+                            'cleaned_token': silence_token,
                             'ignore': True,
                         }
                         df = df.append(ignored_silence_row, ignore_index=True)
