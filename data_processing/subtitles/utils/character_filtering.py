@@ -10,4 +10,15 @@ def to_kana(token: str, include_katakana: bool = False) -> str:
         return ''.join([char for char in token if '\u3040' <= char <= '\u30FF'])
     return ''.join([char for char in token if '\u3040' <= char <= '\u309F'])
 
-# TODO: do something about ・and ー.
+def to_alphanumeric(token: str) -> str:
+    """
+    Filters for alphanumeric characters.
+    Args:
+        token: Token to filter.
+    Returns: Filtered token; this contains only alphanumeric symbols.
+    """
+    return ''.join([char for char in token if char.isalnum()])
+
+def placeholder():
+    # TODO: do something about ・and ー.
+    pass

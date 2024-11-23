@@ -90,9 +90,9 @@ start,end,token,exclude
 25.01,25.21,ば,False
 25.21,25.41,た,False
 25.41,25.6,け,False
-25.6,26.01,,True
-26.01,26.39,,True
-26.39,27.2,,True
+25.6,26.01,v,True
+26.01,26.39,tu,True
+26.39,27.2,ber,True
 27.2,33.81,<silence>,False
 33.81,33.88,ア,False
 33.88,34.01,ニ,False
@@ -314,9 +314,9 @@ start,end,token,exclude
 95.42,95.62,ば,False
 95.62,95.82,た,False
 95.82,96.01,け,False
-96.01,96.42,,True
-96.42,96.8,,True
-96.8,97.62,,True
+96.01,96.42,v,True
+96.42,96.8,tu,True
+96.8,97.62,ber,True
 97.62,100.0,<silence>,False
 100.0,119.43,<silence>,True
 119.43,119.61,マン,False
@@ -580,7 +580,7 @@ start,end,token,exclude
 195.42,195.62,ば,False
 195.62,195.82,た,False
 195.82,196.01,け,False
-196.01,196.42,,True
-196.42,196.8,,True
-196.8,197.21,,True
+196.01,196.42,v,True
+196.42,196.8,tu,True
+196.8,197.21,ber,True
 197.21,inf,<silence>,False
