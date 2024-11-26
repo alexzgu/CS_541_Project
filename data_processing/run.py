@@ -18,10 +18,10 @@ if __name__ == '__main__':
     stage_1_dir = f'{data_dir}/processed/subtitles/stage_1'
     time_range_dir = f'{stage_1_dir}/time_ranges'
 
-    print("Cleaning raw subtitle data...")
-    clean_subtitles(raw_subtitles_path, ignore_times_path, f'{stage_1_dir}/subtitle_files',
-                    output_intermediates=True, intermediate_dir=time_range_dir)
-    print("Cleaned subtitle data.")
-
     # print("Cleaning raw subtitle data...")
-    # clean_subtitles_2(f'{stage_1_dir}/subtitle_files', time_range_dir, clean_subtitles_path)
+    # clean_subtitles(raw_subtitles_path, ignore_times_path, f'{stage_1_dir}/subtitle_files',
+    #                 output_intermediates=True, intermediate_dir=time_range_dir)
+    # print("Cleaned subtitle data.")
+
+    print("Cleaning raw subtitle data...")
+    clean_subtitles_2(f'{stage_1_dir}/subtitle_files', time_range_dir, clean_subtitles_path)
