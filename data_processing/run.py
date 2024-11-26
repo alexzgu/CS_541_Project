@@ -1,5 +1,9 @@
 from data_processing.subtitles.clean_subtitles_1 import clean_subtitles
 from data_processing.subtitles.clean_subtitles_2 import clean_subtitles_2
+import warnings
+
+# suppress FutureWarnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 if __name__ == '__main__':
     data_dir = '../data'
