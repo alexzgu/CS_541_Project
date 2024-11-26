@@ -91,8 +91,8 @@ start,end,token,exclude
 29.68,29.88,か,False
 29.88,30.047,じ,False
 30.047,30.814,つ,False
-30.814,31.148,,False
-31.148,31.548,,False
+30.814,31.148,no,False
+31.148,31.548,more,False
 31.548,31.682,は,False
 31.682,31.782,っ,False
 31.782,31.915,て,False

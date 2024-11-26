@@ -74,6 +74,10 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> (pd
         df = insert_silence_and_excluded(df, ignore_times, silence_ranges, debug=debug)
         if not debug:
             df = df.drop(columns=['overlap'])
+
+            # turn '' into None
+            df['cleaned_token'] = df['cleaned_token'].replace('', None)
+
             # change 'cleaned_token' s.t. if it is null, then it is the same as 'token', but without punctuation
             df['cleaned_token'] = df['cleaned_token'].fillna(df['token'].apply(to_alphanumeric))
 
