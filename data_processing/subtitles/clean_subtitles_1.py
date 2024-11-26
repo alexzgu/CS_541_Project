@@ -3,9 +3,10 @@ import os
 
 import pandas as pd
 
-from data_processing.subtitles.utils.character_filtering import to_kana
+from data_processing.subtitles.utils.character_filtering import to_kana, to_alphanumeric
 from data_processing.subtitles.utils.time_ranges import TimeRange, read_time_range_data, compute_silence_ranges
 from data_processing.subtitles.utils.row_filtering import remove_hemisphere, compute_overlaps
+from data_processing.subtitles.utils.silence_and_excluded import insert_silence_and_excluded
 
 
 def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle_dir: str,
@@ -68,6 +69,20 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> (pd
 
         df['overlap'] = compute_overlaps(df)
         df = df[~df['overlap']]
+
+        debug = False
+        df = insert_silence_and_excluded(df, ignore_times, silence_ranges, debug=debug)
+        if not debug:
+            df = df.drop(columns=['overlap'])
+            # change 'cleaned_token' s.t. if it is null, then it is the same as 'token', but without punctuation
+            df['cleaned_token'] = df['cleaned_token'].fillna(df['token'].apply(to_alphanumeric))
+
+            # remove 'token' and rename 'cleaned_token' to 'token'
+            df = df.drop(columns=['token']).rename(columns={'cleaned_token': 'token'})
+            # print number of null tokens
+            null_tokens = df[df['token'].isnull()]
+            if len(null_tokens) > 0:
+                print(f"Number of null tokens: {len(null_tokens)}")
 
         return df, silence_ranges
 
