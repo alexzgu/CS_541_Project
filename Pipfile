@@ -8,6 +8,7 @@ spleeter = "*"
 torch = "*"
 pandas = "*"
 numpy = "<2"
+pydub = "*"
 
 [dev-packages]
 pandas = "<2"
