@@ -96,9 +96,9 @@ start,end,token,exclude
 27.2,33.81,<silence>,False
 33.81,33.88,ア,False
 33.88,34.01,ニ,False
-34.01,34.22,メ・,False
+34.01,34.22,メ,False
 34.22,34.42,ゲー,False
-34.42,34.63,ム・,False
+34.42,34.63,ム,False
 34.63,34.83,せい,False
 34.83,35.02,ゆ,False
 35.02,35.42,う,False
@@ -320,10 +320,10 @@ start,end,token,exclude
 97.62,100.0,<silence>,False
 100.0,119.43,<silence>,True
 119.43,119.61,マン,False
-119.61,119.82,ガ・,False
+119.61,119.82,ガ,False
 119.82,119.93,フィ,False
 119.93,120.02,ギュ,False
-120.02,120.22,ア・,False
+120.02,120.22,ア,False
 120.22,120.43,アイ,False
 120.43,120.63,ド,False
 120.63,121.01,ル,False
