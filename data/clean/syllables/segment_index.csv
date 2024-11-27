@@ -1,4 +1,4 @@
-Index,File,Start,End,Token
+index,file,start,end,token
 0_0,../data/clean/syllables/clips/0_0.mp3,0.0,12696.0,<silence>
 0_1,../data/clean/syllables/clips/0_1.mp3,12696.0,13263.0,か
 0_2,../data/clean/syllables/clips/0_2.mp3,13263.0,13664.0,た

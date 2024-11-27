@@ -27,7 +27,7 @@ def segment_audio(vocal_audio_dir: str, clean_subtitle_dir: str,
     # write initial header to segment index file
     # Index, File, Start, End, Token
     with open(segment_index_file, 'w') as f:
-        f.write("Index,File,Start,End,Token\n")
+        f.write("index,file,start,end,token\n")
 
     # iterates through files in the clean_subtitle_data_path
     for file in os.listdir(clean_subtitle_dir):
@@ -77,3 +77,28 @@ def segment_audio_file(subtitles_file: str, vocal_audio_file: str, segmented_aud
         # append entry to segment index file
         with open(segment_index_file, 'a') as f:
             f.write(f"{file_idx}_{idx},{segmented_audio_file},{start},{end},{token}\n")
+
+
+def reindex_audio_segments(old_index_file: str, new_index_file: str, audio_clip_dir: str) -> None:
+    df = pd.read_csv(old_index_file)
+    df['old_idx'] = df['index'].copy()
+    df['index'] = df.index
+
+    # renames the corresponding audio files
+    df[['old_idx', 'index']].apply(lambda x: rename_audio_clip(x, audio_clip_dir), axis=1)
+
+    df = df.drop(columns=['old_idx'])
+
+    # entries structured as path/.../#_#.csv
+    df['file'] = df['file'].apply(lambda x: x.split('/')[-1].split('.')[0].split('_')[0])
+    df.to_csv(new_index_file, index=False)
+
+
+def rename_audio_clip(row, audio_clip_dir: str) -> None:
+    old_idx = row[0]
+    new_idx = row[1]
+
+    current_audio_clip_file = os.path.join(audio_clip_dir, f"{old_idx}.mp3")
+    new_audio_clip_file = os.path.join(audio_clip_dir, f"{new_idx}.mp3")
+
+    os.rename(current_audio_clip_file, new_audio_clip_file)
