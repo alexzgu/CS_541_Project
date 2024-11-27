@@ -4,7 +4,7 @@ import os
 import pandas as pd
 
 from data_processing.subtitles.utils.time_ranges import TimeRange, read_time_range_data
-from data_processing.subtitles.utils.character_filtering import filter_long_vowels
+from data_processing.subtitles.utils.character_filtering import filter_long_vowels, filter_null_tokens, kana_to_hira
 
 def clean_subtitles_2(raw_subtitle_dir: str, time_range_dir: str, clean_subtitle_dir: str):
     """
@@ -16,6 +16,7 @@ def clean_subtitles_2(raw_subtitle_dir: str, time_range_dir: str, clean_subtitle
 
     # iterates through files in the raw_subtitle_data_path
     for file in os.listdir(raw_subtitle_dir):
+        #print(f"Cleaning subtitles for file: {file}")
         if file.endswith(".csv"):
             ignore_times_file = os.path.join(time_range_dir, f"{file[:-4]}/ignore.txt")
             silence_times_file = os.path.join(time_range_dir, f"{file[:-4]}/silence.txt")
@@ -43,7 +44,10 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange], silenc
     """
     try:
         df = filter_long_vowels(df)
+        df = filter_null_tokens(df)
 
+        # convert all katakana to hiragana
+        df['token'] = df['token'].apply(kana_to_hira)
         return df
 
     except Exception as e:
