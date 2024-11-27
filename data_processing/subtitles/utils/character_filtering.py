@@ -1,3 +1,5 @@
+import pandas as pd
+
 def is_hira(char: str) -> bool:
     """
     Determines if a character is hiragana.
@@ -60,3 +62,39 @@ def kana_to_hira(token: str) -> str:
     Returns: Converted token.
     """
     return ''.join([chr(ord(char) - 96) if is_kata(char) else char for char in token])
+
+
+def filter_long_vowels(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Clean tokens by removing 'ー' characters and handling empty tokens.
+
+    Parameters:
+    df (pd.DataFrame): Input DataFrame with 'token', 'start', and 'end' columns
+
+    Returns:
+    pd.DataFrame: Processed DataFrame with tokens cleaned and potentially rows removed
+    """
+    # Create a copy to avoid modifying the original DataFrame
+    cleaned_df = df.copy()
+
+    # Remove 'ー' from tokens
+    cleaned_df['token'] = cleaned_df['token'].str.replace('ー', '')
+
+    # Identify rows to remove (empty tokens after cleaning)
+    rows_to_remove = cleaned_df['token'].str.len() == 0
+
+    # If any rows need to be removed
+    if rows_to_remove.any():
+        # Identify indices of rows to remove
+        remove_indices = cleaned_df[rows_to_remove].index
+
+        # For each row to be removed, update the previous row's end
+        for idx in remove_indices:
+            if idx > 0:
+                prev_idx = cleaned_df.index[cleaned_df.index < idx][-1]
+                cleaned_df.at[prev_idx, 'end'] = cleaned_df.at[idx, 'end']
+
+        # Remove the empty token rows
+        cleaned_df = cleaned_df[~rows_to_remove]
+
+    return cleaned_df.reset_index(drop=True)

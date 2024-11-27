@@ -3,10 +3,8 @@ import os
 
 import pandas as pd
 
-from data_processing.subtitles.utils.silence_and_excluded import insert_silence_and_excluded
 from data_processing.subtitles.utils.time_ranges import TimeRange, read_time_range_data
-from data_processing.subtitles.utils.character_filtering import to_alphanumeric
-
+from data_processing.subtitles.utils.character_filtering import filter_long_vowels
 
 def clean_subtitles_2(raw_subtitle_dir: str, time_range_dir: str, clean_subtitle_dir: str):
     """
@@ -44,8 +42,8 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange], silenc
     Returns: Cleaned DataFrame.
     """
     try:
-
-
+        return df
+        df = filter_long_vowels(df)
 
         return df
 

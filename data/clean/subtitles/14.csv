@@ -20,7 +20,7 @@ start,end,token,exclude
 13.387,13.587,う,False
 13.587,13.988,ち,False
 13.988,14.388,に,False
-14.388,14.789,yeah,True
+14.388,14.789,yeah,False
 14.789,15.022,コ,False
 15.022,15.189,コ,False
 15.189,15.389,ロ,False
@@ -193,7 +193,7 @@ start,end,token,exclude
 80.755,80.921,う,False
 80.921,81.122,ち,False
 81.122,81.756,に,False
-81.756,82.189,yeah,True
+81.756,82.189,yeah,False
 82.189,82.423,コ,False
 82.423,82.59,コ,False
 82.59,82.79,ロ,False
@@ -294,7 +294,7 @@ start,end,token,exclude
 127.735,128.002,い,False
 128.002,128.169,ヤ,False
 128.169,129.403,ツ,False
-129.403,130.269,ahh,True
+129.403,130.269,ahh,False
 130.269,131.505,<silence>,False
 131.505,132.273,あ,False
 132.273,133.14,の,False
@@ -340,7 +340,7 @@ start,end,token,exclude
 151.425,151.592,う,False
 151.592,151.792,ち,False
 151.792,152.46,に,False
-152.46,152.86,yeah,True
+152.46,152.86,yeah,False
 152.86,153.06,こ,False
 153.06,153.26,こ,False
 153.26,153.494,ろ,False
