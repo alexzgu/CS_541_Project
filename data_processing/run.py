@@ -19,7 +19,6 @@ if __name__ == '__main__':
     raw_vocals_dir = f'{data_dir}/raw/audio'
     syllables_dir = f'{data_dir}/clean/syllables'
     segment_index_file_path = f'{syllables_dir}/segment_index.csv'
-    reindexed_segment_index_file_path = f'{syllables_dir}/reindexed_segment_index.csv'
 
     syllable_vocals_dir = f'{syllables_dir}/clips'
 
@@ -40,7 +39,7 @@ if __name__ == '__main__':
 
     print("Indexing audio data...")
     reindex_audio_segments(segment_index_file_path,
-                           reindexed_segment_index_file_path,
+                           segment_index_file_path,
                            syllable_vocals_dir)
     print("Indexed audio data.")
 
