@@ -138,8 +138,8 @@ start,end,token,exclude
 65.549,66.016,る,False
 66.016,66.283,<silence>,False
 66.283,66.45,す,False
-66.45,66.817,とー,False
-66.817,70.154,りー,False
+66.45,66.817,と,False
+66.817,70.154,り,False
 70.154,79.396,<silence>,False
 79.396,79.563,あ,False
 79.563,79.73,た,False
@@ -266,8 +266,8 @@ start,end,token,exclude
 124.441,124.942,く,False
 124.942,125.175,<silence>,False
 125.175,125.375,す,False
-125.375,125.709,とー,False
-125.709,129.046,りー,False
+125.375,125.709,と,False
+125.709,129.046,り,False
 129.046,138.322,<silence>,False
 138.322,138.722,そ,False
 138.722,139.056,し,False

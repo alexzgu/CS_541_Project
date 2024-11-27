@@ -42,7 +42,6 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange], silenc
     Returns: Cleaned DataFrame.
     """
     try:
-        return df
         df = filter_long_vowels(df)
 
         return df

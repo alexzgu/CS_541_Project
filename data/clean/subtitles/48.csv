@@ -13,8 +13,7 @@ start,end,token,exclude
 9.893,10.761,た,False
 10.761,11.662,え,False
 11.662,12.563,ぴ,False
-12.563,14.431,ろ,False
-14.431,15.399,ー,False
+12.563,15.399,ろ,False
 15.399,15.899,ぐ,False
 15.899,34.0,<silence>,False
 34.0,47.931,<silence>,True

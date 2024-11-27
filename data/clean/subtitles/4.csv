@@ -29,7 +29,7 @@ start,end,token,exclude
 5.556,5.756,し,False
 5.756,6.223,て,False
 6.223,6.523,いっ,False
-6.523,6.89,せー,False
+6.523,6.89,せ,False
 6.89,7.458,の,False
 7.458,7.958,せ,False
 7.958,14.898,<silence>,False
