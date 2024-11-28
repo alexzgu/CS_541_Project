@@ -1,4 +1,24 @@
 from typing import Set
+import pandas as pd
+
+
+def exclude_if_not_in_token_set(df: pd.DataFrame, tokens_path: str) -> pd.DataFrame:
+    """
+    Args:
+        df: DataFrame containing token data.
+        tokens_path: Path to .txt file containing tokens.
+
+    Returns: DataFrame with rows excluded if their token is not in the token set.
+    """
+
+    token_set = get_tokens(tokens_path)
+
+    # for rows that do not have a token in the token set, set its 'exclude' column to True
+    df['exclude_token_set'] = ~df['token'].isin(token_set)
+    df['exclude'] = df['exclude_token_set'] | df['exclude']
+    df = df.drop(columns=['exclude_token_set'])
+
+    return df
 
 
 def get_tokens(tokens_path: str) -> Set[str]:
@@ -16,3 +36,4 @@ def get_tokens(tokens_path: str) -> Set[str]:
     data = data.split(',')
 
     return set(data)
+

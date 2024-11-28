@@ -7,15 +7,17 @@ from data_processing.utils.character_filtering import to_kana, to_alphanumeric, 
 from data_processing.utils.time_ranges import TimeRange, read_time_range_data, compute_silence_ranges
 from data_processing.utils.row_filtering import remove_hemisphere, compute_overlaps
 from data_processing.utils.silence_and_excluded import insert_silence_and_excluded
+from data_processing.utils.tokens import exclude_if_not_in_token_set
 
 
-def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle_dir: str,
+def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle_dir: str, tokens_path: str,
                     output_intermediates: bool = True, intermediate_dir: str = ""):
     """
     Args:
         raw_subtitle_dir: Directory containing raw subtitle data.
         ignore_times_dir: Directory containing time ranges to ignore.
         clean_subtitle_dir: Directory to store the cleaned subtitle data.
+        tokens_path: Path to .txt file containing tokens.
         output_intermediates: Whether to output intermediate data (intermediate time ranges and silence time ranges).
         intermediate_dir: Directory to store intermediate data.
     """
@@ -29,7 +31,7 @@ def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle
 
             time_ranges_to_ignore = read_time_range_data(ignore_times_file)
             raw_subtitles = pd.read_csv(raw_subtitles_file)
-            cleaned_subtitles, silence_ranges = clean_subtitles_file(raw_subtitles, time_ranges_to_ignore)
+            cleaned_subtitles, silence_ranges = clean_subtitles_file(raw_subtitles, time_ranges_to_ignore, tokens_path)
             cleaned_subtitles.to_csv(cleaned_subtitles_file, index=False)
 
             if cleaned_subtitles.empty:
@@ -49,11 +51,13 @@ def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle
                         f.write(f"{time_range.start}:{time_range.end},")
 
 
-def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> (pd.DataFrame, List[TimeRange]):
+def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange], tokens_path: str) -> \
+        (pd.DataFrame, List[TimeRange]):
     """
     Args:
         df: DataFrame containing raw subtitle data. It has columns: 'start', 'end', 'line', 'unformatted', 'hiragana'.
         ignore_times: Data telling which time ranges to ignore.
+        tokens_path: Path to .txt file containing tokens.
 
     Returns: Cleaned DataFrame and list of time ranges of silence.
     """
@@ -93,6 +97,8 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange]) -> (pd
 
         # convert all katakana to hiragana
         df['token'] = df['token'].apply(kana_to_hira)
+
+        df = exclude_if_not_in_token_set(df, tokens_path)
 
         return df, silence_ranges
 
