@@ -205,4 +205,4 @@ start,end,token,exclude
 81.565,81.865,star,False
 81.865,82.132,dust,False
 82.132,83.067,song,False
-83.067,inf,<silence>,False
+83.067,96.912,<silence>,False

@@ -721,4 +721,4 @@ start,end,token,exclude
 149.5,149.666,い,False
 149.666,149.8,っ,False
 149.8,150.134,か,False
-150.134,inf,<silence>,False
+150.134,154.2,<silence>,False

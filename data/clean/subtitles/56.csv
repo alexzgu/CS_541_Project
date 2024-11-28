@@ -677,4 +677,4 @@ start,end,token,exclude
 231.782,231.915,て,False
 231.915,233.15,ね,False
 233.15,236.0,<silence>,False
-236.0,inf,<silence>,True
+236.0,253.968,<silence>,True

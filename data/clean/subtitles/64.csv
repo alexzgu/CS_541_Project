@@ -841,4 +841,4 @@ start,end,token,exclude
 242.626,243.026,た,False
 243.026,243.227,せ,False
 243.227,243.627,て,False
-243.627,inf,<silence>,False
+243.627,250.056,<silence>,False

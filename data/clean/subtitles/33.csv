@@ -884,4 +884,4 @@ start,end,token,exclude
 252.502,253.17,じゃ,False
 253.17,256.807,<silence>,False
 256.807,257.207,っ,False
-257.207,inf,<silence>,False
+257.207,265.056,<silence>,False

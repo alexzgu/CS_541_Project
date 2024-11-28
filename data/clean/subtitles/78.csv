@@ -255,4 +255,4 @@ start,end,token,exclude
 94.545,95.045,て,False
 95.045,95.312,じ,False
 95.312,97.381,へ,False
-97.381,inf,<silence>,False
+97.381,107.28,<silence>,False

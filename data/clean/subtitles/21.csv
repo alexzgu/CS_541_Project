@@ -491,4 +491,4 @@ start,end,token,exclude
 166.95,167.184,し,False
 167.184,168.418,し,False
 168.418,170.454,wah,False
-170.454,inf,<silence>,False
+170.454,178.08,<silence>,False

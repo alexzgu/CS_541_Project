@@ -385,4 +385,4 @@ start,end,token,exclude
 280.364,280.564,じ,False
 280.564,280.764,ま,False
 280.764,282.666,る,False
-282.666,inf,<silence>,False
+282.666,324.648,<silence>,False

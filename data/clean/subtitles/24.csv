@@ -483,4 +483,4 @@ start,end,token,exclude
 175.926,176.26,black,False
 176.26,176.426,and,False
 176.426,176.894,white,False
-176.894,inf,<silence>,False
+176.894,181.848,<silence>,False

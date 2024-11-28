@@ -569,4 +569,4 @@ start,end,token,exclude
 193.61,194.678,la,False
 194.678,195.512,la,False
 195.512,198.649,la,False
-198.649,inf,<silence>,False
+198.649,217.08,<silence>,False

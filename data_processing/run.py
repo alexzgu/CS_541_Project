@@ -1,4 +1,5 @@
 import warnings
+from data_processing.change_last_end_to_vid_length import change_end_for_directory
 
 # suppress FutureWarnings
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -42,5 +43,9 @@ if __name__ == '__main__':
     #                        segment_index_file_path,
     #                        syllable_vocals_dir)
     # print("Indexed audio data.")
+
+print("Changing last end to vid length...")
+change_end_for_directory(clean_subtitles_path, raw_vocals_dir)
+print("Changed last end to vid length.")
 
 # TODO: create segment break data

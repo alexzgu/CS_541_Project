@@ -625,4 +625,4 @@ start,end,token,exclude
 243.093,244.928,me,False
 244.928,245.162,し,False
 245.162,245.596,て,False
-245.596,inf,<silence>,False
+245.596,273.312,<silence>,False

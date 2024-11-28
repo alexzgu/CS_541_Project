@@ -941,4 +941,4 @@ start,end,token,exclude
 263.58,263.914,め,False
 263.914,264.147,だ,False
 264.147,264.58,ぞ,False
-264.58,inf,<silence>,False
+264.58,272.184,<silence>,False

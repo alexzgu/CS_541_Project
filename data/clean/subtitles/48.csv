@@ -375,4 +375,4 @@ start,end,token,exclude
 236.253,236.486,す,False
 236.486,239.923,み,False
 239.923,250.0,<silence>,False
-250.0,inf,<silence>,True
+250.0,276.024,<silence>,True

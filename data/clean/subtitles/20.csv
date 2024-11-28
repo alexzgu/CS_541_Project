@@ -190,4 +190,4 @@ start,end,token,exclude
 88.839,89.073,よ,False
 89.073,89.306,う,False
 89.306,91.742,に,False
-91.742,inf,<silence>,False
+91.742,108.504,<silence>,False

@@ -444,4 +444,4 @@ start,end,token,exclude
 222.306,222.639,い,False
 222.639,222.873,す,False
 222.873,225.209,き,False
-225.209,inf,<silence>,False
+225.209,255.696,<silence>,False

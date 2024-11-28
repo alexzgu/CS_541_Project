@@ -469,4 +469,4 @@ start,end,token,exclude
 207.291,207.624,give,False
 207.624,207.824,it,False
 207.824,211.728,up,False
-211.728,inf,<silence>,False
+211.728,225.048,<silence>,False

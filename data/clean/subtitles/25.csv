@@ -509,4 +509,4 @@ start,end,token,exclude
 127.111,127.277,ん,False
 127.277,127.478,の,False
 127.478,127.811,さ,False
-127.811,inf,<silence>,False
+127.811,131.232,<silence>,False

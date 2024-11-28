@@ -344,4 +344,4 @@ start,end,token,exclude
 110.661,110.727,み,False
 110.727,111.095,ら,False
 111.095,111.295,い,False
-111.295,inf,<silence>,False
+111.295,129.984,<silence>,False

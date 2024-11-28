@@ -780,4 +780,4 @@ start,end,token,exclude
 254.238,254.404,ぽん,False
 254.404,254.605,ぽん,False
 254.605,254.805,ぽん,False
-254.805,inf,<silence>,False
+254.805,263.256,<silence>,False

@@ -529,4 +529,4 @@ start,end,token,exclude
 190.974,191.441,し,False
 191.441,191.909,く,False
 191.909,195.479,ね,False
-195.479,inf,<silence>,False
+195.479,218.184,<silence>,False

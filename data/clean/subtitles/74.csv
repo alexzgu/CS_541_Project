@@ -345,4 +345,4 @@ start,end,token,exclude
 221.738,222.139,だ,False
 222.139,225.042,け,True
 225.042,238.0,<silence>,True
-238.0,inf,<silence>,False
+238.0,299.088,<silence>,False

@@ -634,4 +634,4 @@ start,end,token,exclude
 233.784,233.984,た,False
 233.984,234.151,い,False
 234.151,234.718,に,False
-234.718,inf,<silence>,False
+234.718,246.288,<silence>,False

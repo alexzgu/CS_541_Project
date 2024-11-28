@@ -972,4 +972,4 @@ start,end,token,exclude
 202.92,203.353,q,False
 203.353,203.754,e,False
 203.754,204.188,d,False
-204.188,inf,<silence>,False
+204.188,220.824,<silence>,False

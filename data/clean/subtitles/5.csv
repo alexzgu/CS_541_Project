@@ -368,4 +368,4 @@ start,end,token,exclude
 200.083,200.317,い,False
 200.317,200.817,く,False
 200.817,202.953,よ,False
-202.953,inf,<silence>,False
+202.953,232.248,<silence>,False

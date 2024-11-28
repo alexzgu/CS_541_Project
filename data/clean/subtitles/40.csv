@@ -609,4 +609,4 @@ start,end,token,exclude
 277.194,277.694,ta,True
 277.694,277.928,wa,True
 277.928,279.496,ku,True
-279.496,inf,<silence>,False
+279.496,286.632,<silence>,False

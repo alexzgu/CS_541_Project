@@ -680,4 +680,4 @@ start,end,token,exclude
 227.044,227.177,she,False
 227.177,227.511,will,False
 227.511,227.978,start,False
-227.978,inf,<silence>,False
+227.978,245.064,<silence>,False

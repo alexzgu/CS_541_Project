@@ -695,4 +695,4 @@ start,end,token,exclude
 284.201,284.501,stel,False
 284.501,285.736,lar,False
 285.736,295.0,<silence>,True
-295.0,inf,<silence>,False
+295.0,304.992,<silence>,False

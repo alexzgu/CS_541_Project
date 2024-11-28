@@ -572,4 +572,4 @@ start,end,token,exclude
 275.792,275.959,び,False
 275.959,276.393,きっ,False
 276.393,276.75,た,False
-276.75,inf,<silence>,False
+276.75,283.176,<silence>,False

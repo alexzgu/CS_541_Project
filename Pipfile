@@ -9,6 +9,7 @@ torch = "*"
 pandas = "*"
 numpy = "<2"
 pydub = "*"
+mutagen = "*"
 
 [dev-packages]
 pandas = "<2"

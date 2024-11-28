@@ -720,4 +720,4 @@ start,end,token,exclude
 187.771,187.938,ん,False
 187.938,188.539,だ,False
 188.539,191.0,<silence>,True
-191.0,inf,<silence>,False
+191.0,205.824,<silence>,False

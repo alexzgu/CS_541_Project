@@ -606,4 +606,4 @@ start,end,token,exclude
 219.703,219.836,ほ,False
 219.836,220.003,こ,False
 220.003,220.404,れ,False
-220.404,inf,<silence>,False
+220.404,241.968,<silence>,False

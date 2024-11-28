@@ -836,4 +836,4 @@ start,end,token,exclude
 252.259,252.66,た,False
 252.66,252.86,せ,False
 252.86,253.259,て,False
-253.259,inf,<silence>,False
+253.259,262.776,<silence>,False

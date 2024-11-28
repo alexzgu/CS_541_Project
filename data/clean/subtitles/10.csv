@@ -373,4 +373,4 @@ start,end,token,exclude
 195.078,195.312,ら,False
 195.312,195.546,ら,False
 195.546,199.082,ら,False
-199.082,inf,<silence>,False
+199.082,216.264,<silence>,False

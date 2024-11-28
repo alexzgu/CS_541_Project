@@ -496,4 +496,4 @@ start,end,token,exclude
 222.839,223.207,last,False
 223.207,223.574,ing,False
 223.574,224.341,soul,False
-224.341,inf,<silence>,False
+224.341,243.096,<silence>,False

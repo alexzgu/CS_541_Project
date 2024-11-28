@@ -605,4 +605,4 @@ start,end,token,exclude
 188.438,188.639,い,False
 188.639,188.839,か,False
 188.839,190.507,が,False
-190.507,inf,<silence>,False
+190.507,204.792,<silence>,False

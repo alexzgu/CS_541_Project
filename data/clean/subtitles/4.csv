@@ -534,4 +534,4 @@ start,end,token,exclude
 195.779,196.413,ら,False
 196.413,196.647,い,False
 196.647,199.283,へ,False
-199.283,inf,<silence>,False
+199.283,220.584,<silence>,False

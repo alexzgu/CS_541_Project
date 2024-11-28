@@ -521,4 +521,4 @@ start,end,token,exclude
 213.864,214.264,し,False
 214.264,214.698,な,False
 214.698,217.95,い,False
-217.95,inf,<silence>,False
+217.95,236.088,<silence>,False
