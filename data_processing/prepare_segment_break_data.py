@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 
+SAMPLE_LENGTH = 5  # in milliseconds
+
 def find_segments_breaks(cleaned_subtitle_dir: str, segments_dir: str) -> None:
     """
     For each csv in the cleaned_subtitle_dir, output a text file in segments_dir such that
@@ -21,8 +23,17 @@ def find_segments_breaks(cleaned_subtitle_dir: str, segments_dir: str) -> None:
             find_segment_breaks_file(cleaned_subtitle_file, segments_data_file)
 
 
-def find_segment_breaks_file(cleaned_subtitle_file: str, segments_data_file: str) -> None:
+def find_segment_breaks_file(cleaned_subtitle_file: str, segments_data_file: str, sample_length=SAMPLE_LENGTH) -> None:
     """
+    Generates data for segment break detection. This involves splitting the audio file into discretized intervals, each
+    interval of size sample_length (in milliseconds).
+    Args:
+        cleaned_subtitle_file:
+        segments_data_file:
+        sample_length: Length of discretized intervals.
+
+    Returns:
+
     """
 
     df = pd.read_csv(cleaned_subtitle_file)
@@ -34,8 +45,6 @@ def find_segment_breaks_file(cleaned_subtitle_file: str, segments_data_file: str
 
     max_interval = int(end_times[-1])
     discretized_df = pd.DataFrame(columns=['start', 'end'])
-
-    sample_length = 5  # each row has (sample_length) ms intervals
 
     discretized_df['start'] = range(max_interval // sample_length)
     discretized_df['start'] = discretized_df['start'] * sample_length
