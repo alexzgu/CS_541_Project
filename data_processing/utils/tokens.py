@@ -32,8 +32,15 @@ def get_tokens(tokens_path: str) -> Set[str]:
     with open(tokens_path, 'r') as file:
         data = file.read()
 
-    data = data.replace(' ', '').replace('\t', '')
+    characters_to_remove = ['\n', ' ', '\'']
+
+    for char in characters_to_remove:
+        data = data.replace(char, '')
+
     data = data.split(',')
+
+    silence_token = '<silence>'
+    data.append(silence_token)
 
     return set(data)
 
