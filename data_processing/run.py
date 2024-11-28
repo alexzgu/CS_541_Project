@@ -1,5 +1,6 @@
 import warnings
 from data_processing.change_last_end_to_vid_length import change_end_for_directory
+from data_processing.prepare_segment_break_data import find_segments_breaks
 
 # suppress FutureWarnings
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -20,6 +21,8 @@ if __name__ == '__main__':
     segment_index_file_path = f'{syllables_dir}/segment_index.csv'
 
     syllable_vocals_dir = f'{syllables_dir}/clips'
+
+    segment_break_dir = f'{data_dir}/clean/segment_breaks'
 
     # stage_1_dir = f'{data_dir}/processed/subtitles/stage_1'
     # time_range_dir = f'{stage_1_dir}/time_ranges'
@@ -44,8 +47,10 @@ if __name__ == '__main__':
     #                        syllable_vocals_dir)
     # print("Indexed audio data.")
 
-print("Changing last end to vid length...")
-change_end_for_directory(clean_subtitles_path, raw_vocals_dir)
-print("Changed last end to vid length.")
+    # print("Changing last end to vid length...")
+    # change_end_for_directory(clean_subtitles_path, raw_vocals_dir)
+    # print("Changed last end to vid length.")
 
-# TODO: create segment break data
+    print("Finding segment breaks...")
+    find_segments_breaks(clean_subtitles_path, segment_break_dir)
+    print("Found segment breaks.")

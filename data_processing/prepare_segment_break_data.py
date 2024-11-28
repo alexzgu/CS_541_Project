@@ -1,12 +1,52 @@
-def find_segments(cleaned_subtitle_data_path: str, segments_data_path: str) -> int:
+import pandas as pd
+import os
+
+def find_segments_breaks(cleaned_subtitle_dir: str, segments_dir: str) -> None:
     """
-    For each csv in the cleaned_subtitle_data_path, output a text file in segments_data_path such that
+    For each csv in the cleaned_subtitle_dir, output a text file in segments_dir such that
     the file contains a comma-separated list of all start and end times (no duplicate times).
     Args:
-        cleaned_subtitle_data_path: Where the cleaned subtitle data (input) is stored.
-        segments_data_path: Where the segments data (output) will be stored.
+        cleaned_subtitle_dir: Where the cleaned subtitle data (input) is stored.
+        segments_dir: Where the segments data (output) will be stored.
 
-    Returns: 0 if successful, -1 otherwise.
+    Returns:
     """
 
-    return -1  # TODO: Implement this function
+    # iterate through files in the cleaned_subtitle_dir
+    for file in os.listdir(cleaned_subtitle_dir):
+        if file.endswith(".csv"):
+            cleaned_subtitle_file = os.path.join(cleaned_subtitle_dir, file)
+            segments_data_file = os.path.join(segments_dir, f"{file[:-4]}.csv")
+
+            find_segment_breaks_file(cleaned_subtitle_file, segments_data_file)
+
+
+def find_segment_breaks_file(cleaned_subtitle_file: str, segments_data_file: str) -> None:
+    """
+    """
+
+    df = pd.read_csv(cleaned_subtitle_file)
+
+    # extract list of end times
+    ms_per_s = 1000
+    df['end'] = df['end'] * ms_per_s  # in milliseconds
+    end_times = df['end'].tolist()
+
+    max_interval = int(end_times[-1])
+    discretized_df = pd.DataFrame(columns=['start', 'end'])
+
+    sample_length = 5  # each row has (sample_length) ms intervals
+
+    discretized_df['start'] = range(max_interval // sample_length)
+    discretized_df['start'] = discretized_df['start'] * sample_length
+
+    discretized_df['end'] = range(1, max_interval // sample_length + 1)
+    discretized_df['end'] = discretized_df['end'] * sample_length
+    discretized_df['break'] = False
+
+    # for each end time in end_times, set the 'break' column to True for the corresponding row in df2
+    for end_time in end_times[:-1]:
+        discretized_df.loc[(discretized_df['start'] <= end_time) & (discretized_df['end'] >= end_time), 'break'] = True
+
+    # write entire discretized_df to segments_data_file
+    discretized_df.to_csv(segments_data_file, index=False)
