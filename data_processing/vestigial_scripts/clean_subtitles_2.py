@@ -3,8 +3,8 @@ import os
 
 import pandas as pd
 
-from data_processing.subtitles.utils.time_ranges import TimeRange, read_time_range_data
-from data_processing.subtitles.utils.character_filtering import filter_long_vowels, filter_null_tokens, kana_to_hira
+from data_processing.utils.time_ranges import TimeRange, read_time_range_data
+from data_processing.utils.character_filtering import filter_long_vowels, filter_null_tokens, kana_to_hira
 
 def clean_subtitles_2(raw_subtitle_dir: str, time_range_dir: str, clean_subtitle_dir: str):
     """

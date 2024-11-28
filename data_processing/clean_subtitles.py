@@ -3,10 +3,10 @@ import os
 
 import pandas as pd
 
-from data_processing.subtitles.utils.character_filtering import to_kana, to_alphanumeric, kana_to_hira, filter_long_vowels, filter_null_tokens
-from data_processing.subtitles.utils.time_ranges import TimeRange, read_time_range_data, compute_silence_ranges
-from data_processing.subtitles.utils.row_filtering import remove_hemisphere, compute_overlaps
-from data_processing.subtitles.utils.silence_and_excluded import insert_silence_and_excluded
+from data_processing.utils.character_filtering import to_kana, to_alphanumeric, kana_to_hira, filter_long_vowels, filter_null_tokens
+from data_processing.utils.time_ranges import TimeRange, read_time_range_data, compute_silence_ranges
+from data_processing.utils.row_filtering import remove_hemisphere, compute_overlaps
+from data_processing.utils.silence_and_excluded import insert_silence_and_excluded
 
 
 def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle_dir: str,

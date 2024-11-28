@@ -2,7 +2,7 @@ from typing import List
 
 import pandas as pd
 
-from data_processing.subtitles.utils.time_ranges import TimeRange
+from data_processing.utils.time_ranges import TimeRange
 
 
 def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_times: List[TimeRange], debug: bool = False) -> pd.DataFrame:

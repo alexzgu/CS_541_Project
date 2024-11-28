@@ -1,5 +1,3 @@
-from data_processing.subtitles.clean_subtitles import clean_subtitles
-from data_processing.subtitles.prepare_token_classification_data import segment_audio, reindex_audio_segments
 import warnings
 
 # suppress FutureWarnings
@@ -37,10 +35,12 @@ if __name__ == '__main__':
     # segment_audio(raw_vocals_dir, clean_subtitles_path, syllable_vocals_dir, segment_index_file_path)
     # print("Segmented audio data.")
 
-    print("Indexing audio data...")
-    reindex_audio_segments(segment_index_file_path,
-                           segment_index_file_path,
-                           syllable_vocals_dir)
-    print("Indexed audio data.")
+    # must run indexing right after segmenting
+
+    # print("Indexing audio data...")
+    # reindex_audio_segments(segment_index_file_path,
+    #                        segment_index_file_path,
+    #                        syllable_vocals_dir)
+    # print("Indexed audio data.")
 
 # TODO: create segment break data
