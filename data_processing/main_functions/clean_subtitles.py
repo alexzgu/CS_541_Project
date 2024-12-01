@@ -11,7 +11,7 @@ from data_processing.utils.tokens import exclude_if_not_in_token_set
 
 
 def clean_subtitles(raw_subtitle_dir: str, ignore_times_dir: str, clean_subtitle_dir: str, tokens_path: str,
-                    output_intermediates: bool = True, intermediate_dir: str = ""):
+                    output_intermediates: bool = False, intermediate_dir: str = ""):
     """
     Args:
         raw_subtitle_dir: Directory containing raw subtitle data.

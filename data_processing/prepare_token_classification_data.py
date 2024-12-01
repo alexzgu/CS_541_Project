@@ -63,6 +63,7 @@ def segment_audio_file(subtitles_file: str, vocal_audio_file: str, segmented_aud
     df = df[df['exclude'] == False].reset_index(drop=True)
     for idx, row in df.iterrows():
         NUM_SEGMENTS_PER_SECOND = 1000
+
         start = row['start'] * NUM_SEGMENTS_PER_SECOND
         end = row['end']  * NUM_SEGMENTS_PER_SECOND
         token = row['token']
