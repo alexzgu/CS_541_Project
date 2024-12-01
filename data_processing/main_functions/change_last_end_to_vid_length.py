@@ -3,6 +3,7 @@ from mutagen.mp3 import MP3
 import os
 from typing import List, Tuple
 
+MILLISECONDS_IN_SECOND = 1000
 
 def change_end_for_directory(subtitles_dir: str, audio_dir: str, segment_index_file: str) -> None:
     """
@@ -43,25 +44,16 @@ def change_end_for_file(subtitles_file: str, audio_file: str, segment_index_df: 
     Returns:
     """
     try:
-        MILLISECONDS_IN_SECOND = 1000
+        # change last entry of 'end' for the subtitles file
         df = pd.read_csv(subtitles_file)
         vid_length = audio_file_length(audio_file)
-        # change last entry of 'end' to vid_length
         df.loc[df.index[-1], 'end'] = vid_length
-
+        # update the corresponding entry in segment_index_df
         song_idx = subtitles_file.split('/')[-1].split('.')[0]  # e.g., '1' from '1.csv'
-        last_idx = df.index[-1]
-
-        # check whether any of the tuples in inf_indices have a second element with the same value as song_idx
-        # if so, pop that tuple from inf_indices and set the entry indexed by the first element of the tuple to vid_length
         for i, tup in enumerate(inf_indices):
             if tup[1] == int(song_idx):
                 inf_indices.pop(i)
                 segment_index_df.loc[segment_index_df['index'] == tup[0], 'end'] = vid_length * MILLISECONDS_IN_SECOND
-
-        df['start'] = df['start'].astype(int)
-        df['end'] = df['end'].astype(int)
-
         df.to_csv(subtitles_file, index=False)
 
     except ValueError:
