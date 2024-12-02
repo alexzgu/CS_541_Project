@@ -4,7 +4,7 @@ import torch
 import os
 
 # load in data with dataloader
-data_dir = '../../data'
+data_dir = 'data'
 syllable_dir = f'{data_dir}/clean/syllables'
 audio_dir = f'{data_dir}/clean/audio/vocals'
 # f'{syllable_dir}/clips'  # this contains indexed .mp3 files, each of which is a song
@@ -46,4 +46,5 @@ for file in os.listdir(audio_dir):
         file_path = os.path.join(audio_dir, file)
         tensors[file] = process_audio(file_path)
         # store the dictionary in the following path: f'{syllable_dir}/tensors.pt'
+        print("aaa")
         torch.save(tensors, f'{syllable_dir}/wav2vec2_embeddings.pt')
