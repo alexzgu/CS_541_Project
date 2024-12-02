@@ -55,7 +55,7 @@ def find_segment_breaks_file(cleaned_subtitle_file: str, segments_data_file: str
 
     # for each end time in end_times, set the 'break' column to True for the corresponding row in df2
     for end_time in end_times[:-1]:
-        discretized_df.loc[(discretized_df['start'] <= end_time) & (discretized_df['end'] >= end_time), 'break'] = True
+        discretized_df.loc[(discretized_df['start'] <= end_time) & (discretized_df['end'] > end_time), 'break'] = True
 
     # write entire discretized_df to segments_data_file
     discretized_df.to_csv(segments_data_file, index=False)
