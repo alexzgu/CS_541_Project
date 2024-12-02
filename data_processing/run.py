@@ -21,7 +21,7 @@ if __name__ == '__main__':
     tokens_path = f'{data_dir}/config/tokens.txt'
 
     raw_vocals_dir = f'{data_dir}/raw/audio'
-    clean_vocals_dir = f'{data_dir}/clean/audio'
+    clean_vocals_dir = f'{data_dir}/clean/audio/vocals'
     syllables_dir = f'{data_dir}/clean/syllables'
     segment_index_file_path = f'{syllables_dir}/segment_index.csv'
 
@@ -34,23 +34,21 @@ if __name__ == '__main__':
     # print("Cleaning raw subtitle data...")
     # clean_subtitles(raw_subtitles_path, ignore_times_path, clean_subtitles_path, tokens_file_path)
     # print("Cleaned subtitle data.")
-    #
+
     # print("Segmenting audio data...")
-    # segment_audio(raw_vocals_dir, clean_subtitles_path, syllable_vocals_dir, segment_index_file_path)
+    # segment_audio(clean_vocals_dir, clean_subtitles_path, syllable_vocals_dir, segment_index_file_path)
     # print("Segmented audio data.")
 
     # must run indexing right after segmenting
-    # print("Indexing audio data...")
-    # reindex_audio_segments(segment_index_file_path,
-    #                        segment_index_file_path,
-    #                        syllable_vocals_dir)
-    # print("Indexed audio data.")
+    print("Indexing audio data...")
+    reindex_audio_segments(segment_index_file_path,
+                           segment_index_file_path,
+                           syllable_vocals_dir)
+    print("Indexed audio data.")
 
-    # print("Changing last end to vid length...")
-    # change_end_for_directory(clean_subtitles_path, raw_vocals_dir, segment_index_file_path)
-    # print("Changed last end to vid length.")
-
-    # converting all start/end times in segment_index_file from float to int
+    print("Changing last end to vid length...")
+    change_end_for_directory(clean_subtitles_path, raw_vocals_dir, segment_index_file_path)
+    print("Changed last end to vid length.")
 
     print("Finding segment breaks...")
     find_segments_breaks(clean_subtitles_path, segment_break_dir)
