@@ -21,6 +21,7 @@ if __name__ == '__main__':
     tokens_path = f'{data_dir}/config/tokens.txt'
 
     raw_vocals_dir = f'{data_dir}/raw/audio'
+    clean_vocals_dir = f'{data_dir}/clean/audio'
     syllables_dir = f'{data_dir}/clean/syllables'
     segment_index_file_path = f'{syllables_dir}/segment_index.csv'
 
