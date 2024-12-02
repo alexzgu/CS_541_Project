@@ -46,4 +46,4 @@ for file in os.listdir(audio_dir):
         file_path = os.path.join(audio_dir, file)
         tensors[file] = process_audio(file_path)
         # store the dictionary in the following path: f'{syllable_dir}/tensors.pt'
-        torch.save(tensors, f'{syllable_dir}/tensors.pt')
+        torch.save(tensors, f'{syllable_dir}/wav2vec2_embeddings.pt')
