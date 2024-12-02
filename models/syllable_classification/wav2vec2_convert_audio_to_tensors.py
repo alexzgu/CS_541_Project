@@ -6,7 +6,7 @@ import os
 # load in data with dataloader
 data_dir = '../../data'
 syllable_dir = f'{data_dir}/clean/syllables'
-audio_dir = f'{data_dir}/raw/audio'
+audio_dir = f'{data_dir}/clean/audio/vocals'
 # f'{syllable_dir}/clips'  # this contains indexed .mp3 files, each of which is a song
 clip_index_file = f'{syllable_dir}/segment_index.csv'
 # the clip index file contains the following columns:
