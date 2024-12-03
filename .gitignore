@@ -3,3 +3,4 @@
 
 data/processed/audio/
 data/clean/syllables/wav2vec2_embeddings.pt
+*.webm
