@@ -20,7 +20,7 @@ def create_srt_from_csv(csv_path, output_path):
     for index, row in df.iterrows():
         start_time = seconds_to_srt_time(row['start'])
         end_time = seconds_to_srt_time(row['end'])
-        token = row['token'] + " (excluded)" if row['exclude'] else row['token']
+        token = row['token'] + " (x)" if row['exclude'] else row['token']
         srt_entry = f"{index + 1}\n{start_time} --> {end_time}\n{token}\n"
         srt_content.append(srt_entry)
 
