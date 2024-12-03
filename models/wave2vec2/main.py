@@ -1,4 +1,6 @@
 import audio
+import wave
+import torchaudio
 import os
 
 # load in data with dataloader
@@ -10,12 +12,20 @@ clip_index_file = f'{syllable_dir}/segment_index.csv'
 
 # Example usage
 audio_path = "../../data/clean/audio/vocals/0.mp3"
-feature_vectors = audio.to_tensors(audio_path, 40)
+waveform, sampling_rate = torchaudio.load(audio_path)
+
+feature_vectors = audio.to_tensors(audio_path, segment_length_ms=40)
 print(f"Shape of Wav2Vec2 feature vectors: {feature_vectors.shape}")
 
 feature_vectors = audio.to_tensors(audio_path, num_vectors=10)
 print(f"Shape of Wav2Vec2 feature vectors: {feature_vectors.shape}")
 
+
+feature_vectors = wave.to_tensors(waveform[..., 0:sampling_rate], sampling_rate, num_vectors=10)
+print(f"Shape of Wav2Vec2 feature vectors: {feature_vectors.shape}")
+
+feature_vectors = wave.to_tensors(waveform[..., 0:sampling_rate], sampling_rate, segment_length_ms=25)
+print(f"Shape of Wav2Vec2 feature vectors: {feature_vectors.shape}")
 
 
 # Process all files in directory
