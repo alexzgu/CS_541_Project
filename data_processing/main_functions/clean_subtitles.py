@@ -75,6 +75,7 @@ def clean_subtitles_file(df: pd.DataFrame, ignore_times: List[TimeRange], tokens
         df = df[~df['overlap']]
 
         debug = False
+        # sort by start, end
         df = insert_silence_and_excluded(df, ignore_times, silence_ranges, debug=debug)
         if not debug:
             df = df.drop(columns=['overlap'])
