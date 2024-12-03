@@ -4,16 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-spleeter = "*"
 torch = "*"
-pandas = "*"
+pandas = "<2"
 numpy = "<2"
+torchvision = "*"
+torchaudio = "*"
+soundfile = "*"
 pydub = "*"
 mutagen = "*"
+transformers = "*"
 
 [dev-packages]
-pandas = "<2"
 
 [requires]
 python_version = "3.10"
-python_full_version = "3.10.15"
