@@ -67,11 +67,10 @@ print(f"Shape of Wav2Vec2 feature vectors: {feature_vectors.shape}")
 
 
 # Process all files in directory
-tensors = {}
+# tensors = {}
 # for file in os.listdir(audio_dir):
 #     if file.endswith('.mp3'):
 #         file_path = os.path.join(audio_dir, file)
-#         tensors[file] = process_audio(file_path)
+#         tensors[file] = encode_audio_to_wav2vec_vectors(file_path, 10)
 #         # store the dictionary in the following path: f'{syllable_dir}/tensors.pt'
-#         print("aaa")
 #         torch.save(tensors, f'{syllable_dir}/wav2vec2_embeddings.pt')
