@@ -45,5 +45,5 @@ def process_directory(input_dir, output_dir):
 # Example usage:
 data_dir = "../../data"
 clean_subtitles_dir = f"{data_dir}/clean/subtitles"
-srt_output_dir = f"{data_dir}/clean/srts"
+srt_output_dir = f"{data_dir}/processed/srts"
 process_directory(clean_subtitles_dir, srt_output_dir)
