@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-SAMPLE_LENGTH = 5  # in milliseconds
+SAMPLE_LENGTH = 10  # in milliseconds
 
 def find_segments_breaks(cleaned_subtitle_dir: str, segments_dir: str) -> None:
     """

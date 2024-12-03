@@ -31,13 +31,13 @@ if __name__ == '__main__':
     # stage_1_dir = f'{data_dir}/processed/subtitles/stage_1'
     # time_range_dir = f'{stage_1_dir}/time_ranges'
 
-    # print("Cleaning raw subtitle data...")
-    # clean_subtitles(raw_subtitles_path, ignore_times_path, clean_subtitles_path, tokens_file_path)
-    # print("Cleaned subtitle data.")
+    print("Cleaning raw subtitle data...")
+    clean_subtitles(raw_subtitles_path, ignore_times_path, clean_subtitles_path, tokens_file_path)
+    print("Cleaned subtitle data.")
 
-    # print("Segmenting audio data...")
-    # segment_audio(clean_vocals_dir, clean_subtitles_path, syllable_vocals_dir, segment_index_file_path)
-    # print("Segmented audio data.")
+    print("Segmenting audio data...")
+    segment_audio(clean_vocals_dir, clean_subtitles_path, syllable_vocals_dir, segment_index_file_path)
+    print("Segmented audio data.")
 
     # must run indexing right after segmenting
     print("Indexing audio data...")
