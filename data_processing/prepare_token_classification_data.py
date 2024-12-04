@@ -3,7 +3,7 @@ import pandas as pd
 from pydub import AudioSegment
 
 def segment_audio(vocal_audio_dir: str, clean_subtitle_dir: str,
-                  segmented_audio_dir: str, segment_index_file_path: str) -> int:
+                  segmented_audio_dir: str, segment_index_file_path: str, padding: int = 0) -> int:
     """
     Segments the vocal audio data into smaller audio clips based on the cleaned subtitle data.
     Each clip is indexed, and information about its file origin, start time, end time, and label (token)
@@ -15,6 +15,7 @@ def segment_audio(vocal_audio_dir: str, clean_subtitle_dir: str,
             Any existing data with the same file name will be overwritten.
         segment_index_file_path:  Where the file containing indices for segments will be stored.
             If it already exists, the data will be appended to the existing file.
+        padding: Number of milliseconds to pad the start and end times of each segment.
 
     Returns: 0 if successful, -1 otherwise.
     """
@@ -35,11 +36,13 @@ def segment_audio(vocal_audio_dir: str, clean_subtitle_dir: str,
             print(f"Segmenting audio for file: {file}")
             subtitles_file = os.path.join(clean_subtitle_dir, file)
             vocal_audio_file = os.path.join(vocal_audio_dir, f"{file[:-4]}.mp3")
-            segment_audio_file(subtitles_file, vocal_audio_file, segmented_audio_dir, segment_index_file)
+            segment_audio_file(subtitles_file, vocal_audio_file, segmented_audio_dir,
+                               segment_index_file, padding=padding)
     return 0
 
 
-def segment_audio_file(subtitles_file: str, vocal_audio_file: str, segmented_audio_dir: str, segment_index_file: str):
+def segment_audio_file(subtitles_file: str, vocal_audio_file: str, segmented_audio_dir: str,
+                       segment_index_file: str, padding:int=0):
     """
     Segments the vocal audio data into smaller audio clips based on the cleaned subtitle data.
     Args:
@@ -47,16 +50,15 @@ def segment_audio_file(subtitles_file: str, vocal_audio_file: str, segmented_aud
         vocal_audio_file:
         segmented_audio_dir:
         segment_index_file:
+        padding: Number of milliseconds to pad the start and end times of each segment
+        (except the first segment's start). Default padding is 0 ms.
 
     Returns:
 
     """
     file_idx = subtitles_file.split('/')[-1].split('.')[0]
 
-    # read in the subtitle data
     df = pd.read_csv(subtitles_file)
-
-    # read in the vocal audio data
     vocal_audio = AudioSegment.from_file(vocal_audio_file)
 
     # filter for rows where exclude = True
@@ -65,17 +67,19 @@ def segment_audio_file(subtitles_file: str, vocal_audio_file: str, segmented_aud
         NUM_SEGMENTS_PER_SECOND = 1000
 
         start = row['start'] * NUM_SEGMENTS_PER_SECOND
+        start_padded = start - padding if idx != 0 else start
+
         end = row['end']  * NUM_SEGMENTS_PER_SECOND
+        end_padded = end + padding if idx != len(df) - 1 else end
+
         token = row['token']
 
-        # segment the audio
-        segment = vocal_audio[start:end]
+        segment = vocal_audio[start_padded:end_padded]
 
-        # save the segment
         segmented_audio_file = os.path.join(segmented_audio_dir, f"{file_idx}_{idx}.mp3")
         segment.export(segmented_audio_file, format="mp3")
 
-        # append entry to segment index file
+        # NOTE: the start/end times listed are the unpadded times, while the audio clips are padded!!!
         with open(segment_index_file, 'a') as f:
             f.write(f"{file_idx}_{idx},{segmented_audio_file},{start},{end},{token}\n")
 
