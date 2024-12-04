@@ -10,3 +10,10 @@ sudo apt install ffmpeg
 
 **Windows**
 choco install ffmpeg
+
+# Install required libraries
+pip install -r requirement.txt
+
+# Run the script
+python inference.py --input_dir ../data/raw/audio --output_dir ../data/clean/audio
+
