@@ -17,7 +17,7 @@ class SkipConnectionNetwork(nn.Module):
 
         # Define the 8 hidden layers with skip connections
         self.hidden_layers = nn.ModuleList([
-            nn.Linear(hidden_size, hidden_size) for _ in range(8)
+            nn.Linear(hidden_size, hidden_size) for _ in range(num_layers - 2)
         ])
 
         self.output_layer = nn.Linear(hidden_size, num_classes)
