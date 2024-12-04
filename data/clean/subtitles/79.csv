@@ -38,8 +38,7 @@ start,end,token,exclude
 15.366,15.733,はい,True
 15.733,16.066,しん,True
 16.066,16.433,ちゅう,True
-16.433,17.5,<silence>,True
-17.5,19.77,<silence>,False
+16.433,19.77,<silence>,True
 19.77,20.304,ほ,False
 20.304,20.471,ら,False
 20.471,21.839,ね,False
@@ -74,7 +73,7 @@ start,end,token,exclude
 33.25,33.384,き,False
 33.384,33.751,た,False
 33.751,34.284,か,False
-34.284,34.451,ふぇ,True
+34.284,34.451,ふぇ,False
 34.451,35.786,の,False
 35.786,36.153,け,False
 36.153,36.52,き,False

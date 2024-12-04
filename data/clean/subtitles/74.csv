@@ -156,8 +156,7 @@ start,end,token,exclude
 105.589,105.823,の,False
 105.823,106.156,な,False
 106.156,107.091,か,False
-107.091,124.0,<silence>,True
-124.0,125.075,<silence>,False
+107.091,125.075,<silence>,True
 125.075,125.375,よ,False
 125.375,125.876,ぎ,False
 125.876,126.376,る,False
@@ -344,5 +343,4 @@ start,end,token,exclude
 221.672,221.738,い,False
 221.738,222.139,だ,False
 222.139,225.042,け,True
-225.042,238.0,<silence>,True
-238.0,299.088,<silence>,False
+225.042,299.088,<silence>,True

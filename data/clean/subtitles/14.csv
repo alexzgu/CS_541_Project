@@ -386,5 +386,4 @@ start,end,token,exclude
 171.345,171.512,ん,False
 171.512,171.745,こ,False
 171.745,172.578,り,False
-172.578,186.0,<silence>,True
-186.0,205.752,<silence>,False
+172.578,205.752,<silence>,True
