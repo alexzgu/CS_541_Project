@@ -14,6 +14,10 @@ def find_segments_breaks(cleaned_subtitle_dir: str, segments_dir: str) -> None:
     Returns:
     """
 
+    # remove all files from segments_dir
+    for file in os.listdir(segments_dir):
+        os.remove(os.path.join(segments_dir, file))
+
     # iterate through files in the cleaned_subtitle_dir
     for file in os.listdir(cleaned_subtitle_dir):
         if file.endswith(".csv"):
@@ -51,6 +55,7 @@ def find_segment_breaks_file(cleaned_subtitle_file: str, segments_data_file: str
 
     discretized_df['end'] = range(1, max_interval // sample_length + 1)
     discretized_df['end'] = discretized_df['end'] * sample_length
+
     discretized_df['break'] = False
 
     # for each end time in end_times, set the 'break' column to True for the corresponding row in df2

@@ -59,8 +59,14 @@ def compute_silence_ranges(df: pd.DataFrame) -> List[TimeRange]:
         List of TimeRange objects representing silent periods.
         The last TimeRange will have -1 as its end time.
     """
+    # if any entry in start or end is NaN, raise an error
+    if df['start'].isnull().values.any() or df['end'].isnull().values.any():
+        raise ValueError("NaN values found in 'start' or 'end' columns. "
+                         "Double check to make sure you didn't accidentally include any"
+                         " NaN values in the subtitle data.")
+
     # Sort by start time and reset index to ensure proper ordering
-    df = df.sort_values(['start', 'end']).reset_index(drop=True)
+    df = df.sort_values(['start', 'end', 'line']).reset_index(drop=True)
 
     # Initialize result list
     silence_ranges = []
@@ -68,7 +74,9 @@ def compute_silence_ranges(df: pd.DataFrame) -> List[TimeRange]:
     # Check if there's silence at the start
     if len(df) == 0:
         return [TimeRange(0.0, -1)]
-    elif df.iloc[0]['start'] > 0:
+
+    #elif below; make sure to remember to change this to elif
+    if float(df.iloc[0]['start']) > 0:
         silence_ranges.append(TimeRange(0.0, df.iloc[0]['start']))
 
     # Find gaps between subtitle segments

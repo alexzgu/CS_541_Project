@@ -342,7 +342,7 @@ start,end,token,exclude
 88.572,89.006,ya,True
 89.006,89.206,こ,False
 89.206,89.44,れ,False
-89.44,89.64,は,False
+89.44,89.64,わ,False
 89.64,89.74,も,False
 89.74,89.873,う,False
 89.873,90.074,て,False
