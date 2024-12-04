@@ -61,54 +61,7 @@ def insert_silence_and_excluded(df: pd.DataFrame, i_times: List[TimeRange], s_ti
         for index, row in df.iterrows():
             if not is_overlapping(row, i_time):
                 continue
-            if row['token'] != silence_token:
-                df.at[index, 'ignore'] = True
-            else:  # silence row
-                i_start_before = i_time.start <= row['start']
-                i_end_after = i_time.end >= row['end']
-                if i_start_before and i_end_after:
-                    df.at[index, 'cleaned_token'] = silence_token  # this is intentional
-                    df.at[index, 'ignore'] = True
-
-                else:  # split the silence row (i_start_before != i_end_after)
-                    if i_start_before:
-                        # the time range to ignore partially overlaps with the silence row,
-                        # where the time range starts before the silence row
-                        # here, the silence row will be split into two rows
-                        # the ignored silence row will have start = silence row start, end = time range end
-                        # the non-ignored silence row will have start = time range end, end = silence row end
-                        df.at[index, 'start'] = i_time.end
-                        ignored_silence_row = {
-                            'start': row['start'],
-                            'end': i_time.end,
-                            'overlap': False,
-                            'token': silence_token,
-                            'cleaned_token': silence_token,
-                            'ignore': True,
-                        }
-                        df = df.append(ignored_silence_row, ignore_index=True)
-
-
-                    else:  # i_end_after
-                        # the time range to ignore partially overlaps with the silence row,
-                        # where the time range ends after the silence row
-                        # here, the silence row will be split into two rows
-                        # the ignored silence row will have start = time range start, end = silence row end
-                        # the non-ignored silence row will have start = silence row start, end = time range start
-                        df.at[index, 'end'] = i_time.start
-                        ignored_silence_row = {
-                            'start': i_time.start,
-                            'end': row['end'],
-                            'overlap': False,
-                            'token': silence_token,
-                            'cleaned_token': silence_token,
-                            'ignore': True,
-                        }
-                        df = df.append(ignored_silence_row, ignore_index=True)
-
-
-    # note: any silence row should have 'overlap' = False, 'cleaned_token' = silence_token, and 'ignore' = False by default,
-    # unless further specified by the above conditions
+            df.at[index, 'ignore'] = True
 
     df = df.sort_values(by=['start', 'end']).reset_index(drop=True)
 
