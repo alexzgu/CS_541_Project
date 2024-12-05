@@ -16,7 +16,7 @@ def get_training_set():
     y = torch.from_numpy(classes)
 
     dataset = TensorDataset(X, y)
-    batch_size = 16
+    batch_size = 4
     return DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
 
@@ -31,17 +31,17 @@ def load_data():
     print(os.getcwd())
     index = pd.read_csv(clip_index_file).to_dict('index')
 
-    syllables = np.array([])
-    classes = np.array([])
+    syllables = []
+    classes = []
 
-    for file in os.listdir(clip_dir):
+    for file in os.listdir(clip_dir)[0:4]:
         if file.endswith('.mp3'):
             clip_id = int(file[:-4])
             waveform, sampling_rate = torchaudio.load(f'{clip_dir}/{file}')
             encoding = wave.to_tensors(waveform, sampling_rate, num_vectors=10)
 
-            np.append(syllables, encoding)
-            np.append(classes, one_hot_encoding(index.get(clip_id)['token']))
+            syllables.append(encoding.flatten())
+            classes.append(one_hot_encoding(index.get(clip_id)['token']))
 
-    return syllables, classes
+    return np.array(syllables), np.array(classes)
 

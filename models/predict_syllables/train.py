@@ -11,15 +11,15 @@ def train(epochs=10):
     dataloader = get_training_set()
     model = SkipConnectionNetwork()
 
-    criterion = nn.CrossEntropyLoss
-    accuracy = Accuracy()
+    criterion = nn.CrossEntropyLoss()
+    accuracy = Accuracy(task="multiclass", num_classes=105)
     optimizer = optim.Adam(model.parameters(), lr=0.01)
 
     for epoch in range(epochs):
         for batch_X, batch_Y in dataloader:
             # Forward pass
             predictions = model(batch_X)
-            loss = criterion(predictions, batch_Y)
+            loss = criterion(predictions, batch_Y.float())
             accuracy(predictions, batch_Y)
 
             # Backward pass and optimization
