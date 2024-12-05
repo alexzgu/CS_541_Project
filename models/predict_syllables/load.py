@@ -1,22 +1,47 @@
+from torch.utils.data import DataLoader, TensorDataset
 import pandas as pd
+import numpy as np
 import torchaudio
+import torch
 import os
+from .syllables import one_hot_encoding
+
+print(os.getcwd())
+
+from ..wave2vec2 import wave
+
+def get_training_set():
+    syllables, classes = load_data()
+    X = torch.from_numpy(syllables)
+    y = torch.from_numpy(classes)
+
+    dataset = TensorDataset(X, y)
+    batch_size = 16
+    return DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
 
 def load_data():
     # load in data with dataloader
-    data_dir = '../../data'
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    data_dir = f'{current_directory}/../../data'
     syllable_dir = f'{data_dir}/clean/syllables'
     clip_dir = f'{syllable_dir}/clips'
     clip_index_file = f'{syllable_dir}/segment_index.csv'
 
+    print(os.getcwd())
     index = pd.read_csv(clip_index_file).to_dict('index')
-    syllable_clips = dict()
+
+    syllables = np.array([])
+    classes = np.array([])
 
     for file in os.listdir(clip_dir):
         if file.endswith('.mp3'):
             clip_id = int(file[:-4])
-            syllable_clips[clip_id] = torchaudio.load(f'{clip_dir}/{file}')
+            waveform, sampling_rate = torchaudio.load(f'{clip_dir}/{file}')
+            encoding = wave.to_tensors(waveform, sampling_rate, num_vectors=10)
 
-    return index, syllable_clips
+            np.append(syllables, encoding)
+            np.append(classes, one_hot_encoding(index.get(clip_id)['token']))
+
+    return syllables, classes
 

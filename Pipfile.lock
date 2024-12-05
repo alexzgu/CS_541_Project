@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e39a2aa7cb730cb46177aded30de978073f532c247d694e7472fc5a8ce69dbdb"
+            "sha256": "c75b4850ee747f2dc0c48fce3476810c4a782f8003fd335d0d6ef543734443c0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -247,6 +247,14 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==3.1.4"
+        },
+        "lightning-utilities": {
+            "hashes": [
+                "sha256:ac6d4e9e28faf3ff4be997876750fee10dc604753dbc429bf3848a95c5d7e0d2",
+                "sha256:f5052b81344cc2684aa9afd74b7ce8819a8f49a858184ec04548a5a109dfd053"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==0.11.9"
         },
         "markupsafe": {
             "hashes": [
@@ -819,13 +827,21 @@
             "markers": "python_version >= '3.7'",
             "version": "==0.4.5"
         },
+        "setuptools": {
+            "hashes": [
+                "sha256:8199222558df7c86216af4f84c30e9b34a61d8ba19366cc914424cdbd28252f6",
+                "sha256:ce74b49e8f7110f9bf04883b730f4765b774ef3ef28f722cce7c273d253aaf7d"
+            ],
+            "markers": "python_version >= '3.9'",
+            "version": "==75.6.0"
+        },
         "six": {
             "hashes": [
-                "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
-                "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
+                "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
-            "version": "==1.16.0"
+            "version": "==1.17.0"
         },
         "soundfile": {
             "hashes": [
@@ -1012,6 +1028,15 @@
             ],
             "index": "pypi",
             "version": "==2.5.1"
+        },
+        "torchmetrics": {
+            "hashes": [
+                "sha256:a508cdd87766cedaaf55a419812bf9f493aff8fffc02cc19df5a8e2e7ccb942a",
+                "sha256:aebba248708fb90def20cccba6f55bddd134a58de43fb22b0c5ca0f3a89fa984"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.9'",
+            "version": "==1.6.0"
         },
         "torchvision": {
             "hashes": [

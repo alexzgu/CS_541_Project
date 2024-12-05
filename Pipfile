@@ -13,6 +13,7 @@ soundfile = "*"
 pydub = "*"
 mutagen = "*"
 transformers = "*"
+torchmetrics = "*"
 
 [dev-packages]
 

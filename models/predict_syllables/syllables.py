@@ -35,5 +35,3 @@ def one_hot_encoding(syllable):
     vector = np.repeat(0, len(syllables))
     vector[hot_index] = 1
     return vector
-
-print(len(syllables))

@@ -42,23 +42,3 @@ model = SkipConnectionNetwork()
 
 # Print model architecture
 print(model)
-
-# Define loss and optimizer
-criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-
-# Example input (batch size = 16, input size = 7680)
-batch_size = 16
-inputs = torch.randn(batch_size, 7680)
-targets = torch.randint(0, 105, (batch_size,))
-
-# Forward pass
-outputs = model(inputs)
-loss = criterion(outputs, targets)
-
-# Backward pass
-loss.backward()
-optimizer.step()
-
-print(f"Loss: {loss.item()}")
-
