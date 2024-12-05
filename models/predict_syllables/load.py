@@ -34,7 +34,7 @@ def load_data_from_mp3():
     classes = []
 
     num = 0
-    for file in os.listdir(clip_dir)[0:32]:
+    for file in os.listdir(clip_dir)[:1500]:
         if file.endswith('.mp3'):
             clip_id = int(file[:-4])
             waveform, sampling_rate = torchaudio.load(f'{clip_dir}/{file}')
@@ -52,5 +52,5 @@ def load_data_from_mp3():
     torch.save(syllable_tensors, f'{current_directory}/../tensors/syllable_tensors.pt')
     torch.save(class_tensors, f'{current_directory}/../tensors/class_tensors.pt')
 
-    return torch.tensor(syllables), torch.tensor(classes)
+    return syllable_tensors, class_tensors
 

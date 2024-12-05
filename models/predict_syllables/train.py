@@ -9,7 +9,7 @@ import torch
 
 accuracy = Accuracy(task="multiclass", num_classes=105)
 
-def train(epochs=100, batch_size=16):
+def train(epochs=1000, batch_size=128):
     dataset = get_training_set()
 
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
