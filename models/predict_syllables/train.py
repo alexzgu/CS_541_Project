@@ -1,14 +1,18 @@
 import torch.nn as nn
 import torch.optim as optim
+from torch.utils.data import DataLoader
 from torchmetrics import Accuracy
 from .model import SkipConnectionNetwork
 from .load import get_training_set
+import torch
 
 
 accuracy = Accuracy(task="multiclass", num_classes=105)
 
-def train(epochs=10):
-    dataloader = get_training_set()
+def train(epochs=100, batch_size=16):
+    dataset = get_training_set()
+
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     model = SkipConnectionNetwork()
 
     criterion = nn.CrossEntropyLoss()
@@ -20,7 +24,7 @@ def train(epochs=10):
             # Forward pass
             predictions = model(batch_X)
             loss = criterion(predictions, batch_Y.float())
-            accuracy(predictions, batch_Y)
+            accuracy(torch.argmax(predictions, dim=1), torch.argmax(batch_Y, dim=1))
 
             # Backward pass and optimization
             optimizer.zero_grad()

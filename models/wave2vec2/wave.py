@@ -65,4 +65,4 @@ def _convert_to_wave2vec2(waveform):
     # Convert hidden states to NumPy array
     feature_vectors = hidden_states.squeeze(0).cpu().numpy()  # Shape: (time_steps, feature_dim)
 
-    return feature_vectors
+    return torch.from_numpy(feature_vectors)

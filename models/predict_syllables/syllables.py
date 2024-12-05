@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 
 syllables = [
     'あ', 'い', 'う', 'え', 'お',
@@ -34,4 +35,4 @@ def one_hot_encoding(syllable):
     hot_index = syllables.index(syllable)
     vector = np.repeat(0, len(syllables))
     vector[hot_index] = 1
-    return vector
+    return torch.from_numpy(vector)
