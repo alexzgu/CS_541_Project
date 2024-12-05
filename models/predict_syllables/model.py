@@ -12,6 +12,7 @@ class SkipConnectionNetwork(nn.Module):
         num_layers=10
     ):
         super(SkipConnectionNetwork, self).__init__()
+        self.relu = nn.ReLU()
 
         self.input_layer = nn.Linear(input_size, hidden_size)
 
