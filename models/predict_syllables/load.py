@@ -1,7 +1,6 @@
 from torch.utils.data import TensorDataset
 import pandas as pd
 import torchaudio
-import numpy as np
 import torch
 import os
 from .syllables import one_hot_encoding
@@ -33,10 +32,10 @@ def load_data_from_tensors():
     syllables = torch.tensor([])
     classes = torch.tensor([])
 
-    for song_id in range(4):
+    for song_id in range(100):
         try:
-            syllables = torch.cat((syllables, torch.load(f'{current_directory}/../tensors/syllable_tensors-{song_id}.pt')), dim=0)
-            classes = torch.cat((classes, torch.load(f'{current_directory}/../tensors/class_tensors-{song_id}.pt')), dim=0)
+            syllables = torch.cat((syllables, torch.load(f'{current_directory}/../tensors/syllables/syllable_tensors-{song_id}.pt')), dim=0)
+            classes = torch.cat((classes, torch.load(f'{current_directory}/../tensors/syllables/class_tensors-{song_id}.pt')), dim=0)
         except FileNotFoundError:
             continue
 
