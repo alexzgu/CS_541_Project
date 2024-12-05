@@ -1,5 +1,5 @@
 import torchaudio
-import wave
+from models.wave2vec2.wave import to_tensors as wave_to_tensors
 
 def to_tensors(audio_path, segment_length_ms=None, num_vectors=None):
     """
@@ -17,4 +17,4 @@ def to_tensors(audio_path, segment_length_ms=None, num_vectors=None):
     # Load audio file using torchaudio
     waveform, sampling_rate = torchaudio.load(audio_path)
 
-    return wave.to_tensors(waveform, sampling_rate, segment_length_ms, num_vectors)
+    return wave_to_tensors(waveform, sampling_rate, segment_length_ms, num_vectors)
