@@ -1,41 +1,35 @@
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import DataLoader
 from torchmetrics import Accuracy
-from .model import SkipConnectionNetwork
-from .load import get_training_set
+from .model import LSTMClassifier
+from .load import get_lstm_dataloader
 import torch
+import os
 
+current_directory = os.path.dirname(os.path.abspath(__file__))
+accuracy = Accuracy(task="multiclass", num_classes=106)
 
-accuracy = Accuracy(task="multiclass", num_classes=105)
-
-def train(epochs=10000, batch_size=128):
-    dataset = get_training_set()
-
-    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    model = SkipConnectionNetwork()
+def train(epochs=10, batch_size=32):
+    dataloader = get_lstm_dataloader(batch_size)
+    model = LSTMClassifier()
 
     criterion = nn.CrossEntropyLoss()
-    accuracy = Accuracy(task="multiclass", num_classes=105)
     optimizer = optim.Adam(model.parameters(), lr=0.01)
+    model.train()
 
     for epoch in range(epochs):
-        for batch_X, batch_Y in dataloader:
+        for padded_sequences, labels, lengths in dataloader:
             # Forward pass
-            predictions = model(batch_X)
-            loss = criterion(predictions, batch_Y.float())
-            accuracy(torch.argmax(predictions, dim=1), torch.argmax(batch_Y, dim=1))
+            outputs = model(padded_sequences, lengths)
+            loss = criterion(outputs, labels)
+            accuracy(torch.argmax(outputs, dim=1), torch.argmax(labels, dim=1))
 
             # Backward pass and optimization
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
-        print(f"Epoch [{epoch + 1}/{epochs}], Loss: {loss.item():.4f}, Accuracy: {accuracy.compute():.2f}")
+            print(f"Epoch [{epoch + 1}/{epochs}], Loss: {loss.item():.4f}, Accuracy: {accuracy.compute():.2f}")
 
-
-
-
-
-
+        torch.save(model.state_dict(), f'{current_directory}/model_{epoch}_{accuracy.compute():.2f}')
 

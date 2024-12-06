@@ -1,8 +1,7 @@
 from .train import train
-from .load import load_data_from_songs
+from .load import convert_songs_to_tensors
 
-# load_data_from_clips()
-# load_data_from_songs()
+# convert_songs_to_tensors()
 
 train()
 

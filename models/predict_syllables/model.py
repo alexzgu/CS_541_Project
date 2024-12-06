@@ -1,42 +1,39 @@
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 import torch.nn as nn
 
-class SkipConnectionNetwork(nn.Module):
+
+class LSTMClassifier(nn.Module):
     def __init__(
         self,
-        input_size=7680,
-        hidden_size=512,
-        num_classes=105,
-        num_layers=10
+        input_size=768,
+        hidden_size=252,
+        num_layers=2,
+        num_classes=106,
+        dropout=0
     ):
-        super(SkipConnectionNetwork, self).__init__()
-        self.relu = nn.ReLU()
+        super(LSTMClassifier, self).__init__()
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, dropout=dropout)
+        self.fc = nn.Linear(hidden_size, num_classes)
 
-        self.input_layer = nn.Linear(input_size, hidden_size)
+    def forward(self, x, lengths):
+        # Pack the sequence
+        packed_x = pack_padded_sequence(x, lengths, batch_first=True, enforce_sorted=True)
 
-        # Define the 8 hidden layers with skip connections
-        self.hidden_layers = nn.ModuleList([
-            nn.Linear(hidden_size, hidden_size) for _ in range(num_layers - 2)
-        ])
+        # Pass through LSTM
+        packed_out, (h_n, c_n) = self.lstm(packed_x)  # h_n is the last hidden state
 
-        self.output_layer = nn.Linear(hidden_size, num_classes)
+        # Optionally unpack (if you need all time steps for something)
+        out, _ = pad_packed_sequence(packed_out, batch_first=True)
 
-    def forward(self, x):
-        # Input layer
-        x = self.relu(self.input_layer(x))
-
-        # Hidden layers with skip connections
-        skip = x  # Save initial input for skip connection
-        for layer in self.hidden_layers:
-            x = self.relu(layer(x) + skip)
-            skip = x  # Update skip connection
-
-        # Output layer
-        x = self.output_layer(x)
-        return x
+        # Use the last hidden state for classification
+        out = h_n[-1]  # (batch_size, hidden_size)
+        out = self.fc(out)  # (batch_size, num_classes)
+        return out
 
 
-# Instantiate the model
-model = SkipConnectionNetwork()
+# Initialize the model
+model = LSTMClassifier()
 
-# Print model architecture
-print(model)
+
