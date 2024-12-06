@@ -8,7 +8,7 @@ class LSTMClassifier(nn.Module):
         input_size=768,
         hidden_size=252,
         num_layers=2,
-        num_classes=106,
+        num_classes=110,
         dropout=0
     ):
         super(LSTMClassifier, self).__init__()

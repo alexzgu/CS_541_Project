@@ -32,7 +32,7 @@ def convert_songs_to_tensors():
     song_ids = sorted(map(lambda x: int(x[:-4]), mp3_files))
 
     num_songs = len(song_ids)
-    for song_id in song_ids:
+    for song_id in song_ids[78:]:
         waveform, sampling_rate = torchaudio.load(f'{vocal_dir}/{song_id}.mp3')
         song_tensor = wave.to_tensors(waveform, sampling_rate, segment_length_ms=10)
         torch.save(song_tensor, f'{current_directory}/../tensors/songs/{song_id}.pt')
@@ -89,6 +89,9 @@ def get_dataset():
 
     for num, tensor_id in enumerate(tensor_ids):
         tensor = torch.load(f'{song_tensor_dir}/{tensor_id}.pt')
+
+        if index.get(tensor_id) is None:
+            continue
 
         for syllable_info in index.get(tensor_id):
             start = int(syllable_info[2] / 10)
