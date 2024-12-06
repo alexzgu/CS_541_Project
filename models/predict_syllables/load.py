@@ -21,7 +21,7 @@ clip_index_file = f'{syllable_dir}/segment_index.csv'
 song_tensor_dir = f'{current_directory}/../tensors/songs'
 
 
-def get_lstm_dataloader(batch_size=8):
+def get_lstm_dataloader(batch_size):
     dataset = get_dataset()
     return DataLoader(dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
 
@@ -32,7 +32,7 @@ def convert_songs_to_tensors():
     song_ids = sorted(map(lambda x: int(x[:-4]), mp3_files))
 
     num_songs = len(song_ids)
-    for song_id in song_ids[78:]:
+    for song_id in song_ids[0:]:
         waveform, sampling_rate = torchaudio.load(f'{vocal_dir}/{song_id}.mp3')
         song_tensor = wave.to_tensors(waveform, sampling_rate, segment_length_ms=10)
         torch.save(song_tensor, f'{current_directory}/../tensors/songs/{song_id}.pt')
@@ -84,7 +84,7 @@ def get_dataset():
 
     file_names = os.listdir(song_tensor_dir)
     tensor_files = filter(lambda x: x.endswith(".pt"), file_names)
-    tensor_ids = sorted(map(lambda x: int(x[:-3]), tensor_files))
+    tensor_ids = sorted(map(lambda x: int(x[:-3]), tensor_files))[:80]
     num_tensors = len(tensor_ids)
 
     for num, tensor_id in enumerate(tensor_ids):
@@ -98,6 +98,8 @@ def get_dataset():
             end = int(syllable_info[3] / 10)
             syllable_class = syllable_info[4]
 
+            if len(tensor[start:end]) == 0:
+                continue
             sequences.append(tensor[start:end])
             labels.append(one_hot_encoding(syllable_class))
 
