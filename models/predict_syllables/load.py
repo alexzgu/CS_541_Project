@@ -21,8 +21,8 @@ clip_index_file = f'{syllable_dir}/segment_index.csv'
 song_tensor_dir = f'{current_directory}/../tensors/songs'
 
 
-def get_lstm_dataloader(batch_size):
-    dataset = get_dataset()
+def get_lstm_dataloader(batch_size, left=0, right=80):
+    dataset = get_dataset(left, right)
     return DataLoader(dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
 
 
@@ -75,7 +75,7 @@ class SequenceDataset(Dataset):
         return self.sequences[idx], self.labels[idx]
 
 
-def get_dataset():
+def get_dataset(left=0, right=80):
     df = pd.read_csv(vocal_index_file)
     index = {key: group.to_numpy() for key, group in df.groupby('file')}
 
@@ -84,7 +84,7 @@ def get_dataset():
 
     file_names = os.listdir(song_tensor_dir)
     tensor_files = filter(lambda x: x.endswith(".pt"), file_names)
-    tensor_ids = sorted(map(lambda x: int(x[:-3]), tensor_files))[:80]
+    tensor_ids = sorted(map(lambda x: int(x[:-3]), tensor_files))[left:right]
     num_tensors = len(tensor_ids)
 
     for num, tensor_id in enumerate(tensor_ids):
