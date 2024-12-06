@@ -5,3 +5,5 @@ data/processed/audio/
 data/clean/syllables/wav2vec2_embeddings.pt
 *.webm
 /models/segment_break_detection/cache
+/models/tensors/songs
+models/tensors/songs.zip
