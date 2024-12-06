@@ -10,9 +10,11 @@ current_directory = os.path.dirname(os.path.abspath(__file__))
 model_directory = f'{current_directory}/pretrained'
 accuracy = Accuracy(task="multiclass", num_classes=110)
 
-def train(epochs=10, batch_size=32):
+def train(epochs=9999, batch_size=32):
     dataloader = get_lstm_dataloader(batch_size)
+
     model = LSTMClassifier()
+    model.load_state_dict(torch.load(f'{model_directory}/model_20_0.65'))
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.01)
@@ -32,5 +34,5 @@ def train(epochs=10, batch_size=32):
 
             print(f"Epoch [{epoch + 1}/{epochs}], Loss: {loss.item():.4f}, Accuracy: {accuracy.compute():.2f}")
 
-        torch.save(model.state_dict(), f'model_directory/model_{epoch}_{accuracy.compute():.2f}')
+        torch.save(model.state_dict(), f'{model_directory}/model_{epoch + 1}_{accuracy.compute():.2f}')
 
