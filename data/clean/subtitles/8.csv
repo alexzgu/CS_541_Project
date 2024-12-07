@@ -14,6 +14,7 @@ start,end,token,exclude
 8.125,8.325,ち,False
 8.325,8.892,で,False
 8.892,9.047,う,False
+9.047,9.093,<silence>,
 9.093,9.637,た,False
 9.66,9.86,お,False
 9.86,10.394,う,False

@@ -1,6 +1,7 @@
 start,end,token,exclude
 0.0,12.363,<silence>,False
 12.363,12.483,い,False
+12.483,12.529,<silence>,
 12.529,12.673,つ,False
 12.696,12.863,の,False
 12.863,13.03,ま,False

@@ -35,6 +35,7 @@ start,end,token,exclude
 18.535,18.635,た,False
 18.635,18.869,やっ,True
 18.869,19.08,ちゃっ,True
+19.08,19.103,<silence>,
 19.103,19.536,た,False
 19.536,19.87,wow,True
 19.87,20.317,oh,True

@@ -1,6 +1,7 @@
 start,end,token,exclude
 0.0,2.019,<silence>,False
 2.019,2.463,lets,True
+2.463,2.486,<silence>,
 2.486,2.853,see,True
 2.853,3.22,the,True
 3.22,3.787,world,True

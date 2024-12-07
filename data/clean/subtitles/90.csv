@@ -10,6 +10,7 @@ start,end,token,exclude
 5.68,6.079,ga,True
 6.079,12.787,<silence>,False
 12.787,13.089,hey,True
+13.089,13.154,<silence>,
 13.154,13.433,hey,True
 13.521,13.823,hey,True
 13.921,14.075,hey,True

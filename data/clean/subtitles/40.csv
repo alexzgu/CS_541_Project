@@ -1,6 +1,7 @@
 start,end,token,exclude
 0.0,0.985,<silence>,True
 0.985,1.362,e,True
+1.362,1.385,<silence>,
 1.385,1.852,la,True
 1.852,2.453,ci,True
 2.453,2.786,fu,True

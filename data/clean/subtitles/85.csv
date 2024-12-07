@@ -3,6 +3,7 @@ start,end,token,exclude
 1.518,1.852,み,False
 1.852,2.152,わ,False
 2.152,2.53,く,False
+2.53,2.553,<silence>,
 2.553,3.02,を,False
 3.02,3.52,か,False
 3.52,3.821,く,False

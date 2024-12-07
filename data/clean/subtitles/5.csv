@@ -8,6 +8,7 @@ start,end,token,exclude
 18.769,19.069,に,False
 19.069,19.269,ふ,False
 19.269,19.547,か,False
+19.547,19.57,<silence>,
 19.57,20.07,れ,False
 20.07,20.558,て,False
 20.637,20.869,わ,False

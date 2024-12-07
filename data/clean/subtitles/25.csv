@@ -4,6 +4,7 @@ start,end,token,exclude
 1.685,1.885,あ,False
 1.885,2.052,な,False
 2.052,2.229,た,False
+2.229,2.252,<silence>,
 2.252,2.453,に,False
 2.453,2.82,は,False
 2.82,2.92,み,False

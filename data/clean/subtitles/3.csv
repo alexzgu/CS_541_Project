@@ -1,6 +1,7 @@
 start,end,token,exclude
 0.0,10.527,<silence>,False
 10.527,10.738,き,False
+10.738,10.761,<silence>,
 10.761,10.894,み,False
 10.894,11.228,の,False
 11.228,11.528,ひ,False

@@ -23,6 +23,7 @@ start,end,token,exclude
 19.837,20.104,を,False
 20.104,20.437,み,False
 20.437,20.825,た,False
+20.825,20.871,<silence>,
 20.871,21.405,who,True
 21.405,21.839,is,True
 21.839,22.303,the,True
