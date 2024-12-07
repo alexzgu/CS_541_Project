@@ -32,7 +32,7 @@ if __name__ == '__main__':
     syllable_vocals_dir = f'{syllables_dir}/clips'
     segment_break_dir = f'{data_dir}/clean/segment_breaks'
 
-    # do things
+    # do things; NOTE: never run clean_subtitles again. we got what we needed from it.
     # print("Cleaning raw subtitle data...")
     # clean_subtitles(raw_subtitles_path, ignore_times_path, processed_subtitles_path, tokens_file_path)
     # print("Cleaned subtitle data.")
@@ -53,13 +53,13 @@ if __name__ == '__main__':
     # change_end_for_directory(processed_subtitles_path, raw_vocals_dir, segment_index_file_path)
     # print("Changed last end to vid length.")
 
-    # reduce silence
-    print("Reducing silence...")
-    reduce_silence_for_directory(processed_subtitles_path, clean_vocals_dir,
-                                 clean_subtitles_path)
-    print("Reduced silence.")
-
-    # for segment break detection
-    print("Finding segment breaks...")
-    find_segments_breaks(clean_subtitles_path, segment_break_dir, sample_length=10)
-    print("Found segment breaks.")
+    # # reduce silence
+    # print("Reducing silence...")
+    # reduce_silence_for_directory(processed_subtitles_path, clean_vocals_dir,
+    #                              clean_subtitles_path)
+    # print("Reduced silence.")
+    #
+    # # for segment break detection
+    # print("Finding segment breaks...")
+    # find_segments_breaks(clean_subtitles_path, segment_break_dir, sample_length=10)
+    # print("Found segment breaks.")
