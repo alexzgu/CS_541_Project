@@ -11,5 +11,5 @@ from .load import convert_songs_to_tensors
 #     lr=0.001,
 #     weight_decay=0.001,
 # )
-print(test('model_20ms_0.6363_test', 20))
+print(test('model_20ms_drop_0.33_0.5210_test', 20))
 
