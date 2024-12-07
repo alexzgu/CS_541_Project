@@ -1,7 +1,6 @@
 start,end,token,exclude
 0.0,1.285,<silence>,False
 1.285,1.606,い,False
-1.606,1.652,<silence>,
 1.652,1.819,ろ,False
 1.819,1.986,づ,False
 1.986,2.106,く,False

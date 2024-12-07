@@ -37,7 +37,6 @@ start,end,token,exclude
 36.92,37.054,りょ,False
 37.054,37.221,く,False
 37.221,37.365,て,False
-37.365,37.388,<silence>,
 37.388,37.688,き,False
 37.688,37.832,み,False
 37.855,38.032,せ,False

@@ -1,7 +1,6 @@
 start,end,token,exclude
 0.0,20.804,<silence>,False
 20.804,21.199,あ,False
-21.199,21.238,<silence>,
 21.238,21.382,こ,False
 21.405,21.538,い,False
 21.538,21.672,の,False

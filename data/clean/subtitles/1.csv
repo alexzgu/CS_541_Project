@@ -30,7 +30,6 @@ start,end,token,exclude
 10.194,10.327,ど,False
 10.327,10.427,く,False
 10.427,10.729,た,False
-10.729,10.861,<silence>,
 10.861,10.961,へ,False
 10.961,11.061,い,False
 11.061,11.161,ど,False

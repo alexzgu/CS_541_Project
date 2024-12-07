@@ -5,7 +5,6 @@ start,end,token,exclude
 24.908,25.109,い,False
 25.109,25.442,な,False
 25.442,25.73,こ,False
-25.73,25.776,<silence>,
 25.776,27.03,と,False
 27.144,27.344,さ,False
 27.344,27.678,さ,False

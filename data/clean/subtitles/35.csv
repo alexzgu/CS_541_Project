@@ -3,7 +3,6 @@ start,end,token,exclude
 20.371,20.571,し,False
 20.571,20.771,ず,False
 20.771,21.235,む,False
-21.235,21.372,<silence>,
 21.372,21.549,あ,False
 21.572,21.859,か,False
 21.905,22.172,ね,False

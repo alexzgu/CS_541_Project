@@ -3,7 +3,6 @@ start,end,token,exclude
 16.133,16.3,あ,False
 16.3,16.467,っ,True
 16.467,16.644,と,False
-16.644,16.667,<silence>,
 16.667,16.8,う,False
 16.8,16.944,て,False
 16.967,17.134,き,False

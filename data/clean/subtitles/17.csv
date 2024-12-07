@@ -8,7 +8,6 @@ start,end,token,exclude
 26.844,27.378,こ,False
 27.378,27.578,ろ,False
 27.578,28.205,が,False
-28.205,28.212,<silence>,
 28.212,28.589,ろ,False
 28.612,28.946,か,False
 28.946,29.346,で,False

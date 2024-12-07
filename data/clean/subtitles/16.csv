@@ -6,7 +6,6 @@ start,end,token,exclude
 15.499,15.699,ふ,False
 15.699,15.866,か,False
 15.866,16.052,れ,False
-16.052,16.066,<silence>,
 16.066,17.018,て,False
 17.018,17.501,<silence>,False
 17.501,17.701,だ,False

@@ -6,7 +6,6 @@ start,end,token,exclude
 33.817,34.018,さ,False
 34.018,34.118,め,False
 34.118,34.428,た,False
-34.428,34.451,<silence>,
 34.451,35.085,ら,False
 35.085,35.419,ひ,False
 35.419,35.753,が,False
