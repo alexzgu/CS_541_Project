@@ -57,13 +57,13 @@ def reduce_silence_for_directory(input_csv_dir, input_mp3_dir, output_csv_dir):
 
                 # iterate through all rows, and if there is a gap between the end of one row and the start of the next row,
                 # insert a new row with <silence> token and the start and end times of the gap
-                for index, row in df.iterrows():
-                    if index < len(df) - 1:
-                        next_row = df.iloc[index + 1]
-                        gap = next_row['start'] - row['end']
-                        if gap > 0:
-                            new_row = pd.DataFrame([[row['end'], next_row['start'], '<silence>']], columns=['start', 'end', 'token'])
-                            df = pd.concat([df.iloc[:index + 1], new_row, df.iloc[index + 1:]]).reset_index(drop=True)
+                # for index, row in df.iterrows():
+                #     if index < len(df) - 1:
+                #         next_row = df.iloc[index + 1]
+                #         gap = next_row['start'] - row['end']
+                #         if gap > 0:
+                #             new_row = pd.DataFrame([[row['end'], next_row['start'], '<silence>']], columns=['start', 'end', 'token'])
+                #             df = pd.concat([df.iloc[:index + 1], new_row, df.iloc[index + 1:]]).reset_index(drop=True)
 
                 # Save the updated dataframe
                 df.to_csv(output_csv_filepath, index=False)

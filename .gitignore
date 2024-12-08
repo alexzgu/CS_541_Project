@@ -10,3 +10,5 @@ data/clean/syllables/wav2vec2_embeddings.pt
 /models/tensors/songs_40ms
 models/tensors/songs.zip
 /models/tensors/songs
+/models/segment_break_detection/data_cache
+/data/clean/segment_breaks
