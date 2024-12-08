@@ -59,12 +59,14 @@ def train(
         torch.save(model.state_dict(), f'{model_path}_{test_accuracy:.2f}_test')
 
 
+
+
 def test(model_name, segment_length_ms):
     print(device)
     batch_size = 128
     dataloader = get_lstm_dataloader(batch_size, segment_length_ms, 80, 93)
 
-    model = LSTMClassifier()
+    model = LSTMClassifier(hidden_size=144, dropout=0.5)
     model.load_state_dict(torch.load(f'{model_directory}/{model_name}', map_location=torch.device(device)))
     model = model.to(device)
     model.eval()
@@ -73,14 +75,27 @@ def test(model_name, segment_length_ms):
 
     accuracies = []
 
+    y_hat = np.array([])
+    y = np.array([])
+
     for padded_sequences, labels, lengths in dataloader:
         padded_sequences, labels = padded_sequences.to(device), labels.to(device)
         # Forward pass
         outputs = model(padded_sequences, lengths)
         loss = criterion(outputs, labels)
-        accuracy(torch.argmax(outputs, dim=1), torch.argmax(labels, dim=1))
+
+        predictions = torch.argmax(outputs, dim=1)
+        values = torch.argmax(labels, dim=1)
+
+        accuracy = Accuracy(task="multiclass", num_classes=110).to(device)
+        accuracy(predictions, values)
 
         print(f"Test Loss: {loss.item():.4f}, Test Accuracy: {accuracy.compute():.2f}")
-        accuracies.append(accuracy.compute())
+        y_hat = np.concatenate((y_hat, predictions.cpu().detach().numpy()))
+        y = np.concatenate((y, values.cpu().detach().numpy()))
+        accuracies.append(accuracy.compute().cpu())
 
-    return np.mean(accuracies)
+    test_accuracy = np.mean(accuracies)
+    torch.save(model.state_dict(), f'{model_directory}/model_{segment_length_ms}ms_{test_accuracy:.4f}_test')
+    return test_accuracy, y, y_hat
+

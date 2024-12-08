@@ -6,10 +6,10 @@ class LSTMClassifier(nn.Module):
     def __init__(
         self,
         input_size=768,
-        hidden_size=252,
+        hidden_size=144,
         num_layers=2,
         num_classes=110,
-        dropout=0.0
+        dropout=0.5
     ):
         super(LSTMClassifier, self).__init__()
         self.hidden_size = hidden_size
