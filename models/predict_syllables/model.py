@@ -9,7 +9,7 @@ class LSTMClassifier(nn.Module):
         hidden_size=252,
         num_layers=2,
         num_classes=110,
-        dropout=0
+        dropout=0.0
     ):
         super(LSTMClassifier, self).__init__()
         self.hidden_size = hidden_size
@@ -31,9 +31,3 @@ class LSTMClassifier(nn.Module):
         out = h_n[-1]  # (batch_size, hidden_size)
         out = self.fc(out)  # (batch_size, num_classes)
         return out
-
-
-# Initialize the model
-model = LSTMClassifier()
-
-

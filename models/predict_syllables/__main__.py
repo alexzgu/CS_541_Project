@@ -1,8 +1,15 @@
 from .train import train, test
 from .load import convert_songs_to_tensors
 
-# convert_songs_to_tensors()
+# convert_songs_to_tensors(40)
 
-# train()
-test()
+# train(
+#     model_name=None,
+#     segment_length_ms=20,
+#     epochs=50,
+#     batch_size=128,
+#     lr=0.001,
+#     weight_decay=0.001,
+# )
+print(test('model_10ms_drop_0_0.4916_test', 10))
 
