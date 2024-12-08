@@ -9,3 +9,4 @@ data/clean/syllables/wav2vec2_embeddings.pt
 /models/tensors/songs_20ms
 /models/tensors/songs_40ms
 models/tensors/songs.zip
+/models/tensors/songs
