@@ -20,6 +20,8 @@ clip_dir = f'{syllable_dir}/clips'
 clip_index_file = f'{syllable_dir}/segment_index.csv'
 song_tensor_dir = f'{current_directory}/../tensors/songs'
 
+pred_vocal_index_file = f'{data_dir}/clean/syllables/segment_index.csv'
+
 
 def get_lstm_dataloader(batch_size, segment_length_ms, left=0, right=80):
     dataset = get_dataset(segment_length_ms, left, right)
@@ -59,6 +61,25 @@ class SequenceDataset(Dataset):
 
     def __getitem__(self, idx):
         return self.sequences[idx], self.labels[idx]
+
+
+def get_predicted_segments(segment_length_ms=20):
+    file_names = os.listdir(f'{song_tensor_dir}_{segment_length_ms}ms')
+    tensor_files = filter(lambda x: x.endswith(".pt"), file_names)
+    tensor_ids = sorted(map(lambda x: int(x[:-3]), tensor_files))
+    num_tensors = len(tensor_ids)
+
+    tensors = dict()
+
+    for num, tensor_id in enumerate(tensor_ids):
+        tensor = torch.load(f'{song_tensor_dir}_{segment_length_ms}ms/{tensor_id}.pt')
+        tensors[tensor_id] = tensor
+
+        progress_count(num + 1, num_tensors)
+
+    index = pd.read_csv(pred_vocal_index_file)
+    return index, tensors
+
 
 
 def get_dataset(segment_length_ms, left=0, right=80):
