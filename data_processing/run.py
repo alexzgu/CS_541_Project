@@ -53,13 +53,41 @@ if __name__ == '__main__':
     # change_end_for_directory(processed_subtitles_path, raw_vocals_dir, segment_index_file_path)
     # print("Changed last end to vid length.")
 
-    # # reduce silence
+    # reduce silence
     # print("Reducing silence...")
     # reduce_silence_for_directory(processed_subtitles_path, clean_vocals_dir,
     #                              clean_subtitles_path)
     # print("Reduced silence.")
-    #
-    # # for segment break detection
+
+    # for segment break detection
     # print("Finding segment breaks...")
-    # find_segments_breaks(clean_subtitles_path, segment_break_dir, sample_length=10)
+    # find_segments_breaks(clean_subtitles_path, segment_break_dir, sample_length=20)
     # print("Found segment breaks.")
+
+    # scuffed thing; do not run this
+    sep_script_dir = f'separate_scripts'
+    golden_csv_dir = f'{sep_script_dir}/golden_csvs/processed'
+    clean_golden_csv_dir = f'{sep_script_dir}/golden_csvs/clean'
+    golden_vocals_dir = f'{sep_script_dir}/golden_audio'
+    segment_idx_file = f'{sep_script_dir}/segment_index.csv'
+    segment_breaks_dir = f'{sep_script_dir}/golden_breaks'
+
+    print("Segmenting audio data...")
+    segment_audio(golden_vocals_dir, golden_csv_dir, 'separate_scripts/golden_syllables',
+                  segment_idx_file, padding=50)
+    print("Segmented audio data.")
+
+    print("Indexing audio data...")
+    reindex_audio_segments(segment_idx_file, segment_idx_file,
+                           'separate_scripts/golden_syllables')
+
+    print("Finding segment breaks...")
+    find_segments_breaks(golden_csv_dir, segment_breaks_dir, sample_length=20)
+    print("Found segment breaks.")
+
+    # read in segment break idx file and cast start and end times to int
+    import pandas as pd
+    df = pd.read_csv(segment_idx_file)
+    df['start'] = df['start'].astype(int)
+    df['end'] = df['end'].astype(int)
+    df.to_csv(segment_idx_file, index=False)

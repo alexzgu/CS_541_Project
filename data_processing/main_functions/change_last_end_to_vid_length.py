@@ -5,7 +5,8 @@ from typing import List, Tuple
 
 MILLISECONDS_IN_SECOND = 1000
 
-def change_end_for_directory(subtitles_dir: str, audio_dir: str, segment_index_file: str) -> None:
+def change_end_for_directory(subtitles_dir: str, audio_dir: str, segment_index_file: str,
+                             audio_files_present: bool = False) -> None:
     """
     Change the last entry of 'end' in each csv in the subtitles_dir to the length
     of the corresponding audio file in seconds.
@@ -13,6 +14,7 @@ def change_end_for_directory(subtitles_dir: str, audio_dir: str, segment_index_f
         subtitles_dir:
         audio_dir:
         segment_index_file:
+        audio_files_present:
 
     Returns:
     """
@@ -33,7 +35,8 @@ def change_end_for_directory(subtitles_dir: str, audio_dir: str, segment_index_f
     segment_index_df.to_csv(segment_index_file, index=False)
 
 
-def change_end_for_file(subtitles_file: str, audio_file: str, segment_index_df: pd.DataFrame, inf_indices: List[Tuple[int, int]]) -> (pd.DataFrame, List[Tuple[int, int]]):
+def change_end_for_file(subtitles_file: str, audio_file: str, segment_index_df: pd.DataFrame, inf_indices: List[Tuple[int, int]],
+                        audio_files_present:bool = False) -> (pd.DataFrame, List[Tuple[int, int]]):
     """
     Change the last entry of 'end' in the input subtitles file to the length of the audio file in milliseconds.
     Args:
@@ -41,12 +44,14 @@ def change_end_for_file(subtitles_file: str, audio_file: str, segment_index_df: 
         audio_file:
         segment_index_df:
         inf_indices:
+        audio_files_present:
     Returns:
     """
     try:
+        vid_length = audio_file_length(audio_file)
+
         # change last entry of 'end' for the subtitles file
         df = pd.read_csv(subtitles_file)
-        vid_length = audio_file_length(audio_file)
         df.loc[df.index[-1], 'end'] = vid_length
         # update the corresponding entry in segment_index_df
         song_idx = subtitles_file.split('/')[-1].split('.')[0]  # e.g., '1' from '1.csv'
@@ -54,7 +59,8 @@ def change_end_for_file(subtitles_file: str, audio_file: str, segment_index_df: 
             if tup[1] == int(song_idx):
                 inf_indices.pop(i)
                 segment_index_df.loc[segment_index_df['index'] == tup[0], 'end'] = vid_length * MILLISECONDS_IN_SECOND
-        df.to_csv(subtitles_file, index=False)
+        if audio_files_present:
+            df.to_csv(subtitles_file, index=False)
 
     except ValueError:
         print(f"Error changing end for file: {subtitles_file}")
