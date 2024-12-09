@@ -1,0 +1,319 @@
+WEBVTT
+
+STYLE
+::cue {
+    background-color: transparent;
+    color: white;
+    font-size: 1.5em;
+    font-family: Arial, sans-serif;
+}
+::cue(.correct) {
+    color: lime;
+}
+::cue(.incorrect) {
+    color: red;
+}
+::cue(.predicted) {
+    color: cyan;
+}
+
+00:00:00.000 --> 00:00:03.686
+<c.correct>[silence]</c> <c.incorrect>yu</c> <c.incorrect>me</c> <c.correct>na</c>
+<c.predicted>[silence]</c> <c.predicted>i</c> <c.predicted>na</c> <c.predicted>na</c>
+
+00:00:02.186 --> 00:00:06.322
+<c.incorrect>ra</c> <c.correct>ba</c> <c.incorrect>do</c> <c.correct>re</c> <c.correct>ho</c> <c.correct>do</c> <c.correct>yo</c> <c.correct>ka</c>
+<c.predicted>i</c> <c.predicted>ba</c> <c.predicted>to</c> <c.predicted>re</c> <c.predicted>ho</c> <c.predicted>do</c> <c.predicted>yo</c> <c.predicted>ka</c>
+
+00:00:04.955 --> 00:00:09.892
+<c.incorrect>ta</c> <c.incorrect>de</c> <c.correct>sho</c> <c.correct>u</c> <c.correct>i</c> <c.correct>ma</c> <c.correct>da</c> <c.correct>ni</c>
+<c.predicted>te</c> <c.predicted>te</c> <c.predicted>sho</c> <c.predicted>u</c> <c.predicted>i</c> <c.predicted>ma</c> <c.predicted>da</c> <c.predicted>ni</c>
+
+00:00:08.392 --> 00:00:12.328
+<c.correct>a</c> <c.incorrect>na</c> <c.correct>ta</c> <c.correct>no</c> <c.incorrect>ko</c> <c.incorrect>to</c> <c.incorrect>wo</c> <c.incorrect>yu</c>
+<c.predicted>a</c> <c.predicted>n</c> <c.predicted>ta</c> <c.predicted>no</c> <c.predicted>ku</c> <c.predicted>ko</c> <c.predicted>to</c> <c.predicted>i</c>
+
+00:00:10.828 --> 00:00:14.930
+<c.correct>me</c> <c.incorrect>ni</c> <c.incorrect>mi</c> <c.incorrect>ru</c> <c.incorrect>wa</c> <c.correct>su</c> <c.incorrect>re</c> <c.correct>ta</c>
+<c.predicted>me</c> <c.predicted>n</c> <c.predicted>ni</c> <c.predicted>ni</c> <c.predicted>[silence]</c> <c.predicted>su</c> <c.predicted>se</c> <c.predicted>ta</c>
+
+00:00:13.430 --> 00:00:17.700
+<c.correct>mo</c> <c.correct>no</c> <c.incorrect>wo</c> <c.incorrect>to</c> <c.incorrect>ri</c> <c.correct>ni</c> <c.correct>ka</c> <c.incorrect>e</c>
+<c.predicted>mo</c> <c.predicted>no</c> <c.predicted>u</c> <c.predicted>ku</c> <c.predicted>to</c> <c.predicted>ni</c> <c.predicted>ka</c> <c.predicted>i</c>
+
+00:00:16.200 --> 00:00:20.936
+<c.correct>ru</c> <c.incorrect>yo</c> <c.incorrect>u</c> <c.correct>ni</c> <c.incorrect>fu</c> <c.incorrect>ru</c> <c.incorrect>bi</c> <c.correct>ta</c>
+<c.predicted>ru</c> <c.predicted>i</c> <c.predicted>yo</c> <c.predicted>ni</c> <c.predicted>ku</c> <c.predicted>fu</c> <c.predicted>ri</c> <c.predicted>ta</c>
+
+00:00:19.436 --> 00:00:23.873
+<c.incorrect>o</c> <c.incorrect>mo</c> <c.incorrect>i</c> <c.correct>de</c> <c.correct>no</c> <c.incorrect>ho</c> <c.correct>ko</c> <c.incorrect>ri</c> <c.incorrect>wo</c>
+<c.predicted>a</c> <c.predicted>o</c> <c.predicted>mo</c> <c.predicted>de</c> <c.predicted>no</c> <c.predicted>mo</c> <c.predicted>ko</c> <c.predicted>i</c> <c.predicted>ro</c>
+
+00:00:22.373 --> 00:00:28.010
+<c.correct>ha</c> <c.correct>ra</c> <c.correct>u</c> <c.correct>[silence]</c> <c.incorrect>mo</c>
+<c.predicted>ha</c> <c.predicted>ra</c> <c.predicted>u</c> <c.predicted>[silence]</c> <c.predicted>n</c>
+
+00:00:26.510 --> 00:00:30.613
+<c.incorrect>do</c> <c.incorrect>ra</c> <c.correct>na</c> <c.correct>i</c> <c.correct>shi</c> <c.incorrect>a</c> <c.incorrect>wa</c> <c.correct>se</c>
+<c.predicted>ma</c> <c.predicted>da</c> <c.predicted>na</c> <c.predicted>i</c> <c.predicted>shi</c> <c.predicted>yo</c> <c.predicted>mo</c> <c.predicted>se</c>
+
+00:00:29.113 --> 00:00:34.416
+<c.incorrect>ga</c> <c.correct>a</c> <c.incorrect>ru</c> <c.correct>ko</c> <c.correct>to</c> <c.incorrect>wo</c> <c.incorrect>sa</c> <c.incorrect>i</c> <c.incorrect>go</c>
+<c.predicted>a</c> <c.predicted>a</c> <c.predicted>ri</c> <c.predicted>ko</c> <c.predicted>to</c> <c.predicted>u</c> <c.predicted>su</c> <c.predicted>sa</c> <c.predicted>o</c>
+
+00:00:32.916 --> 00:00:37.486
+<c.correct>ni</c> <c.correct>a</c> <c.incorrect>na</c> <c.correct>ta</c> <c.incorrect>ga</c> <c.incorrect>o</c> <c.incorrect>shi</c> <c.correct>e</c> <c.correct>te</c>
+<c.predicted>ni</c> <c.predicted>a</c> <c.predicted>a</c> <c.predicted>ta</c> <c.predicted>ka</c> <c.predicted>u</c> <c.predicted>u</c> <c.predicted>e</c> <c.predicted>te</c>
+
+00:00:35.986 --> 00:00:40.589
+<c.incorrect>ku</c> <c.incorrect>re</c> <c.correct>ta</c> <c.correct>i</c> <c.incorrect>e</c> <c.correct>zu</c> <c.correct>ni</c> <c.correct>ka</c> <c.correct>ku</c>
+<c.predicted>n</c> <c.predicted>ka</c> <c.predicted>ta</c> <c.predicted>i</c> <c.predicted>i</c> <c.predicted>zu</c> <c.predicted>ni</c> <c.predicted>ka</c> <c.predicted>ku</c>
+
+00:00:39.089 --> 00:00:43.359
+<c.correct>shi</c> <c.correct>te</c> <c.correct>ta</c> <c.correct>ku</c> <c.correct>ra</c> <c.correct>i</c> <c.incorrect>ka</c> <c.correct>ko</c>
+<c.predicted>shi</c> <c.predicted>te</c> <c.predicted>ta</c> <c.predicted>ku</c> <c.predicted>ra</c> <c.predicted>i</c> <c.predicted>ga</c> <c.predicted>ko</c>
+
+00:00:41.859 --> 00:00:46.462
+<c.correct>mo</c> <c.incorrect>a</c> <c.correct>na</c> <c.correct>ta</c> <c.correct>ga</c> <c.correct>i</c> <c.incorrect>na</c> <c.incorrect>kya</c>
+<c.predicted>mo</c> <c.predicted>ma</c> <c.predicted>na</c> <c.predicted>ta</c> <c.predicted>ga</c> <c.predicted>i</c> <c.predicted>i</c> <c.predicted>ka</c>
+
+00:00:44.962 --> 00:00:50.232
+<c.incorrect>e</c> <c.incorrect>i</c> <c.incorrect>e</c> <c.incorrect>n</c> <c.correct>ni</c> <c.correct>ku</c> <c.correct>ra</c> <c.correct>i</c> <c.incorrect>ma</c> <c.incorrect>ma</c>
+<c.predicted>i</c> <c.predicted>e</c> <c.predicted>i</c> <c.predicted>e</c> <c.predicted>ni</c> <c.predicted>ku</c> <c.predicted>ra</c> <c.predicted>i</c> <c.predicted>mo</c> <c.predicted>mo</c>
+
+00:00:48.732 --> 00:00:53.035
+<c.incorrect>ki</c> <c.incorrect>to</c> <c.incorrect>mo</c> <c.incorrect>u</c> <c.incorrect>ko</c> <c.incorrect>re</c> <c.correct>i</c> <c.incorrect>jo</c> <c.incorrect>u</c>
+<c.predicted>[silence]</c> <c.predicted>ki</c> <c.predicted>to</c> <c.predicted>mo</c> <c.predicted>ku</c> <c.predicted>ka</c> <c.predicted>i</c> <c.predicted>tsu</c> <c.predicted>ta</c>
+
+00:00:51.535 --> 00:00:55.070
+<c.correct>ki</c> <c.incorrect>zu</c> <c.correct>tsu</c> <c.correct>ku</c> <c.correct>ko</c> <c.correct>to</c> <c.correct>na</c>
+<c.predicted>ki</c> <c.predicted>ja</c> <c.predicted>tsu</c> <c.predicted>ku</c> <c.predicted>ko</c> <c.predicted>to</c> <c.predicted>na</c>
+
+00:00:53.570 --> 00:00:58.207
+<c.incorrect>do</c> <c.correct>a</c> <c.incorrect>ri</c> <c.correct>ha</c> <c.correct>shi</c> <c.incorrect>na</c> <c.correct>i</c> <c.correct>to</c>
+<c.predicted>to</c> <c.predicted>a</c> <c.predicted>i</c> <c.predicted>ha</c> <c.predicted>shi</c> <c.predicted>hi</c> <c.predicted>i</c> <c.predicted>to</c>
+
+00:00:56.707 --> 00:01:01.310
+<c.correct>wa</c> <c.correct>ka</c> <c.correct>te</c> <c.correct>i</c> <c.correct>ru</c> <c.incorrect>a</c> <c.incorrect>no</c> <c.incorrect>hi</c> <c.incorrect>no</c>
+<c.predicted>wa</c> <c.predicted>ka</c> <c.predicted>te</c> <c.predicted>i</c> <c.predicted>ru</c> <c.predicted>sa</c> <c.predicted>n</c> <c.predicted>me</c> <c.predicted>hi</c>
+
+00:00:59.810 --> 00:01:03.746
+<c.correct>ka</c> <c.incorrect>na</c> <c.correct>shi</c> <c.correct>mi</c> <c.correct>sa</c> <c.correct>e</c> <c.correct>a</c> <c.incorrect>no</c>
+<c.predicted>ka</c> <c.predicted>no</c> <c.predicted>shi</c> <c.predicted>mi</c> <c.predicted>sa</c> <c.predicted>e</c> <c.predicted>a</c> <c.predicted>na</c>
+
+00:01:02.246 --> 00:01:05.647
+<c.correct>hi</c> <c.incorrect>no</c> <c.incorrect>ku</c> <c.correct>ru</c> <c.correct>shi</c> <c.correct>mi</c> <c.correct>sa</c>
+<c.predicted>hi</c> <c.predicted>i</c> <c.predicted>to</c> <c.predicted>ru</c> <c.predicted>shi</c> <c.predicted>mi</c> <c.predicted>sa</c>
+
+00:01:04.147 --> 00:01:08.050
+<c.correct>e</c> <c.incorrect>so</c> <c.incorrect>no</c> <c.incorrect>su</c> <c.incorrect>be</c> <c.correct>te</c> <c.correct>wo</c> <c.correct>a</c> <c.correct>i</c>
+<c.predicted>e</c> <c.predicted>su</c> <c.predicted>to</c> <c.predicted>shi</c> <c.predicted>su</c> <c.predicted>te</c> <c.predicted>wo</c> <c.predicted>a</c> <c.predicted>i</c>
+
+00:01:06.550 --> 00:01:10.452
+<c.incorrect>shi</c> <c.incorrect>te</c> <c.correct>ta</c> <c.incorrect>a</c> <c.incorrect>na</c> <c.incorrect>ta</c> <c.correct>to</c> <c.incorrect>to</c>
+<c.predicted>i</c> <c.predicted>ta</c> <c.predicted>ta</c> <c.predicted>u</c> <c.predicted>no</c> <c.predicted>da</c> <c.predicted>to</c> <c.predicted>ku</c>
+
+00:01:08.952 --> 00:01:13.055
+<c.correct>mo</c> <c.incorrect>ni</c> <c.correct>mu</c> <c.incorrect>ne</c> <c.correct>ni</c> <c.incorrect>no</c> <c.correct>ko</c> <c.incorrect>ri</c>
+<c.predicted>mo</c> <c.predicted>ri</c> <c.predicted>mu</c> <c.predicted>n</c> <c.predicted>ni</c> <c.predicted>n</c> <c.predicted>ko</c> <c.predicted>i</c>
+
+00:01:11.555 --> 00:01:15.291
+<c.incorrect>ha</c> <c.incorrect>na</c> <c.incorrect>re</c> <c.correct>na</c> <c.correct>i</c> <c.incorrect>ni</c> <c.incorrect>ga</c> <c.correct>i</c> <c.incorrect>re</c>
+<c.predicted>ka</c> <c.predicted>no</c> <c.predicted>i</c> <c.predicted>na</c> <c.predicted>i</c> <c.predicted>i</c> <c.predicted>ni</c> <c.predicted>i</c> <c.predicted>i</c>
+
+00:01:13.791 --> 00:01:18.527
+<c.correct>mo</c> <c.incorrect>n</c> <c.correct>no</c> <c.incorrect>ni</c> <c.correct>o</c> <c.correct>i</c> <c.correct>a</c> <c.incorrect>me</c> <c.correct>ga</c> <c.incorrect>fu</c>
+<c.predicted>mo</c> <c.predicted>u</c> <c.predicted>no</c> <c.predicted>i</c> <c.predicted>o</c> <c.predicted>i</c> <c.predicted>a</c> <c.predicted>n</c> <c.predicted>ga</c> <c.predicted>ku</c>
+
+00:01:17.027 --> 00:01:21.297
+<c.correct>ri</c> <c.incorrect>ya</c> <c.incorrect>mu</c> <c.correct>ma</c> <c.incorrect>de</c> <c.incorrect>ha</c> <c.correct>ka</c> <c.correct>e</c>
+<c.predicted>ri</c> <c.predicted>yo</c> <c.predicted>mo</c> <c.predicted>ma</c> <c.predicted>ku</c> <c.predicted>wa</c> <c.predicted>ka</c> <c.predicted>e</c>
+
+00:01:19.797 --> 00:01:24.733
+<c.incorrect>re</c> <c.correct>na</c> <c.correct>i</c> <c.correct>i</c> <c.correct>ma</c> <c.correct>de</c> <c.correct>mo</c> <c.correct>a</c> <c.correct>na</c>
+<c.predicted>i</c> <c.predicted>na</c> <c.predicted>i</c> <c.predicted>i</c> <c.predicted>ma</c> <c.predicted>de</c> <c.predicted>mo</c> <c.predicted>a</c> <c.predicted>na</c>
+
+00:01:23.233 --> 00:01:27.069
+<c.correct>ta</c> <c.incorrect>ha</c> <c.correct>wa</c> <c.correct>ta</c> <c.incorrect>shi</c> <c.correct>no</c> <c.incorrect>hi</c>
+<c.predicted>ta</c> <c.predicted>wo</c> <c.predicted>wa</c> <c.predicted>ta</c> <c.predicted>su</c> <c.predicted>no</c> <c.predicted>i</c>
+
+00:01:25.569 --> 00:01:39.748
+<c.correct>ka</c> <c.incorrect>ri</c> <c.correct>[silence]</c> <c.correct>ku</c>
+<c.predicted>ka</c> <c.predicted>i</c> <c.predicted>[silence]</c> <c.predicted>ku</c>
+
+00:01:38.248 --> 00:01:42.351
+<c.incorrect>ra</c> <c.incorrect>ya</c> <c.correct>mi</c> <c.incorrect>de</c> <c.correct>a</c> <c.correct>na</c> <c.correct>ta</c> <c.correct>no</c>
+<c.predicted>ku</c> <c.predicted>yo</c> <c.predicted>mi</c> <c.predicted>te</c> <c.predicted>a</c> <c.predicted>na</c> <c.predicted>ta</c> <c.predicted>no</c>
+
+00:01:40.851 --> 00:01:45.854
+<c.correct>se</c> <c.incorrect>wo</c> <c.correct>na</c> <c.incorrect>zo</c> <c.correct>ta</c> <c.incorrect>so</c> <c.correct>no</c> <c.correct>ri</c>
+<c.predicted>se</c> <c.predicted>yo</c> <c.predicted>na</c> <c.predicted>so</c> <c.predicted>ta</c> <c.predicted>tsu</c> <c.predicted>no</c> <c.predicted>ri</c>
+
+00:01:44.354 --> 00:01:48.023
+<c.incorrect>n</c> <c.correct>ka</c> <c.correct>ku</c> <c.incorrect>wo</c> <c.correct>se</c> <c.correct>n</c> <c.incorrect>me</c> <c.incorrect>i</c> <c.correct>ni</c>
+<c.predicted>i</c> <c.predicted>ka</c> <c.predicted>ku</c> <c.predicted>ku</c> <c.predicted>se</c> <c.predicted>n</c> <c.predicted>n</c> <c.predicted>me</c> <c.predicted>ni</c>
+
+00:01:46.523 --> 00:01:51.427
+<c.incorrect>o</c> <c.incorrect>bo</c> <c.correct>e</c> <c.correct>te</c> <c.incorrect>i</c> <c.incorrect>ru</c> <c.incorrect>u</c> <c.incorrect>ke</c> <c.correct>to</c> <c.incorrect>me</c>
+<c.predicted>yu</c> <c.predicted>u</c> <c.predicted>e</c> <c.predicted>te</c> <c.predicted>te</c> <c.predicted>yo</c> <c.predicted>ku</c> <c.predicted>ka</c> <c.predicted>to</c> <c.predicted>ma</c>
+
+00:01:49.927 --> 00:01:54.029
+<c.correct>ki</c> <c.incorrect>re</c> <c.incorrect>na</c> <c.incorrect>i</c> <c.correct>mo</c> <c.correct>no</c> <c.correct>to</c> <c.correct>de</c>
+<c.predicted>ki</c> <c.predicted>ne</c> <c.predicted>n</c> <c.predicted>na</c> <c.predicted>mo</c> <c.predicted>no</c> <c.predicted>to</c> <c.predicted>de</c>
+
+00:01:52.529 --> 00:01:57.666
+<c.correct>a</c> <c.incorrect>u</c> <c.correct>ta</c> <c.incorrect>bi</c> <c.correct>a</c> <c.incorrect>fu</c> <c.correct>re</c> <c.correct>te</c> <c.incorrect>ya</c>
+<c.predicted>a</c> <c.predicted>o</c> <c.predicted>ta</c> <c.predicted>i</c> <c.predicted>a</c> <c.predicted>a</c> <c.predicted>re</c> <c.predicted>te</c> <c.predicted>i</c>
+
+00:01:56.166 --> 00:02:00.102
+<c.correct>ma</c> <c.correct>na</c> <c.correct>i</c> <c.correct>no</c> <c.correct>ha</c> <c.correct>na</c> <c.correct>mi</c> <c.incorrect>da</c>
+<c.predicted>ma</c> <c.predicted>na</c> <c.predicted>i</c> <c.predicted>no</c> <c.predicted>ha</c> <c.predicted>na</c> <c.predicted>mi</c> <c.predicted>i</c>
+
+00:01:58.602 --> 00:02:03.339
+<c.correct>da</c> <c.correct>ke</c> <c.correct>na</c> <c.incorrect>ni</c> <c.incorrect>wo</c> <c.correct>shi</c> <c.incorrect>te</c>
+<c.predicted>da</c> <c.predicted>ke</c> <c.predicted>na</c> <c.predicted>i</c> <c.predicted>o</c> <c.predicted>shi</c> <c.predicted>hi</c>
+
+00:02:01.839 --> 00:02:06.108
+<c.correct>i</c> <c.correct>ta</c> <c.correct>no</c> <c.correct>na</c> <c.incorrect>ni</c> <c.incorrect>wo</c> <c.incorrect>mi</c> <c.incorrect>te</c>
+<c.predicted>i</c> <c.predicted>ta</c> <c.predicted>no</c> <c.predicted>na</c> <c.predicted>i</c> <c.predicted>yo</c> <c.predicted>i</c> <c.predicted>mi</c>
+
+00:02:04.608 --> 00:02:08.911
+<c.correct>i</c> <c.correct>ta</c> <c.incorrect>no</c> <c.correct>wa</c> <c.incorrect>ta</c> <c.incorrect>shi</c> <c.correct>no</c> <c.correct>shi</c>
+<c.predicted>i</c> <c.predicted>ta</c> <c.predicted>do</c> <c.predicted>wa</c> <c.predicted>ku</c> <c.predicted>te</c> <c.predicted>no</c> <c.predicted>shi</c>
+
+00:02:07.411 --> 00:02:12.514
+<c.incorrect>ra</c> <c.correct>na</c> <c.correct>i</c> <c.correct>yo</c> <c.correct>ko</c> <c.incorrect>ga</c> <c.correct>o</c> <c.incorrect>de</c> <c.incorrect>do</c>
+<c.predicted>ya</c> <c.predicted>na</c> <c.predicted>i</c> <c.predicted>yo</c> <c.predicted>ko</c> <c.predicted>da</c> <c.predicted>o</c> <c.predicted>te</c> <c.predicted>ko</c>
+
+00:02:11.014 --> 00:02:15.084
+<c.incorrect>ko</c> <c.correct>ka</c> <c.incorrect>de</c> <c.correct>a</c> <c.incorrect>na</c> <c.correct>ta</c> <c.incorrect>ga</c> <c.correct>i</c> <c.correct>ma</c>
+<c.predicted>u</c> <c.predicted>ka</c> <c.predicted>i</c> <c.predicted>a</c> <c.predicted>ra</c> <c.predicted>ta</c> <c.predicted>to</c> <c.predicted>i</c> <c.predicted>ma</c>
+
+00:02:13.584 --> 00:02:17.152
+<c.incorrect>wa</c> <c.incorrect>ta</c> <c.correct>shi</c> <c.incorrect>to</c> <c.incorrect>o</c> <c.incorrect>na</c> <c.correct>ji</c> <c.incorrect>yo</c>
+<c.predicted>ma</c> <c.predicted>n</c> <c.predicted>shi</c> <c.predicted>hi</c> <c.predicted>ko</c> <c.predicted>ra</c> <c.predicted>ji</c> <c.predicted>o</c>
+
+00:02:15.652 --> 00:02:19.221
+<c.incorrect>u</c> <c.incorrect>na</c> <c.incorrect>na</c> <c.incorrect>mi</c> <c.incorrect>da</c> <c.incorrect>ni</c> <c.correct>ku</c> <c.correct>re</c>
+<c.predicted>o</c> <c.predicted>da</c> <c.predicted>a</c> <c.predicted>n</c> <c.predicted>ga</c> <c.predicted>i</c> <c.predicted>ku</c> <c.predicted>re</c>
+
+00:02:17.721 --> 00:02:21.290
+<c.correct>sa</c> <c.incorrect>bi</c> <c.incorrect>shi</c> <c.correct>sa</c> <c.correct>no</c> <c.correct>na</c> <c.incorrect>ka</c>
+<c.predicted>sa</c> <c.predicted>ni</c> <c.predicted>i</c> <c.predicted>sa</c> <c.predicted>no</c> <c.predicted>na</c> <c.predicted>ta</c>
+
+00:02:19.790 --> 00:02:23.859
+<c.incorrect>ni</c> <c.correct>i</c> <c.correct>ru</c> <c.correct>na</c> <c.correct>ra</c> <c.incorrect>wa</c> <c.correct>ta</c> <c.correct>shi</c>
+<c.predicted>i</c> <c.predicted>i</c> <c.predicted>ru</c> <c.predicted>na</c> <c.predicted>ra</c> <c.predicted>ma</c> <c.predicted>ta</c> <c.predicted>shi</c>
+
+00:02:22.359 --> 00:02:26.462
+<c.incorrect>no</c> <c.correct>ko</c> <c.correct>to</c> <c.correct>na</c> <c.correct>do</c> <c.incorrect>do</c> <c.correct>u</c> <c.incorrect>ka</c>
+<c.predicted>shi</c> <c.predicted>ko</c> <c.predicted>to</c> <c.predicted>na</c> <c.predicted>do</c> <c.predicted>to</c> <c.predicted>u</c> <c.predicted>to</c>
+
+00:02:24.962 --> 00:02:29.231
+<c.incorrect>wa</c> <c.incorrect>su</c> <c.incorrect>re</c> <c.correct>te</c> <c.correct>ku</c> <c.incorrect>da</c> <c.correct>sa</c> <c.correct>i</c>
+<c.predicted>u</c> <c.predicted>tsu</c> <c.predicted>na</c> <c.predicted>te</c> <c.predicted>ku</c> <c.predicted>to</c> <c.predicted>sa</c> <c.predicted>i</c>
+
+00:02:27.731 --> 00:02:31.634
+<c.correct>so</c> <c.incorrect>n</c> <c.incorrect>na</c> <c.correct>ko</c> <c.correct>to</c> <c.correct>ko</c> <c.correct>ko</c> <c.incorrect>ro</c>
+<c.predicted>so</c> <c.predicted>ko</c> <c.predicted>da</c> <c.predicted>ko</c> <c.predicted>to</c> <c.predicted>ko</c> <c.predicted>ko</c> <c.predicted>do</c>
+
+00:02:30.134 --> 00:02:34.737
+<c.correct>ka</c> <c.correct>ra</c> <c.incorrect>ne</c> <c.correct>ga</c> <c.correct>u</c> <c.incorrect>ho</c> <c.correct>do</c> <c.correct>ni</c>
+<c.predicted>ka</c> <c.predicted>ra</c> <c.predicted>n</c> <c.predicted>ga</c> <c.predicted>u</c> <c.predicted>u</c> <c.predicted>do</c> <c.predicted>ni</c>
+
+00:02:33.237 --> 00:02:37.373
+<c.correct>i</c> <c.correct>ma</c> <c.correct>de</c> <c.correct>mo</c> <c.correct>a</c> <c.incorrect>na</c> <c.correct>ta</c> <c.incorrect>ha</c> <c.correct>wa</c>
+<c.predicted>i</c> <c.predicted>ma</c> <c.predicted>de</c> <c.predicted>mo</c> <c.predicted>a</c> <c.predicted>no</c> <c.predicted>ta</c> <c.predicted>wa</c> <c.predicted>wa</c>
+
+00:02:35.873 --> 00:02:43.345
+<c.incorrect>ta</c> <c.correct>shi</c> <c.correct>no</c> <c.incorrect>hi</c> <c.correct>ka</c> <c.incorrect>ri</c> <c.correct>[silence]</c>
+<c.predicted>to</c> <c.predicted>shi</c> <c.predicted>no</c> <c.predicted>i</c> <c.predicted>ka</c> <c.predicted>ni</c> <c.predicted>[silence]</c>
+
+00:02:41.845 --> 00:02:48.884
+<c.incorrect>ji</c> <c.incorrect>bu</c> <c.correct>n</c> <c.incorrect>ga</c> <c.correct>o</c> <c.correct>mo</c> <c.correct>u</c> <c.correct>yo</c> <c.incorrect>ri</c>
+<c.predicted>se</c> <c.predicted>no</c> <c.predicted>n</c> <c.predicted>da</c> <c.predicted>o</c> <c.predicted>mo</c> <c.predicted>u</c> <c.predicted>yo</c> <c.predicted>i</c>
+
+00:02:47.384 --> 00:02:52.354
+<c.incorrect>ko</c> <c.correct>i</c> <c.correct>wo</c> <c.incorrect>shi</c> <c.correct>te</c> <c.correct>i</c> <c.correct>ta</c> <c.correct>a</c> <c.correct>na</c>
+<c.predicted>o</c> <c.predicted>i</c> <c.predicted>wo</c> <c.predicted>u</c> <c.predicted>te</c> <c.predicted>i</c> <c.predicted>ta</c> <c.predicted>a</c> <c.predicted>na</c>
+
+00:02:50.854 --> 00:02:57.826
+<c.correct>ta</c> <c.correct>ni</c> <c.correct>a</c> <c.correct>re</c> <c.correct>ka</c> <c.correct>ra</c> <c.correct>o</c> <c.correct>mo</c> <c.correct>u</c>
+<c.predicted>ta</c> <c.predicted>ni</c> <c.predicted>a</c> <c.predicted>re</c> <c.predicted>ka</c> <c.predicted>ra</c> <c.predicted>o</c> <c.predicted>mo</c> <c.predicted>u</c>
+
+00:02:56.326 --> 00:03:04.066
+<c.correct>yo</c> <c.incorrect>u</c> <c.correct>ni</c> <c.correct>i</c> <c.incorrect>ki</c> <c.incorrect>ga</c> <c.incorrect>de</c> <c.incorrect>ki</c> <c.correct>na</c>
+<c.predicted>yo</c> <c.predicted>o</c> <c.predicted>ni</c> <c.predicted>i</c> <c.predicted>i</c> <c.predicted>da</c> <c.predicted>re</c> <c.predicted>i</c> <c.predicted>na</c>
+
+00:03:02.566 --> 00:03:08.871
+<c.correct>i</c> <c.correct>a</c> <c.incorrect>n</c> <c.incorrect>na</c> <c.correct>ni</c> <c.correct>so</c> <c.incorrect>ba</c> <c.correct>ni</c> <c.correct>i</c> <c.correct>ta</c>
+<c.predicted>i</c> <c.predicted>a</c> <c.predicted>a</c> <c.predicted>n</c> <c.predicted>ni</c> <c.predicted>so</c> <c.predicted>bo</c> <c.predicted>ni</c> <c.predicted>i</c> <c.predicted>ta</c>
+
+00:03:07.371 --> 00:03:15.077
+<c.correct>no</c> <c.correct>ni</c> <c.correct>ma</c> <c.correct>ru</c> <c.correct>de</c> <c.correct>u</c> <c.correct>so</c> <c.correct>mi</c>
+<c.predicted>no</c> <c.predicted>ni</c> <c.predicted>ma</c> <c.predicted>ru</c> <c.predicted>de</c> <c.predicted>u</c> <c.predicted>so</c> <c.predicted>mi</c>
+
+00:03:13.577 --> 00:03:18.514
+<c.correct>ta</c> <c.correct>i</c> <c.incorrect>to</c> <c.incorrect>te</c> <c.correct>mo</c> <c.incorrect>wa</c> <c.incorrect>su</c> <c.incorrect>re</c>
+<c.predicted>ta</c> <c.predicted>i</c> <c.predicted>n</c> <c.predicted>to</c> <c.predicted>mo</c> <c.predicted>a</c> <c.predicted>i</c> <c.predicted>ne</c>
+
+00:03:17.014 --> 00:03:24.753
+<c.incorrect>ra</c> <c.incorrect>re</c> <c.incorrect>na</c> <c.correct>i</c> <c.correct>so</c> <c.incorrect>re</c> <c.incorrect>da</c> <c.correct>ke</c>
+<c.predicted>na</c> <c.predicted>ni</c> <c.predicted>no</c> <c.predicted>i</c> <c.predicted>so</c> <c.predicted>ne</c> <c.predicted>na</c> <c.predicted>ke</c>
+
+00:03:23.253 --> 00:03:32.361
+<c.incorrect>ga</c> <c.correct>ta</c> <c.correct>shi</c> <c.incorrect>ka</c> <c.correct>[silence]</c>
+<c.predicted>da</c> <c.predicted>ta</c> <c.predicted>shi</c> <c.predicted>ta</c> <c.predicted>[silence]</c>
+
+00:03:30.861 --> 00:03:34.396
+<c.correct>a</c> <c.incorrect>no</c> <c.incorrect>hi</c> <c.incorrect>no</c> <c.incorrect>ka</c> <c.incorrect>na</c> <c.correct>shi</c> <c.correct>mi</c>
+<c.predicted>a</c> <c.predicted>n</c> <c.predicted>mi</c> <c.predicted>i</c> <c.predicted>da</c> <c.predicted>ra</c> <c.predicted>shi</c> <c.predicted>mi</c>
+
+00:03:32.896 --> 00:03:36.665
+<c.correct>sa</c> <c.incorrect>e</c> <c.correct>a</c> <c.incorrect>no</c> <c.incorrect>hi</c> <c.incorrect>no</c> <c.correct>ku</c> <c.incorrect>ru</c> <c.correct>shi</c>
+<c.predicted>sa</c> <c.predicted>i</c> <c.predicted>a</c> <c.predicted>n</c> <c.predicted>ki</c> <c.predicted>hi</c> <c.predicted>ku</c> <c.predicted>u</c> <c.predicted>shi</c>
+
+00:03:35.165 --> 00:03:38.767
+<c.correct>mi</c> <c.correct>sa</c> <c.correct>e</c> <c.incorrect>so</c> <c.correct>no</c> <c.correct>su</c> <c.incorrect>be</c> <c.incorrect>te</c>
+<c.predicted>mi</c> <c.predicted>sa</c> <c.predicted>e</c> <c.predicted>su</c> <c.predicted>no</c> <c.predicted>su</c> <c.predicted>n</c> <c.predicted>de</c>
+
+00:03:37.267 --> 00:03:41.503
+<c.correct>wo</c> <c.correct>a</c> <c.correct>i</c> <c.incorrect>shi</c> <c.incorrect>te</c> <c.incorrect>ta</c> <c.incorrect>a</c> <c.incorrect>na</c> <c.incorrect>ta</c>
+<c.predicted>wo</c> <c.predicted>a</c> <c.predicted>i</c> <c.predicted>i</c> <c.predicted>ta</c> <c.predicted>to</c> <c.predicted>u</c> <c.predicted>no</c> <c.predicted>da</c>
+
+00:03:40.003 --> 00:03:44.039
+<c.correct>to</c> <c.incorrect>to</c> <c.correct>mo</c> <c.correct>ni</c> <c.incorrect>mu</c> <c.incorrect>ne</c> <c.correct>ni</c> <c.incorrect>no</c>
+<c.predicted>to</c> <c.predicted>ko</c> <c.predicted>mo</c> <c.predicted>ni</c> <c.predicted>fu</c> <c.predicted>n</c> <c.predicted>ni</c> <c.predicted>i</c>
+
+00:03:42.539 --> 00:03:46.475
+<c.incorrect>ko</c> <c.correct>ri</c> <c.correct>ha</c> <c.incorrect>na</c> <c.correct>re</c> <c.correct>na</c> <c.correct>i</c> <c.incorrect>ni</c>
+<c.predicted>no</c> <c.predicted>ri</c> <c.predicted>ha</c> <c.predicted>no</c> <c.predicted>re</c> <c.predicted>na</c> <c.predicted>i</c> <c.predicted>i</c>
+
+00:03:44.975 --> 00:03:49.378
+<c.incorrect>ga</c> <c.correct>i</c> <c.incorrect>re</c> <c.correct>mo</c> <c.incorrect>n</c> <c.correct>no</c> <c.correct>ni</c> <c.correct>o</c> <c.correct>i</c> <c.correct>a</c>
+<c.predicted>na</c> <c.predicted>i</c> <c.predicted>i</c> <c.predicted>mo</c> <c.predicted>u</c> <c.predicted>no</c> <c.predicted>ni</c> <c.predicted>o</c> <c.predicted>i</c> <c.predicted>a</c>
+
+00:03:47.878 --> 00:03:51.847
+<c.incorrect>me</c> <c.correct>ga</c> <c.incorrect>fu</c> <c.incorrect>ri</c> <c.incorrect>ya</c> <c.incorrect>mu</c> <c.correct>ma</c> <c.incorrect>de</c>
+<c.predicted>n</c> <c.predicted>ga</c> <c.predicted>ku</c> <c.predicted>ni</c> <c.predicted>yo</c> <c.predicted>mo</c> <c.predicted>ma</c> <c.predicted>te</c>
+
+00:03:50.347 --> 00:03:55.451
+<c.correct>ha</c> <c.correct>ka</c> <c.correct>e</c> <c.incorrect>re</c> <c.incorrect>na</c> <c.correct>i</c> <c.incorrect>ki</c> <c.incorrect>ri</c> <c.incorrect>wa</c>
+<c.predicted>ha</c> <c.predicted>ka</c> <c.predicted>e</c> <c.predicted>e</c> <c.predicted>ra</c> <c.predicted>i</c> <c.predicted>i</c> <c.predicted>hi</c> <c.predicted>ha</c>
+
+00:03:53.951 --> 00:03:57.853
+<c.correct>ke</c> <c.correct>ta</c> <c.correct>ka</c> <c.incorrect>ji</c> <c.correct>tsu</c> <c.incorrect>no</c> <c.correct>ka</c>
+<c.predicted>ke</c> <c.predicted>ta</c> <c.predicted>ka</c> <c.predicted>ri</c> <c.predicted>tsu</c> <c.predicted>u</c> <c.predicted>ka</c>
+
+00:03:56.353 --> 00:04:00.622
+<c.correct>ta</c> <c.incorrect>ho</c> <c.correct>u</c> <c.correct>no</c> <c.correct>yo</c> <c.correct>u</c> <c.correct>ni</c> <c.correct>i</c> <c.correct>ma</c>
+<c.predicted>ta</c> <c.predicted>ku</c> <c.predicted>u</c> <c.predicted>no</c> <c.predicted>yo</c> <c.predicted>u</c> <c.predicted>ni</c> <c.predicted>i</c> <c.predicted>ma</c>
+
+00:03:59.122 --> 00:04:03.358
+<c.incorrect>de</c> <c.correct>mo</c> <c.correct>a</c> <c.correct>na</c> <c.correct>ta</c> <c.incorrect>ha</c> <c.incorrect>wa</c> <c.correct>ta</c>
+<c.predicted>bi</c> <c.predicted>mo</c> <c.predicted>a</c> <c.predicted>na</c> <c.predicted>ta</c> <c.predicted>wa</c> <c.predicted>ba</c> <c.predicted>ta</c>
+
+00:04:01.858 --> 00:04:18.060
+<c.correct>shi</c> <c.correct>no</c> <c.correct>hi</c> <c.incorrect>ka</c> <c.incorrect>ri</c> <c.correct>[silence]</c>
+<c.predicted>shi</c> <c.predicted>no</c> <c.predicted>hi</c> <c.predicted>ta</c> <c.predicted>ni</c> <c.predicted>[silence]</c>
+
