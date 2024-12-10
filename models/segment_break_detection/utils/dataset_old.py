@@ -44,13 +44,20 @@ class BreakDataset(Dataset):
             mel_spec = self._compute_spectrogram(waveform, sr)
 
             # Truncate to last break + 2
-            last_break = labels.nonzero(as_tuple=True)[0][-1]
-            mel_spec = mel_spec[:, :last_break + 2]
-            labels = labels[:last_break + 2]
+            # last_break = labels.nonzero(as_tuple=True)[0][-1]
+            # mel_spec = mel_spec[:, :last_break + 2]
+            # labels = labels[:last_break + 2]
+
+            # truncate the difference between the lengths of mel_spec and labels
+            diff = labels.shape[0] - mel_spec.shape[1]
+            if diff > 50:
+                print(f"WARNING: File {file_idx} has a large difference between mel_spec and labels: {diff}")
+            if diff < 0:
+                print(f"NOTE: Audio {file_idx} has a longer label than mel_spec: {diff}")
 
             self.data.append((file_idx, mel_spec, labels))
             self.length += 1
-            print(f"Index: {file_idx}, Mel shape: {mel_spec.shape}, Labels shape: {labels.shape}")
+            # print(f"Index: {file_idx}, Mel shape: {mel_spec.shape}, Labels shape: {labels.shape}")
             if mel_spec.shape[1] != labels.shape[0]:
                 print(f"WARNING: File {file_idx} has mismatched shapes {mel_spec.shape} and {labels.shape}")
         if debug:
