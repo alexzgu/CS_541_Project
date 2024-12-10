@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from models.segment_break_detection.utils.dataset_old import BreakDataset
+from models.segment_break_detection.utils.dataset import BreakDataset
 from models.segment_break_detection.utils.cnn_rnn import CNNRNN
 
 DATA_DIR = '../../../data'
