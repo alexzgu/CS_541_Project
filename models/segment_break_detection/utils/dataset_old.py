@@ -1,6 +1,8 @@
 import torch
 import torchaudio
 from torch.utils.data import Dataset
+import os
+import pandas as pd
 
 class BreakDataset(Dataset):
     def __init__(self, audio_dir: str, label_dir: str, interval_width: int = 20, debug: bool = False):
@@ -14,29 +16,6 @@ class BreakDataset(Dataset):
         interval_width: width of the fixed intervals (in ms) used to compute the mel spectrogram.
         Default is 20 ms.
         """
-        self.audio_dir = audio_dir
-        self.label_dir = label_dir
-        self.interval_width = interval_width
-        self.length = 0
-        import torch
-        import torchaudio
-        import pandas as pd
-        from torch.utils.data import Dataset
-        import os
-
-        class BreakDataset(Dataset):
-            def init(self, audio_dir: str, label_dir: str, interval_width: int = 20, debug: bool = False):
-
-                """
-            Args:
-            audio_dir: all files in audio_dir are audio files with names of the form
-            "{INTEGER}.{mp3, wav, etc.}"
-            label_dir: all files in label_dir are csv files with names of the form
-            "{INTEGER}.csv", where each csv file has columns
-            index (non-negative int), start (non-negative float), end (non-negative float), break (bool)
-            interval_width: width of the fixed intervals (in ms) used to compute the mel spectrogram.
-            Default is 20 ms.
-            """
 
         self.audio_dir = audio_dir
         self.label_dir = label_dir
