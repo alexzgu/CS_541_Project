@@ -12,3 +12,6 @@ models/tensors/songs.zip
 /models/tensors/songs
 /models/segment_break_detection/data_cache
 /data/clean/segment_breaks
+/models/segment_break_detection/breaks
+/models/segment_break_detection/labeled_spectrogram_tensors
+/models/segment_break_detection/predictions

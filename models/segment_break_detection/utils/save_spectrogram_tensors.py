@@ -3,9 +3,14 @@ import torch
 import os
 
 # Define paths
-shared_dir = "../../../data/clean"
-AUDIO_DIR = f"{shared_dir}/audio/vocals"
-LABEL_DIR = f"{shared_dir}/segment_breaks"
+#shared_dir = "../../../data/clean"
+#AUDIO_DIR = f"{shared_dir}/audio/vocals"
+#LABEL_DIR = f"{shared_dir}/segment_breaks"
+
+shared_dir = '../../../data_processing/separate_scripts/'
+AUDIO_DIR = f"{shared_dir}/golden_audio"
+LABEL_DIR = f"{shared_dir}/golden_breaks"
+
 SAVE_DIR = "../labeled_spectrogram_tensors"
 interval_width = 20  # ms
 
@@ -30,7 +35,7 @@ for idx, mel_spec, labels in dataset:
     }
 
     # Save using torch.save
-    save_path = os.path.join(SAVE_DIR, f'sample_{idx}.pt')
+    save_path = os.path.join(SAVE_DIR, f'{idx}.pt')
     torch.save(data_dict, save_path)
     print(f"Saved sample {idx} to {save_path}")
 

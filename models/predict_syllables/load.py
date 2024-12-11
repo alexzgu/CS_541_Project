@@ -20,7 +20,7 @@ clip_dir = f'{syllable_dir}/clips'
 clip_index_file = f'{syllable_dir}/segment_index.csv'
 song_tensor_dir = f'{current_directory}/../tensors/songs'
 
-pred_vocal_index_file = f'{data_dir}/clean/syllables/segment_index.csv'
+pred_vocal_index_file = "models/predict_syllables/segment_break.csv" #  f'{data_dir}/clean/syllables/segment_index.csv'
 
 
 def get_lstm_dataloader(batch_size, segment_length_ms, left=0, right=80):

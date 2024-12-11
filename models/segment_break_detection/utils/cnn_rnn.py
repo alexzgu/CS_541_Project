@@ -11,20 +11,6 @@ import torch.optim as optim
 class CNNRNN(nn.Module):
     def __init__(self, n_mels=32, hidden_size=128, num_layers=3):
         super(CNNRNN, self).__init__()
-        # self.conv = nn.Sequential(
-        #     nn.Conv1d(n_mels, 64, kernel_size=3, padding=1),
-        #     nn.ReLU(),
-        #     nn.Conv1d(64, 32, kernel_size=3, padding=1),
-        #     nn.ReLU()
-        # )
-        # self.rnn = nn.LSTM(
-        #     input_size=32,
-        #     hidden_size=hidden_size,
-        #     num_layers=num_layers,
-        #     batch_first=True,
-        #     bidirectional=True
-        # )
-
         self.conv = nn.Sequential(
             nn.Conv1d(n_mels, 64, kernel_size=3, padding=1),
             nn.BatchNorm1d(64),
