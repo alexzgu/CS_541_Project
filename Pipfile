@@ -5,8 +5,8 @@ name = "pypi"
 
 [packages]
 torch = "*"
-pandas = "<2"
-numpy = "<2"
+pandas = "*"
+numpy = "*"
 torchvision = "*"
 torchaudio = "*"
 soundfile = "*"
@@ -16,6 +16,7 @@ transformers = "*"
 torchmetrics = "*"
 matplotlib = "*"
 scikit-learn = "*"
+librosa = "*"
 
 [dev-packages]
 
