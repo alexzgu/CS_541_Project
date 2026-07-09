@@ -17,3 +17,11 @@ models/tensors/songs.zip
 /models/segment_break_detection/predictions
 /tmp
 /isolate_vocals/.venv31110
+
+# refactored package
+.venv/
+artifacts/
+runs/
+*.egg-info/
+__pycache__/
+.pytest_cache/
