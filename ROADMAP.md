@@ -2,7 +2,7 @@
 
 Textless syllable-level transcription of Japanese songs (v2 of the CS 541 project). Revised 2026-07-09 (rev. 3: no-forced-alignment constraint; segmental decoder core). **Status: planning — no implementation started.**
 
-Mathematical companion: `docs/pipeline_specification.tex` defines every model in full detail. This file covers architecture, data, phases, and acceptance criteria.
+Mathematical companion: `docs/pipeline_specification.md` defines every model in full detail. This file covers architecture, data, phases, and acceptance criteria.
 
 **Hard constraints (project identity):** (i) textless — no transcript exists or is used at inference; (ii) **no forced alignment anywhere**, including dataset cleaning — no stage infers timestamps by aligning a token sequence to audio; (iii) deep networks provide local evidence, explicit probabilistic structure (durations, transitions, boundaries, phonetic geometry) does the rest — less black box, not more.
 
@@ -53,7 +53,8 @@ Core product path P0→P4 ≈ 1.5–2 focused weeks.
 - **Model 1 checkpoints still Drive-only** (`pretrained/Transformer_Wave2Vec_Models/`, `pretrained/Transformer_Spectrogram_Models/`) — requested; not blocking.
 - **Model 2 survives**: `models/predict_syllables/pretrained/model_20ms_drop_0.5_144_0.5363_test` (LSTM 768→144×2, dropout 0.5; attrs `lstm`/`fc`). Drive `Code/{main,load,model,train,syllables,my_helper}` = Colab copies (path deltas; `main` reproduces micro-F1 0.53516). `Segment Break Code/main.ipynb` = unused template.
 - Repo `best_model_*.pth` = later CNN-BiLSTM dead ends (constant predictors ~0.494–0.496).
-- Encoder was English `facebook/wav2vec2-base`, re-instantiated per call. Keep: 11 GB wav2vec2 tensors (93 songs), separated vocals (93), cleaning chain, `audio-separator` wrapper. End-to-end accuracy never measured.
+- Encoder was English `facebook/wav2vec2-base`, re-instantiated per call. Keep: separated vocals (93), cleaning chain, `audio-separator` wrapper. End-to-end accuracy never measured.
+- **Verified 2026-07-09: the local 11 GB tensor cache (`models/tensors/songs_20ms/`) is misnamed — it holds the 10 ms resample-trick variant** (frame count × 10 ms = audio duration on every checked song; the 20 ms checkpoint scores 3% on it vs the 52% of its `pred` column). True-20 ms tensors existed only on Colab/Drive. Consequence: `--from-legacy` adopts into the 10 ms cache; the 20 ms cache is re-encoded locally (`kashi encode` replicates legacy semantics — full-song Wav2Vec2Processor normalization + one full-song forward, fp16+SDPA on 6 GB).
 - Hygiene debt (P0): mixed sec/ms units, 20 ms constant ×7 files, vocab ×4, cwd-dependent paths, dead inference CLI, destructive prep scripts, abandoned `paper_based_approach/`, 3 req-specs + 4 venvs, ~100 MB vendored UVR5/demucs. Map: Appendix A.
 - Prior refactor deleted same day; design recovered from bytecode (Appendix B).
 
@@ -170,7 +171,7 @@ src/kashi/
   web/app.py      # FastAPI; single worker; in-memory jobs; static/index.html
   cli.py
 tests/            # unit + 10 s CPU smoke fixture
-docs/pipeline_specification.tex   # the mathematical spec (source of truth for all models)
+docs/pipeline_specification.md   # the mathematical spec (source of truth for all models)
 ```
 
 ### 3.2 Component contracts
@@ -289,7 +290,17 @@ One `pyproject.toml`, Python 3.12, torch-CUDA; extras `[uvr] [demucs] [tda] [lm]
 
 **Metrics** (formal definitions: spec §10): boundary F1@{20,50} ms + mean|Δt|; **SER** (headline); timed-token F1 (token ∧ |Δstart| ≤ 50 ms); partial credit (phonetic kernel); noise-span P/R (IoU ≥ 0.3).
 
-**P1 baselines to record** (none exist): (a) legacy Model 2 on ground-truth segments ≈ 0.536 (validates port); (b) energy+LSTM end-to-end SER/timed-F1 (first honest end-to-end number); (c) paper Model 1 retrained verbatim from the recovered notebook ≈ F1 0.41; (d) bug-fixed Model 1 (batch_first + PE + edge-guarded labels) — quantifies the bug cost. Later phases must beat predecessors on gold + frozen test or don't merge.
+**P1 baselines — RECORDED 2026-07-09** (`runs/baselines/*.json`, frozen test split, re-encoded 20 ms features):
+
+| Baseline | Headline | Detail |
+|---|---|---|
+| (a) legacy M2, GT segments | **acc 0.5319** (paper 0.5363, Δ0.4 pt — port validated) | partial credit 0.757 (first measurement) |
+| (b) energy+LSTM end-to-end | **SER 0.797** · timed-token F1 0.106 | boundary F1@50ms 0.30 — the bar P3 must clear |
+| (c) M1 verbatim (bugs incl.), 10 ep | boundary F1@60ms **0.646**, mean&#124;Δ&#124; 34.5 ms | paper-metric F1 0.351 (paper 0.408; different feature vintage/seed) |
+| (d) M1 bug-fixed + soft-BCE, 20 ep | boundary F1@60ms 0.574 | paper-metric F1 0.348 |
+| (d′) M1 bug-fixed + latent-offset, 10 ep | boundary F1@60ms **0.624**, mean&#124;Δ&#124; 32.6 ms | best fixed-arch trainer at half the epochs |
+
+**Findings:** (1) the architecture "bug cost" is ≈ zero at equal budget — wav2vec2's own transformer already supplies temporal context, so Model-1's attention adds little; the lever is labels/decoding, not M1 architecture (consistent with §2.1). (2) The latent-offset loss beats soft-BCE (0.624 vs 0.574 at half the epochs) — P3 default confirmed. (3) End-to-end was never the sum of its stage metrics: SER 0.797 despite 53% classifier accuracy — segmentation is the bottleneck, exactly what the segmental decoder targets. Still open in P1: test-side gold windows need human listening (`kashi gold export/import`).
 
 ---
 
@@ -381,7 +392,7 @@ P0 ─→ P1 ─→ P2 ─→ P3 ─→ P4
 | `data_preparation/preparing_raw_data/` (UVR5-GUI + demucs vendor) | delete (pip replaces) | — |
 | `models/paper_based_approach/` | archive (never functional) | `legacy/` |
 | `data_processing/container_files/` | archive (SLURM-specific) | `legacy/` |
-| `models/tensors/songs_20ms/*.pt` (11 GB) | keep; symlink-adopt | `kashi encode --from-legacy` |
+| `models/tensors/songs_20ms/*.pt` (11 GB; actually 10 ms variant) | keep; symlink-adopt into the 10 ms cache | `kashi encode --from-legacy` |
 | golden CSVs (songs 0/6/16/19, `<sil>/<bre>`) | seed gold set | `kashi gold import` |
 | `karaoke_subtitle_dataset/src/*.rs` (VTT parser) | port to Python; keep as differential oracle | `kashi/data/scrape.py` |
 | root `out.csv`, `predictions/`, `data_preparation/out.csv` | delete | — |

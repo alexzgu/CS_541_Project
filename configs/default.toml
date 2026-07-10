@@ -1,0 +1,145 @@
+# kashi default configuration.
+# Precedence: this file < --config <file> < --set key=value (repeatable).
+# All weights/thresholds referenced in docs/pipeline_specification.md live here.
+
+[data]
+frame_ms = 20
+sample_rate = 16000
+version = "clean"            # clean | clean_v2 | gold
+
+[paths]
+data_dir = "data"
+artifacts_dir = "artifacts"
+runs_dir = "runs"
+dataset_repo = "../karaoke_subtitle_dataset"
+legacy_tensors = "models/tensors/songs_20ms"
+legacy_tensors_frame_ms = 10   # verified: dir is misnamed; tensors are the 10 ms variant
+legacy_segment_index = "data/clean/syllables/segment_index.csv"
+
+[pipeline]
+mode = "two_stage"           # two_stage | segmental (segmental lands in P3)
+separator = "none"           # none | uvr | demucs
+encoder = "wav2vec2"         # wav2vec2 | mel
+segmenter = "energy"         # energy | transformer | hmm
+classifier = "lstm"          # lstm | silence_only
+decoder = "segmental"
+
+[split]
+name = "paper"               # frozen: sorted ids [0:80] train / [80:93] test, labeled only
+train_right = 80
+test_right = 93
+
+[separator.uvr]
+model_filename = "model_mel_band_roformer_ep_3005_sdr_11.ckpt"
+output_dir = "data/clean/audio/vocals"
+
+[separator.demucs]
+model = "htdemucs"
+
+[encoder.wav2vec2]
+checkpoint = "facebook/wav2vec2-base"   # legacy default; JA candidates evaluated in P2
+projection_head = ""
+chunk_s = 20.0
+device = "auto"
+
+[encoder.mel]
+n_mels = 64
+
+[features]
+voicing = "autocorr"         # autocorr | tda
+fmin_hz = 70.0
+fmax_hz = 500.0
+window_ms = 46.0
+
+[segmenter.energy]
+top_db = 30.0
+min_dur_ms = 60
+max_dur_ms = 1200
+
+[segmenter.transformer]
+checkpoint = ""
+threshold = 0.45
+nms_frames = 3
+attn_window = 100
+
+[segmenter.hmm]              # P2
+L = 120
+rho = 0.95
+alpha = 4.0
+gamma = 4.0
+sweeps = 30
+burnin = 10
+pca_dim = 48
+
+[classifier.lstm]
+checkpoint = "models/predict_syllables/pretrained/model_20ms_drop_0.5_144_0.5363_test"
+input_size = 768
+hidden_size = 144
+num_layers = 2
+dropout = 0.5
+
+[decoder.segmental]          # P3
+d_max = 60
+top_k = 8
+n_best = 4
+lambda_c = 1.0
+lambda_d = 0.5
+lambda_b = 0.5
+lambda_lm = 0.0
+
+[boundaries]                 # P2
+sources = ["hmm", "onset", "voicing"]
+hmm_p_min = 0.3
+
+[realign]                    # P2
+out_version = "clean_v2"
+delta_max_ms = 100
+c_miss = 1.2
+eta = 0.5
+noise_min_ms = 60
+noise_rms_db = -35.0
+voicing_thresh = 0.35
+
+[qa]                         # P2
+max_mean_shift_ms = 60.0
+max_flagged_frac = 0.15
+min_candidate_recall = 0.6
+quarantine = true
+
+[train]
+seed = 541
+
+[train.segmenter]
+loss = "latent_offset"       # latent_offset | soft_bce
+delta = 3
+epochs = 10
+lr = 1e-4
+batch_songs = 1
+tolerance_frames = 3
+
+[train.classifier]
+loss = "phonetic"            # phonetic | ce
+smooth_alpha = 0.1
+kernel_power = 4
+epochs = 25
+lr = 1e-3
+weight_decay = 2e-3
+batch_size = 128
+
+[train.frame]                # P3
+head = "mlp256"
+
+[train.encoder]              # P5
+mode = "temporal"            # temporal | supcon | covers
+temperature = 0.1
+steps = 2000
+batch_size = 512
+
+[eval]
+tolerances_ms = [20, 50]
+split = "paper"
+
+[web]                        # P4
+host = "127.0.0.1"
+port = 8000
+max_upload_mb = 500

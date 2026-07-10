@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kashi"
+version = "0.2.0"
+description = "Textless syllable-level transcription of Japanese songs (kashi = lyrics)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.0",
+    "scipy>=1.11",
+    "torch>=2.4",
+    "torchaudio>=2.4",
+    "soundfile>=0.12",
+    "tqdm>=4.60",
+]
+
+[project.optional-dependencies]
+hf = ["transformers>=4.40"]
+uvr = ["audio-separator>=0.24"]
+demucs = ["demucs>=4.0"]
+tda = ["ripser>=0.6"]
+lm = ["pyctcdecode>=0.5"]
+web = ["fastapi>=0.110", "uvicorn[standard]>=0.29", "python-multipart>=0.0.9"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+kashi = "kashi.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
