@@ -135,6 +135,10 @@ def cmd_train(args) -> None:
         from .train import frame as mod
 
         mod.train(cfg, version=args.version, name=args.name)
+    elif args.model == "encoder":
+        from .train import encoder as mod
+
+        mod.train(cfg, name=args.name)
     else:
         raise SystemExit(f"`kashi train {args.model}` lands in a later phase — see ROADMAP.md")
 

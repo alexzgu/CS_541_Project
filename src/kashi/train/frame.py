@@ -48,6 +48,27 @@ def _load_split(cfg, ids, store, version):
     return np.concatenate(X), np.concatenate(Y)
 
 
+def _maybe_project(cfg, dev, *Xs):
+    """Apply the configured contrastive head (if any) to raw cached features,
+    so training matches what the encoder emits at inference."""
+    head_path = cfg.get("encoder.wav2vec2.projection_head", "")
+    if not head_path:
+        return Xs
+    from ..nn.contrastive import ProjectionHead
+
+    head = ProjectionHead.load(head_path).to(dev).eval()
+    out = []
+    with torch.inference_mode():
+        for X in Xs:
+            parts = [
+                head(torch.from_numpy(X[s : s + 65536]).to(dev)).cpu().numpy()
+                for s in range(0, len(X), 65536)
+            ]
+            out.append(np.concatenate(parts))
+    print(f"[frame] projected features via {head_path} -> dim {out[0].shape[1]}")
+    return tuple(out)
+
+
 def train(cfg, version: str | None = None, name: str | None = None,
           epochs: int = 4, lr: float = 1e-3, batch: int = 4096) -> Path:
     common.set_seed(int(cfg["train.seed"]))
@@ -57,6 +78,7 @@ def train(cfg, version: str | None = None, name: str | None = None,
     train_ids, test_ids = manifest.split_ids(cfg, version)
     Xtr, Ytr = _load_split(cfg, train_ids, store, version)
     Xte, Yte = _load_split(cfg, test_ids, store, version)
+    Xtr, Xte = _maybe_project(cfg, dev, Xtr, Xte)
     print(f"[frame] train {len(Ytr):,} frames / test {len(Yte):,} (dim {Xtr.shape[1]})")
 
     model = FrameClassifier(input_size=Xtr.shape[1]).to(dev)
