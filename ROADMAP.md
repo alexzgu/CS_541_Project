@@ -4,7 +4,7 @@ Textless syllable-level transcription of Japanese songs (v2 of the CS 541 projec
 
 Mathematical companion: `docs/pipeline_specification.md` defines every model in full detail. This file covers architecture, data, phases, and acceptance criteria.
 
-**Hard constraints (project identity):** (i) textless — no transcript exists or is used at inference; (ii) **no forced alignment anywhere**, including dataset cleaning — no stage infers timestamps by aligning a token sequence to audio; (iii) deep networks provide local evidence, explicit probabilistic structure (durations, transitions, boundaries, phonetic geometry) does the rest — less black box, not more.
+**Hard constraints (project identity):** (i) textless — no transcript exists or is used at inference; (ii) **no forced alignment at inference**. AMENDED 2026-07-10 (user): forced alignment IS permitted as a *training bootstrap* — e.g. CTC forced alignment of the known label sequences to derive sharp frame targets — after which training switches to unsupervised methods (pseudo-labeling etc.); (iii) deep networks provide local evidence, explicit probabilistic structure (durations, transitions, boundaries, phonetic geometry) does the rest.
 
 ---
 

@@ -270,6 +270,18 @@ def cmd_discover(args) -> None:
     print(f"{res.n_active_states} active units, {len(res.boundaries)} boundaries -> {out}")
 
 
+def cmd_colab(args) -> None:
+    cfg = _cfg(args)
+    from .data import colab
+
+    if args.colab_cmd == "pack":
+        colab.pack(cfg)
+    else:
+        if not args.path:
+            raise SystemExit("usage: kashi colab integrate <dir-or-zip>")
+        colab.integrate(cfg, args.path)
+
+
 def cmd_loop(args) -> None:
     cfg = _cfg(args)
     from .train.pseudo import loop
@@ -408,6 +420,12 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("what", choices=["durations", "lm"])
     sp.add_argument("--version", default=None)
     sp.set_defaults(fn=cmd_fit)
+
+    sp = sub.add_parser("colab", help="pack inputs for Colab / integrate results (S10)")
+    _add_common(sp)
+    sp.add_argument("colab_cmd", choices=["pack", "integrate"])
+    sp.add_argument("path", nargs="?", default=None)
+    sp.set_defaults(fn=cmd_colab)
 
     sp = sub.add_parser("serve", help="run the web app")
     _add_common(sp)

@@ -17,4 +17,6 @@ Reply per ID. Decided items stay for the record.
 | S5 test-side gold listening | **no, foreseeable future** | reporting = frozen test vs v1 + train-side gold |
 | S6 git commits | **yes, as checkpoints** | in effect (`Co-Authored-By: Claude Fable 5`) |
 | S8 legacy 10 ms tensors (11 GB) | **delete** | done 2026-07-10 — `models/tensors/` and its 10 ms cache symlinks removed |
+| S9 forced alignment | **allowed for training bootstrap only** (2026-07-10) | inference stays textless; enables CTC-FA frame targets + Colab CTC fine-tune |
+| S10 Colab offload | **yes — notebooks linked with Google Drive**, user pastes results back into the repo | first job: `colab/ctc_bootstrap.ipynb` (see ROADMAP) |
 | S7 heavy compute | **Google Colab TPU available** — Claude writes notebook code, you paste & run | planned uses: P5.4 continued SSL pretraining on singing; optionally batch vocal separation of the pool (Colab GPU). A ready-to-paste notebook will be produced when P5.4 starts |
