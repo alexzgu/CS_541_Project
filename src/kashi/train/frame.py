@@ -74,7 +74,10 @@ def train(cfg, version: str | None = None, name: str | None = None,
     common.set_seed(int(cfg["train.seed"]))
     dev = common.device()
     run = common.run_dir(cfg, "frame", name)
-    store = FeatureStore(cfg)
+    # read the RAW feature cache; the projection head (if any) is applied here
+    from ..data.store import encoder_cache_id
+
+    store = FeatureStore(cfg, encoder_id=encoder_cache_id(cfg, include_projection=False))
     train_ids, test_ids = manifest.split_ids(cfg, version)
     Xtr, Ytr = _load_split(cfg, train_ids, store, version)
     Xte, Yte = _load_split(cfg, test_ids, store, version)

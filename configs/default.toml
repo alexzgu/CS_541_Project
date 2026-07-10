@@ -80,7 +80,7 @@ num_layers = 2
 dropout = 0.5
 
 [decoder.segmental]          # P3
-frame_checkpoint = ""        # empty = newest runs/frame-*/best.pt
+frame_checkpoint = "runs/frame-20260709-235542/best.pt"  # 86-song 768-d model (P5.2 head rejected)
 d_max = 60
 d_min = 3                    # >= 60 ms per mora (silence exempt)
 top_k = 8

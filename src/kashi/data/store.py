@@ -16,12 +16,12 @@ def _sanitize(name: str) -> str:
     return re.sub(r"[^A-Za-z0-9._-]+", "-", name)
 
 
-def encoder_cache_id(cfg, encoder_name: str | None = None) -> str:
+def encoder_cache_id(cfg, encoder_name: str | None = None, include_projection: bool = True) -> str:
     name = encoder_name or cfg["pipeline.encoder"]
     if name == "wav2vec2":
         detail = _sanitize(cfg["encoder.wav2vec2.checkpoint"])
         head = cfg.get("encoder.wav2vec2.projection_head", "")
-        if head:
+        if head and include_projection:
             detail += "+proj-" + _sanitize(Path(head).stem)
     elif name == "mel":
         detail = f"mel{cfg['encoder.mel.n_mels']}"
