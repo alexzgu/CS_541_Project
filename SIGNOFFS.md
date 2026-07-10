@@ -4,12 +4,7 @@ Reply per ID. Decided items stay for the record.
 
 ## Open
 
-### S8 — `models/tensors/` (11 GB) — keep or delete?
-The legacy wav2vec2 cache. Verified to be the **10 ms** resample-trick variant
-(dir name misleading); the pipeline re-encodes true 20 ms features locally in
-~4 min, so nothing uses it. Only conceivable value: reviving the 10 ms
-experiments. **Default on OK: delete** (it survives in no commit — it was
-always gitignored — so deletion is final).
+*(none)*
 
 ## Decided (2026-07-09/10)
 
@@ -21,4 +16,5 @@ always gitignored — so deletion is final).
 | S4 romaji first-class | **yes** | applies when t1/ro songs gain audio |
 | S5 test-side gold listening | **no, foreseeable future** | reporting = frozen test vs v1 + train-side gold |
 | S6 git commits | **yes, as checkpoints** | in effect (`Co-Authored-By: Claude Fable 5`) |
+| S8 legacy 10 ms tensors (11 GB) | **delete** | done 2026-07-10 — `models/tensors/` and its 10 ms cache symlinks removed |
 | S7 heavy compute | **Google Colab TPU available** — Claude writes notebook code, you paste & run | planned uses: P5.4 continued SSL pretraining on singing; optionally batch vocal separation of the pool (Colab GPU). A ready-to-paste notebook will be produced when P5.4 starts |
