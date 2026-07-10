@@ -71,6 +71,7 @@ gamma = 4.0
 sweeps = 30
 burnin = 10
 pca_dim = 48
+temperature = 16.0   # tempers emissions vs sticky prior (P6 shattering fix)
 
 [classifier.lstm]
 checkpoint = "models/predict_syllables/pretrained/model_20ms_drop_0.5_144_0.5363_test"

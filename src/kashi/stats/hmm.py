@@ -74,7 +74,11 @@ class StickyHDPHMMResult:
 class StickyHDPHMM:
     def __init__(self, L: int = 120, alpha: float = 4.0, gamma: float = 4.0,
                  rho: float = 0.95, sweeps: int = 30, burnin: int = 10,
-                 seed: int = 541):
+                 seed: int = 541, temperature: float = 1.0):
+        # temperature > 1 tempers the emission log-likelihoods (ll / tau) so the
+        # sticky transition prior can compete; cures 1-frame dwell shattering
+        # (P6 finding: emissions ~10s of nats/frame vs ~7-nat sticky bonus).
+        self.temperature = temperature
         self.L, self.alpha, self.gamma = L, alpha, gamma
         self.kappa = rho / (1.0 - rho) * alpha
         self.sweeps, self.burnin = sweeps, burnin
@@ -113,7 +117,7 @@ class StickyHDPHMM:
             Xc = X[s : s + 2048]
             diff = Xc[:, None, :] - mu[None]                      # [t, L, D]
             ll[s : s + len(Xc)] = const - 0.5 * (diff ** 2 / var[None]).sum(-1)
-        return ll
+        return ll / self.temperature
 
     # -- FFBS ----------------------------------------------------------------
     def _ffbs(self, ll: np.ndarray, pi: np.ndarray, beta: np.ndarray) -> np.ndarray:

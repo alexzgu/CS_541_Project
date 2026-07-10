@@ -30,6 +30,7 @@ def hmm_boundaries(cfg, feats: np.ndarray, cache_key: str | None = None) -> list
         sweeps=int(cfg["segmenter.hmm.sweeps"]),
         burnin=int(cfg["segmenter.hmm.burnin"]),
         seed=int(cfg["train.seed"]),
+        temperature=float(cfg.get("segmenter.hmm.temperature", 1.0)),
     )
     res = hmm.fit(X, min_prob=float(cfg["boundaries.hmm_p_min"]))
     frame_s = cfg.frame_ms / 1000.0
