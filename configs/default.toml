@@ -17,7 +17,7 @@ legacy_tensors_frame_ms = 10   # verified: dir is misnamed; tensors are the 10 m
 legacy_segment_index = "data/clean/syllables/segment_index.csv"
 
 [pipeline]
-mode = "two_stage"           # two_stage | segmental (segmental lands in P3)
+mode = "segmental"           # PROMOTED 2026-07-09: beats two_stage baseline_b on SER + timed-F1
 separator = "none"           # none | uvr | demucs
 encoder = "wav2vec2"         # wav2vec2 | mel
 segmenter = "energy"         # energy | transformer | hmm
@@ -79,13 +79,15 @@ num_layers = 2
 dropout = 0.5
 
 [decoder.segmental]          # P3
+frame_checkpoint = ""        # empty = newest runs/frame-*/best.pt
 d_max = 60
+d_min = 3                    # >= 60 ms per mora (silence exempt)
 top_k = 8
 n_best = 4
 lambda_c = 1.0
-lambda_d = 0.5
+lambda_d = 2.0
 lambda_b = 0.5
-lambda_lm = 0.0
+lambda_lm = 0.3
 
 [boundaries]                 # P2
 sources = ["hmm", "onset", "voicing"]

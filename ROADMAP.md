@@ -318,6 +318,8 @@ Package per §3.1 (recovered design, Appendix B): tokens/phonetics/subtitles/con
 ① Encoder probe (½ d): JA-hubert vs JA-wav2vec2 vs EN-base by frozen linear probe. ② `stats/hmm.py`: sticky HDP-HMM weak-limit blocked Gibbs (FFBS + NIG + CRT steps per spec §7); HSMM upgrade behind a flag. ③ `components/boundaries.py`: hmm posterior, spectral-flux onset, voicing-delta sources; union+merge. ④ `stats/snapping.py` monotone matching DP; `kashi realign`: snap (≤100 ms), `<noise>` tagging (voicing+RMS), `missed-vocal` flags, classifier-agreement flags, QA quarantine → `clean_v2` + report. ⑤ Retrain M1/M2 on v2 (P3 trainers pulled early if needed) and re-run once (v3 only if gold improves).
 **Accept (gold train-side):** snapped labels mean|Δt| ≤ 30 ms and boundary F1@50 ≥ 0.80 (v1 baseline expected ≈ 0.6–0.7); candidate recall ≥ 0.85 within ±100 ms of gold boundaries; noise-span P ≥ 0.8 @ R ≥ 0.5; 100% of unmatched/large-shift rows flagged not silently moved; quarantine list plausible.
 
+**Status 2026-07-09 — machinery done end-to-end; acceptance NOT met; v2 correctly rejected by the adopt-only-if-gold-improves policy.** Measured on gold songs {0,6,16,19} (lyric-edge boundary metric): v1 F1@50 = 0.552, mean|Δ| 18.4 ms; v2 (snapped) = 0.528, 21.7 ms — blanket snapping *degrades* v1. Diagnosis: (i) candidates are near-dense (recall 0.99+ at ±100 ms even at hmm_p_min 0.6, hmm+onset only) so snapping is indiscriminate jitter, not correction; (ii) gold descends from hand-corrected v1 (v1-vs-gold matched error only ~18 ms) yet gold recall is 0.65 — a third of gold lyric edges disagree with v1 by >50 ms, so real improvements exist but require *targeted* moves. Noise tagging at −48 dBFS: P 0.2–0.4 / R 0.06–0.17 (breaths quieter and shorter than the RMS gate; instrumental bleed causes false positives). Queued iteration: cross-source candidate agreement, snap only classifier-disagreement rows, margin-based snapping, spectral-flatness breath detector, HSMM candidates.
+
 ### P2b — Corpus expansion (parallel) — 1.5–2 d
 Python VTT parser + differential test; `dataset import` (dedupe, romaji→kana with reject-log, QA filters from dataset repo's analysis_csvs); `dataset scrape`; download/separate/encode; realign before admission.
 **Accept:** ≥140 labeled songs QA-passed; dual-track mismatch < 2%; frozen test split untouched.
@@ -325,6 +327,8 @@ Python VTT parser + differential test; `dataset import` (dedupe, romaji→kana w
 ### P3 — Models v2 + decoder — 2–3 d
 Model 2f frame posterior; `fit durations` (NB per class, silence mixture) + optional `fit lm`; `decoders.segmental` (exact DP + cumulative sums + top-K + N-best LSTM rescoring + forward–backward confidences); retrain M1 with latent-offset loss and M2/2f with phonetic loss on clean_v2 + expanded corpus; voicing-append ablation. Grid: {v1/v2} × {EN/JA} × {two_stage/segmental} × {±bigram} × {±phonetic} × {±voicing} → `runs/ablations/`.
 **Accept:** `mode=segmental` beats the P1 two-stage baseline on SER **and** timed-token F1 on frozen test; λ grid documented; default flipped by promotion, not by hand.
+
+**Status 2026-07-09 — core acceptance MET; default promoted to `segmental`.** Model 2f (MLP-256 head, phonetic soft targets, silence down-weighting; test frame-acc 0.382/110), NB duration fits (31.5k segments), add-k bigram (30k transitions), exact semi-Markov Viterbi with d_min=3/d_max=60 and silence chunking (decode ≈ 0.3 s/song). Frozen-test results vs baseline (b) [SER 0.797 / timed-F1 0.106 / bF1@50 0.300 / PC 0.742]: λ_d=2 alone → 0.785 / 0.203 / 0.427 / 0.786; **λ_d=2 + λ_lm=0.3 (promoted) → SER 0.744 / timed-F1 0.203 / bF1@50 0.417 / PC 0.793** (`runs/ablations/`). First naive λ_d=0.5 over-segmented (SER 1.51) — duration+bigram priors are what tame it: the explicit-structure thesis in practice. Remaining: retrain on clean_v2 once a realign variant passes gold (P2 iteration); Model-1 β term (needs latent-offset ckpt retrain — best was overwritten by the soft-BCE rerun); N-best LSTM rescoring; full ablation grid incl. JA-encoder probe; forward–backward confidences for pseudo-labeling.
 
 ### P4 — Product (G4) — 2–3 d
 Web app per §3.7 over pipeline progress callbacks.
@@ -364,11 +368,7 @@ P0 ─→ P1 ─→ P2 ─→ P3 ─→ P4
 
 ## 7. Open items (user)
 
-1. **From Google Drive:** add `pretrained/Transformer_Wave2Vec_Models/` (esp. `model_9_final`) and `pretrained/Transformer_Spectrogram_Models/`. Everything else the notebooks reference is in-repo or regenerable.
-2. OK to move `paper_based_approach/`, vendored UVR5-GUI/demucs, vestigial scripts/EDA notebooks under `legacy/` in P0 (delete after P3)?
-3. Scraping scope: additional channels/covers volume?
-4. Cloud GPU budget for P5.4 — yes/no?
-5. Romaji-only songs as first-class training data (recommended) or separate track?
+**Moved to `SIGNOFFS.md`** (S1 legacy deletion · S2 audio for the 70 staged songs *without* local audio — the 27 t2-extra already have audio+vocals on disk and need none · S3 new scraping · S4 romaji as first-class data · S5 test-side gold listening · S6 first commit · S7 cloud budget). Still nice-to-have from Google Drive: `pretrained/Transformer_Wave2Vec_Models/` (esp. `model_9_final`) and `pretrained/Transformer_Spectrogram_Models/` — reproduction already works without them (baseline (c) retrains in minutes), so this is archive-completeness only.
 
 ---
 

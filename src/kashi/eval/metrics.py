@@ -21,9 +21,17 @@ def lyric_tokens(segs: list[Segment]) -> list[str]:
 
 
 def boundary_times(segs: list[Segment]) -> list[float]:
-    """Internal boundaries (each row's end except the last), non-excluded rows."""
-    kept = [s for s in segs if not s.exclude]
-    return [s.end for s in kept[:-1]]
+    """Lyric-edge boundary set: start and end of every lyric row (silence,
+    <noise> and excluded rows contribute nothing), deduplicated within 1 ms —
+    robust to differing silence/noise row structure between label versions."""
+    edges: list[float] = []
+    for s in segs:
+        if s.exclude or s.token in (SILENCE, NOISE, ""):
+            continue
+        for t in (s.start, s.end):
+            if not edges or t - edges[-1] > 1e-3:
+                edges.append(t)
+    return edges
 
 
 def clip_to_window(segs: list[Segment], start: float, end: float) -> list[Segment]:

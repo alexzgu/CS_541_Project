@@ -127,8 +127,24 @@ def cmd_train(args) -> None:
         from .train import classifier as mod
 
         mod.train(cfg, version=args.version, init=args.init, name=args.name)
+    elif args.model == "frame":
+        from .train import frame as mod
+
+        mod.train(cfg, version=args.version, name=args.name)
     else:
         raise SystemExit(f"`kashi train {args.model}` lands in a later phase — see ROADMAP.md")
+
+
+def cmd_fit(args) -> None:
+    cfg = _cfg(args)
+    if args.what == "durations":
+        from .stats.durations import fit_durations
+
+        fit_durations(cfg, version=args.version)
+    elif args.what == "lm":
+        from .stats.lm import fit_bigram
+
+        fit_bigram(cfg, version=args.version)
 
 
 def cmd_eval(args) -> None:
@@ -200,6 +216,59 @@ def cmd_transcribe(args) -> None:
           f"(stage timings: {result.timings})")
     for fmt, path in result.out_files.items():
         print(f"  {fmt}: {path}")
+
+
+def cmd_realign(args) -> None:
+    import json
+
+    cfg = _cfg(args)
+    from .realign import realign_dataset, report_vs_gold
+
+    if args.vs_gold:
+        print(json.dumps(report_vs_gold(cfg, version=args.out_version), indent=2, default=float))
+        return
+    songs = [int(s) for s in args.songs] if args.songs else None
+    realign_dataset(cfg, song_ids=songs, out_version=args.out_version)
+
+
+def cmd_discover(args) -> None:
+    cfg = _cfg(args)
+    from pathlib import Path
+
+    import numpy as np
+
+    from . import audio as audio_mod
+    from .registry import create
+    from .stats.hmm import PCA, StickyHDPHMM
+
+    wave = audio_mod.load_audio(args.input, sr=cfg.sample_rate)
+    feats = create(cfg, "encoder").encode(wave, cfg.sample_rate)
+    X = PCA(int(cfg["segmenter.hmm.pca_dim"])).fit(feats).transform(feats)
+    res = StickyHDPHMM(
+        L=int(cfg["segmenter.hmm.L"]), alpha=float(cfg["segmenter.hmm.alpha"]),
+        gamma=float(cfg["segmenter.hmm.gamma"]), rho=float(cfg["segmenter.hmm.rho"]),
+        sweeps=int(cfg["segmenter.hmm.sweeps"]), burnin=int(cfg["segmenter.hmm.burnin"]),
+    ).fit(X)
+    out = Path(args.out) if args.out else Path(args.input).with_suffix(".units.csv")
+    frame_s = cfg.frame_ms / 1000.0
+    z = res.last_path
+    with open(out, "w") as f:
+        f.write("start,end,unit\n")
+        s = 0
+        for t in range(1, len(z) + 1):
+            if t == len(z) or z[t] != z[s]:
+                f.write(f"{s*frame_s:.3f},{t*frame_s:.3f},{z[s]}\n")
+                s = t
+    print(f"{res.n_active_states} active units, {len(res.boundaries)} boundaries -> {out}")
+
+
+def cmd_serve(args) -> None:
+    cfg = _cfg(args)
+    from .web.app import serve
+
+    print(f"kashi web app on http://{args.host or cfg['web.host']}:{args.port or cfg['web.port']} "
+          f"(pipeline: {cfg['pipeline.mode']}, separator: {cfg['pipeline.separator']})")
+    serve(cfg, host=args.host, port=args.port)
 
 
 def cmd_run(args) -> None:
@@ -306,12 +375,33 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--allow-train", action="store_true")
     sp.set_defaults(fn=cmd_run)
 
+    sp = sub.add_parser("realign", help="snap label timings to acoustics, tag <noise> (no forced alignment)")
+    _add_common(sp)
+    sp.add_argument("--songs", nargs="*", default=None)
+    sp.add_argument("--out-version", default=None)
+    sp.add_argument("--vs-gold", action="store_true", help="report v1/v2 vs the gold subset")
+    sp.set_defaults(fn=cmd_realign)
+
+    sp = sub.add_parser("discover", help="unsupervised HDP-HMM unit discovery on one audio file")
+    _add_common(sp)
+    sp.add_argument("input")
+    sp.add_argument("--out", default=None, help="output CSV (default: <input>.units.csv)")
+    sp.set_defaults(fn=cmd_discover)
+
+    sp = sub.add_parser("fit", help="closed-form fits: durations | lm")
+    _add_common(sp)
+    sp.add_argument("what", choices=["durations", "lm"])
+    sp.add_argument("--version", default=None)
+    sp.set_defaults(fn=cmd_fit)
+
+    sp = sub.add_parser("serve", help="run the web app")
+    _add_common(sp)
+    sp.add_argument("--host", default=None)
+    sp.add_argument("--port", type=int, default=None)
+    sp.set_defaults(fn=cmd_serve)
+
     for name, phase, help_ in [
-        ("realign", "P2", "auto-clean label timings, tag <noise> (boundary snapping)"),
-        ("discover", "P2/P6", "unsupervised HDP-HMM unit discovery"),
-        ("fit", "P3", "closed-form fits: durations | lm"),
         ("loop", "P5", "self-training loop over unlabeled data"),
-        ("serve", "P4", "run the web app"),
     ]:
         sp = sub.add_parser(name, help=f"{help_} (lands in {phase})")
         _add_common(sp)

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kashi — karaoke subtitles</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, sans-serif; background: #14151a; color: #e8e8ea;
+         display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 2rem 1rem; }
+  h1 { font-size: 1.4rem; margin: 0 0 .25rem; }  h1 span { color: #8bd5ff; }
+  p.sub { color: #9a9aa4; margin: 0 0 1.5rem; }
+  .card { width: min(760px, 100%); background: #1d1f26; border: 1px solid #2c2f3a;
+          border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  #drop { border: 2px dashed #3a3f4f; border-radius: 12px; padding: 2.5rem 1rem; text-align: center;
+          cursor: pointer; transition: border-color .15s, background .15s; }
+  #drop.hover { border-color: #8bd5ff; background: #22242e; }
+  #drop input { display: none; }
+  .bar { height: 8px; background: #2c2f3a; border-radius: 4px; overflow: hidden; margin-top: .75rem; }
+  .bar i { display: block; height: 100%; width: 0; background: #8bd5ff; transition: width .4s; }
+  .stage { color: #9a9aa4; font-size: .85rem; margin-top: .4rem; }
+  video { width: 100%; border-radius: 8px; background: #000; }
+  .links a { display: inline-block; margin: .5rem .75rem 0 0; color: #8bd5ff; text-decoration: none;
+             border: 1px solid #3a3f4f; border-radius: 6px; padding: .3rem .8rem; }
+  .links a:hover { background: #22242e; }
+  .err { color: #ff8b8b; white-space: pre-wrap; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+  <h1><span>kashi</span> — textless karaoke subtitles</h1>
+  <p class="sub">Drop a music video or audio file; the pipeline produces per-syllable hiragana subtitles.</p>
+
+  <div class="card">
+    <label id="drop">
+      <input type="file" id="file" accept="video/*,audio/*">
+      <strong>Drop a file here</strong> or click to choose<br>
+      <small>mp4 · mp3 · wav · webm …</small>
+    </label>
+    <div id="progress" class="hidden">
+      <div class="bar"><i id="fill"></i></div>
+      <div class="stage" id="stage">queued…</div>
+    </div>
+    <div id="error" class="err hidden"></div>
+  </div>
+
+  <div class="card hidden" id="result">
+    <video id="video" controls crossorigin="anonymous">
+      <track id="track" kind="subtitles" srclang="ja" label="kashi" default>
+    </video>
+    <div class="links" id="links"></div>
+    <div class="stage" id="summary"></div>
+  </div>
+
+<script>
+const drop = document.getElementById('drop');
+const fileInput = document.getElementById('file');
+const show = (id, on = true) => document.getElementById(id).classList.toggle('hidden', !on);
+
+['dragover', 'dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => {
+  e.preventDefault();
+  drop.classList.toggle('hover', ev === 'dragover');
+  if (ev === 'drop' && e.dataTransfer.files[0]) upload(e.dataTransfer.files[0]);
+}));
+fileInput.addEventListener('change', () => fileInput.files[0] && upload(fileInput.files[0]));
+
+async function upload(file) {
+  show('error', false); show('result', false); show('progress');
+  document.getElementById('fill').style.width = '2%';
+  document.getElementById('stage').textContent = 'uploading…';
+  const body = new FormData();
+  body.append('file', file);
+  try {
+    const res = await fetch('/jobs', { method: 'POST', body });
+    if (!res.ok) throw new Error((await res.json()).detail || res.statusText);
+    poll((await res.json()).job_id);
+  } catch (err) { fail(err); }
+}
+
+async function poll(id) {
+  try {
+    const job = await (await fetch(`/jobs/${id}`)).json();
+    document.getElementById('fill').style.width = `${Math.max(2, job.frac * 100)}%`;
+    document.getElementById('stage').textContent = `${job.state}: ${job.stage || '…'}`;
+    if (job.state === 'error') return fail(new Error(job.error));
+    if (job.state !== 'done') return setTimeout(() => poll(id), 1000);
+    finish(id, job);
+  } catch (err) { fail(err); }
+}
+
+function finish(id, job) {
+  show('progress', false); show('result');
+  const video = document.getElementById('video');
+  video.src = `/jobs/${id}/media`;
+  document.getElementById('track').src = `/jobs/${id}/files/vtt`;
+  const links = document.getElementById('links');
+  links.innerHTML = '';
+  for (const fmt of ['srt', 'vtt', 'ass', 'csv']) {
+    const a = document.createElement('a');
+    a.href = `/jobs/${id}/files/${fmt}`;
+    a.textContent = fmt.toUpperCase();
+    a.download = '';
+    links.appendChild(a);
+  }
+  const t = Object.entries(job.timings).map(([k, v]) => `${k} ${v}s`).join(' · ');
+  document.getElementById('summary').textContent = `${job.n_syllables} syllables — ${t}`;
+}
+
+function fail(err) {
+  show('progress', false); show('error');
+  document.getElementById('error').textContent = String(err.message || err);
+}
+</script>
+</body>
+</html>

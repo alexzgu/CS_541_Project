@@ -1,0 +1,24 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - name: system deps
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+      - name: venv + install (CPU torch)
+        run: |
+          uv venv --python 3.12 .venv
+          uv pip install --python .venv/bin/python \
+            torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python .venv/bin/python -e ".[web,dev]" httpx
+      - name: pytest
+        run: .venv/bin/python -m pytest tests/ -q
+        # dataset-repo differential tests and GPU paths skip automatically

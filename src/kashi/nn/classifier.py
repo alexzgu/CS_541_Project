@@ -38,6 +38,32 @@ class LSTMClassifier(nn.Module):
         return self.fc(h_n[-1])
 
 
+class FrameClassifier(nn.Module):
+    """Model 2f (spec §5.2): per-frame posterior over the 110 classes. Additive
+    span scores decompose over frames, enabling the exact semi-Markov DP."""
+
+    def __init__(self, input_size: int = 768, hidden: int = 256, num_classes: int = 110):
+        super().__init__()
+        self.hparams = dict(input_size=input_size, hidden=hidden, num_classes=num_classes)
+        self.net = nn.Sequential(
+            nn.Linear(input_size, hidden), nn.GELU(), nn.Dropout(0.1),
+            nn.Linear(hidden, num_classes),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:  # [.., D] -> [.., C] logits
+        return self.net(x)
+
+    @torch.inference_mode()
+    def log_probs(self, feats: np.ndarray, batch: int = 8192) -> np.ndarray:
+        """[T, C] log posteriors."""
+        device = next(self.parameters()).device
+        out = []
+        for s in range(0, len(feats), batch):
+            x = torch.from_numpy(feats[s : s + batch]).float().to(device)
+            out.append(torch.log_softmax(self(x), dim=-1).cpu().numpy())
+        return np.concatenate(out) if out else np.zeros((0, 110), dtype=np.float32)
+
+
 class PhoneticCrossEntropy(nn.Module):
     """Cross-entropy against phonetic soft targets (spec §5.3):
     q(u'|u) = (1-alpha)·1[u'=u] + alpha·(k^power renormalised off-diagonal)."""
