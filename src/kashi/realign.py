@@ -102,7 +102,27 @@ def _snap_rows(cfg, rows: list[Segment], candidates: list[dict]) -> tuple[list[S
     return out, stats
 
 
-def _noise_pass(cfg, rows: list[Segment], rms_db: np.ndarray, voicing: np.ndarray) -> tuple[list[Segment], dict]:
+def flatness_track(wave: np.ndarray, sr: int, frame_ms: int) -> np.ndarray:
+    """Per-frame spectral flatness in [0,1]: breath/hiss is broadband (high),
+    voiced singing is harmonic (low). 46 ms windows on the frame grid."""
+    hop = int(sr * frame_ms / 1000)
+    win = int(sr * 0.046)
+    T = len(wave) // hop
+    out = np.zeros(T, dtype=np.float32)
+    hann = np.hanning(win)
+    for t in range(T):
+        c = t * hop + hop // 2
+        seg = wave[max(0, c - win // 2): c + win // 2]
+        if len(seg) < win // 2:
+            continue
+        P = np.abs(np.fft.rfft(seg * hann[: len(seg)])) ** 2 + 1e-12
+        P = P[2:]  # drop DC region
+        out[t] = float(np.exp(np.mean(np.log(P))) / np.mean(P))
+    return out
+
+
+def _noise_pass(cfg, rows: list[Segment], rms_db: np.ndarray, voicing: np.ndarray,
+                flatness: np.ndarray | None = None) -> tuple[list[Segment], dict]:
     """Inside non-lyric regions: energetic∧aperiodic runs -> <noise> rows;
     energetic∧periodic runs -> missed-vocal report entries."""
     frame_s = cfg.frame_ms / 1000.0
@@ -111,12 +131,18 @@ def _noise_pass(cfg, rows: list[Segment], rms_db: np.ndarray, voicing: np.ndarra
     for r in rows:
         if not r.is_silence:  # excluded rows are known content, not "missed"
             covered[int(r.start / frame_s): max(0, int(np.ceil(r.end / frame_s)))] = True
-    thr_db = max(float(cfg["realign.noise_rms_db"]), float(rms_db.max()) - 40.0)
     v_thr = float(cfg["realign.voicing_thresh"])
     min_fr = max(1, int(cfg["realign.noise_min_ms"]) // cfg.frame_ms)
     voicing = voicing[:T]
 
-    energetic = (rms_db >= thr_db) & ~covered
+    if flatness is not None and cfg.get("realign.noise_method", "rms_voicing") == "flatness":
+        # breath = audible + broadband + aperiodic; gate well below the lyric level
+        quiet_gate = float(rms_db.max()) - float(cfg.get("realign.flatness_rms_window_db", 55.0))
+        f_thr = float(cfg.get("realign.flatness_thresh", 0.3))
+        energetic = (rms_db >= quiet_gate) & (flatness[:T] >= f_thr) & ~covered
+    else:
+        thr_db = max(float(cfg["realign.noise_rms_db"]), float(rms_db.max()) - 40.0)
+        energetic = (rms_db >= thr_db) & ~covered
     noise_rows: list[Segment] = []
     missed: list[tuple[float, float]] = []
     t = 0
@@ -166,7 +192,10 @@ def realign_dataset(cfg, song_ids: list[int] | None = None,
         )
         candidates = _song_candidates(cfg, song_id, feats, wave, cfg.sample_rate, voicing)
         snapped, stats = _snap_rows(cfg, rows, candidates)
-        final, noise_stats = _noise_pass(cfg, snapped, rms_db, voicing)
+        flat = None
+        if cfg.get("realign.noise_method", "rms_voicing") == "flatness":
+            flat = flatness_track(wave, cfg.sample_rate, cfg.frame_ms)
+        final, noise_stats = _noise_pass(cfg, snapped, rms_db, voicing, flatness=flat)
         write_csv(final, out_dir / f"{song_id}.csv")
         stats.update(noise_stats)
         stats["song_id"] = song_id
