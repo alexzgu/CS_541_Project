@@ -20,7 +20,7 @@ import pandas as pd
 from ..subtitles import Segment, read_csv, write_csv
 from ..tokens import NOISE, SILENCE, TOKENS
 
-GOLDEN_SRC = "data_processing/separate_scripts/golden_csvs/processed"
+GOLDEN_SRC = "data/gold/source/golden_csvs/processed"
 GOLDEN_IDS = (0, 6, 16, 19)
 _NOISE_ALIASES = {"$breathing", "$echo", "<bre>", "<noise>"}
 _SIL_ALIASES = {"<silence>", "<sil>", "<s></s>"}
