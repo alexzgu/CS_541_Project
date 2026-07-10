@@ -88,6 +88,10 @@ def cmd_dataset(args) -> None:
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text(json.dumps(report, indent=2, default=float))
             print(f"[dual-track] full report -> {out}")
+    elif args.dataset_cmd == "admit":
+        from .data.import_ds import admit_t2_extra
+
+        admit_t2_extra(cfg)
     elif args.dataset_cmd == "scrape":
         from .data import scrape
 
@@ -301,7 +305,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     sp = sub.add_parser("dataset", help="dataset build / download / import / scrape")
     _add_common(sp)
-    sp.add_argument("dataset_cmd", choices=["build", "download", "import", "scrape"])
+    sp.add_argument("dataset_cmd", choices=["build", "download", "import", "admit", "scrape"])
     sp.add_argument("--out-version", default="clean")
     sp.add_argument("--force", action="store_true")
     sp.add_argument("--no-trim", action="store_true", help="skip the audio silence-trim step")

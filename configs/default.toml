@@ -12,6 +12,7 @@ data_dir = "data"
 artifacts_dir = "artifacts"
 runs_dir = "runs"
 dataset_repo = "../karaoke_subtitle_dataset"
+unlabeled_pool = "/home/eizigi/Music/headphone music/wave1"   # S3: JP vocal mixes for P5
 legacy_tensors = "models/tensors/songs_20ms"
 legacy_tensors_frame_ms = 10   # verified: dir is misnamed; tensors are the 10 ms variant
 legacy_segment_index = "data/clean/syllables/segment_index.csv"

@@ -81,12 +81,15 @@ def song_paths(cfg, song_id: int) -> SongPaths:
     )
 
 
+# The paper's test songs, FROZEN as an explicit list: originally the labeled
+# ids in positions [80:93]. Pinned so that admitting new labeled songs with
+# ids in that range (t2-extra) cannot silently change the test set.
+PAPER_TEST_IDS = (81, 83, 85, 89, 90, 91, 92)
+
+
 def split_ids(cfg, version: str | None = None) -> tuple[list[int], list[int]]:
-    """(train_ids, test_ids): positional split over sorted ids, labeled only."""
-    ids = song_ids(cfg)
+    """(train_ids, test_ids): frozen paper test set; everything else trains."""
     labeled = set(labeled_ids(cfg, version))
-    tr_right = int(cfg["split.train_right"])
-    te_right = int(cfg["split.test_right"])
-    train = [i for i in ids[:tr_right] if i in labeled]
-    test = [i for i in ids[tr_right:te_right] if i in labeled]
+    test = [i for i in PAPER_TEST_IDS if i in labeled]
+    train = sorted(labeled - set(PAPER_TEST_IDS))
     return train, test

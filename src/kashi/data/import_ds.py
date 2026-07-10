@@ -290,6 +290,50 @@ def _kana_sequence(df: pd.DataFrame) -> list[str]:
     return toks
 
 
+def admit_t2_extra(cfg) -> list[int]:
+    """Admit staged t2-extra songs (SIGNOFFS S2: audio already local).
+
+    For each staged YouTube id: map back to its numeric T2 index, materialise
+    the raw subtitle file, run the cleaning chain (trim uses the existing
+    vocals), and cache features. Existing labels are never overwritten; the
+    frozen test set is pinned by manifest.PAPER_TEST_IDS.
+    """
+    from . import build as build_mod
+    from .encode import encode_targets
+
+    staged = cfg.data_dir / "imported" / "t2-extra" / "subtitle_files"
+    if not staged.is_dir():
+        print("[admit] nothing staged under t2-extra")
+        return []
+    vid_to_id = {r["ID"]: int(r["Index"]) for r in manifest.read_index(cfg)}
+    raw_dir = cfg.data_dir / "raw" / "subtitles" / "subtitle_files"
+    clean_dir = manifest.subtitles_dir(cfg, "clean")
+    admitted: list[int] = []
+    for f in sorted(staged.glob("*.csv")):
+        song_id = vid_to_id.get(f.stem)
+        if song_id is None:
+            print(f"[admit] {f.stem}: not in index.tsv, skipped")
+            continue
+        if (clean_dir / f"{song_id}.csv").is_file():
+            continue  # already labeled — never overwrite
+        raw_dst = raw_dir / f"{song_id}.csv"
+        if not raw_dst.is_file():
+            raw_dst.write_bytes(f.read_bytes())
+        try:
+            df = build_mod.build_song(cfg, song_id, trim=True)
+        except Exception as e:
+            print(f"[admit] song {song_id}: build FAILED ({e})")
+            continue
+        df.to_csv(clean_dir / f"{song_id}.csv", index=False)
+        admitted.append(song_id)
+        print(f"[admit] song {song_id} ({f.stem}): {len(df)} rows")
+    if admitted:
+        encode_targets(cfg, songs=admitted)
+    train, test = manifest.split_ids(cfg)
+    print(f"[admit] +{len(admitted)} songs -> {len(train)} train / {len(test)} test labeled")
+    return admitted
+
+
 # Orthography-vs-phonetics: kana subs write particles は/へ/を; romaji subs
 # write their sounds wa/e/o. Phonetically identical — zero-cost in the check.
 _PHON_SAME = {frozenset(p) for p in
