@@ -134,7 +134,7 @@ def cmd_train(args) -> None:
     elif args.model == "frame":
         from .train import frame as mod
 
-        mod.train(cfg, version=args.version, name=args.name)
+        mod.train(cfg, version=args.version, name=args.name, targets=args.targets)
     elif args.model == "encoder":
         from .train import encoder as mod
 
@@ -362,6 +362,8 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--init", default=None, help="warm-start checkpoint (legacy ok)")
     sp.add_argument("--name", default=None, help="run name (default: timestamp)")
     sp.add_argument("--promote", action="store_true", help="adopt as default if eval improves (P3)")
+    sp.add_argument("--targets", default=None,
+                    help="frame: dir of FA frame labels (artifacts/colab/fa_labels; S9 bootstrap)")
     sp.set_defaults(fn=cmd_train)
 
     sp = sub.add_parser("eval", help="evaluate a checkpoint / the pipeline / baselines")

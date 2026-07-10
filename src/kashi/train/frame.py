@@ -35,13 +35,25 @@ def frame_targets(cfg, song_id: int, T: int, version: str | None = None) -> np.n
     return y
 
 
-def _load_split(cfg, ids, store, version):
+def _load_split(cfg, ids, store, version, targets_dir: Path | None = None):
+    """targets_dir: use forced-alignment frame labels (colab fa_labels/<id>.npy,
+    S9 bootstrap) instead of timestamp-derived targets where available."""
     X, Y = [], []
     for song_id in ids:
         if not store.has(str(song_id)):
             continue
         feats = store.load(str(song_id))
-        y = frame_targets(cfg, song_id, len(feats), version)
+        fa = (targets_dir / f"{song_id}.npy") if targets_dir else None
+        if fa is not None and fa.is_file():
+            y_fa = np.load(fa).astype(np.int64)
+            n = min(len(feats), len(y_fa))
+            y = np.full(len(feats), -1, dtype=np.int64)
+            y[:n] = y_fa[:n]
+            # keep exclusion masking from the label rows
+            y_rows = frame_targets(cfg, song_id, len(feats), version)
+            y[y_rows < 0] = -1
+        else:
+            y = frame_targets(cfg, song_id, len(feats), version)
         keep = y >= 0
         X.append(feats[keep])
         Y.append(y[keep])
@@ -71,7 +83,8 @@ def _maybe_project(cfg, dev, *Xs):
 
 def train(cfg, version: str | None = None, name: str | None = None,
           epochs: int = 4, lr: float = 1e-3, batch: int = 4096,
-          weak: tuple[np.ndarray, np.ndarray, float] | None = None) -> Path:
+          weak: tuple[np.ndarray, np.ndarray, float] | None = None,
+          targets: str | None = None) -> Path:
     common.set_seed(int(cfg["train.seed"]))
     dev = common.device()
     run = common.run_dir(cfg, "frame", name)
@@ -80,8 +93,9 @@ def train(cfg, version: str | None = None, name: str | None = None,
 
     store = FeatureStore(cfg, encoder_id=encoder_cache_id(cfg, include_projection=False))
     train_ids, test_ids = manifest.split_ids(cfg, version)
-    Xtr, Ytr = _load_split(cfg, train_ids, store, version)
-    Xte, Yte = _load_split(cfg, test_ids, store, version)
+    tdir = Path(targets) if targets else None
+    Xtr, Ytr = _load_split(cfg, train_ids, store, version, targets_dir=tdir)
+    Xte, Yte = _load_split(cfg, test_ids, store, version)  # test targets stay label-derived
     Xtr, Xte = _maybe_project(cfg, dev, Xtr, Xte)
     print(f"[frame] train {len(Ytr):,} frames / test {len(Yte):,} (dim {Xtr.shape[1]})")
 
