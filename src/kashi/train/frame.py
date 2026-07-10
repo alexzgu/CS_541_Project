@@ -70,7 +70,8 @@ def _maybe_project(cfg, dev, *Xs):
 
 
 def train(cfg, version: str | None = None, name: str | None = None,
-          epochs: int = 4, lr: float = 1e-3, batch: int = 4096) -> Path:
+          epochs: int = 4, lr: float = 1e-3, batch: int = 4096,
+          weak: tuple[np.ndarray, np.ndarray, float] | None = None) -> Path:
     common.set_seed(int(cfg["train.seed"]))
     dev = common.device()
     run = common.run_dir(cfg, "frame", name)
@@ -94,6 +95,17 @@ def train(cfg, version: str | None = None, name: str | None = None,
     sil_frac = float((Ytr == SILENCE_ID).mean())
     if sil_frac > 0.3:
         w[Ytr == SILENCE_ID] = 0.3 / sil_frac
+    if weak is not None and len(weak[1]):
+        Xw, Yw, w_weak = weak
+        (Xw,) = _maybe_project(cfg, dev, Xw)
+        ww = np.full(len(Yw), w_weak, dtype=np.float32)
+        sil_w = float((Yw == SILENCE_ID).mean())
+        if sil_w > 0.3:
+            ww[Yw == SILENCE_ID] *= 0.3 / sil_w
+        Xtr = np.concatenate([Xtr, Xw])
+        Ytr = np.concatenate([Ytr, Yw])
+        w = np.concatenate([w, ww])
+        print(f"[frame] + {len(Yw):,} weak frames at weight {w_weak}")
     opt = torch.optim.Adam(model.parameters(), lr=lr)
 
     n = len(Ytr)

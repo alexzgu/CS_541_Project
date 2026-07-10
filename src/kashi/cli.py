@@ -270,6 +270,13 @@ def cmd_discover(args) -> None:
     print(f"{res.n_active_states} active units, {len(res.boundaries)} boundaries -> {out}")
 
 
+def cmd_loop(args) -> None:
+    cfg = _cfg(args)
+    from .train.pseudo import loop
+
+    loop(cfg, rounds=args.rounds, min_conf=args.min_conf, weak_weight=args.weak_weight)
+
+
 def cmd_serve(args) -> None:
     cfg = _cfg(args)
     from .web.app import serve
@@ -408,13 +415,13 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--port", type=int, default=None)
     sp.set_defaults(fn=cmd_serve)
 
-    for name, phase, help_ in [
-        ("loop", "P5", "self-training loop over unlabeled data"),
-    ]:
-        sp = sub.add_parser(name, help=f"{help_} (lands in {phase})")
-        _add_common(sp)
-        sp.add_argument("args", nargs="*")
-        sp.set_defaults(fn=_planned(phase))
+    sp = sub.add_parser("loop", help="self-training: harvest pseudo-labels, retrain, evaluate")
+    _add_common(sp)
+    sp.add_argument("what", choices=["unsup"])
+    sp.add_argument("--rounds", type=int, default=1)
+    sp.add_argument("--min-conf", type=float, default=0.9)
+    sp.add_argument("--weak-weight", type=float, default=0.3)
+    sp.set_defaults(fn=cmd_loop)
 
     return p
 
