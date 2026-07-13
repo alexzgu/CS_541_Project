@@ -105,6 +105,8 @@ def loop(cfg, rounds: int = 1, min_conf: float = 0.9, weak_weight: float = 0.3) 
         Xw, Yw = load_weak(cfg)
         print(f"[loop] training frame model with {len(Yw):,} weak frames (w={weak_weight})")
         ckpt = frame_mod.train(cfg, name=f"pseudo-r{r}", weak=(Xw, Yw, weak_weight))
+        # evaluate the NEW checkpoint (config may pin an incumbent)
+        cfg.as_dict()["decoder"]["segmental"]["frame_checkpoint"] = str(ckpt)
         rep = evaluate_pipeline(cfg, split="test")
         p = rep["pooled"]
         print(f"[loop] round {r}: SER {p['ser']:.3f} timedF1 {p['timed_token_f1']:.3f}")
