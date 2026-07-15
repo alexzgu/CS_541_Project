@@ -50,6 +50,9 @@ class SegmentalDecoder:
         self._ctc = None
         if self.emissions == "ctc":
             self.ctc_dir = sect.get("ctc_model", "artifacts/ctc_local/out/ctc_model")
+            # spike: greedy peaky decode; viterbi: semi-Markov DP over the CTC
+            # emissions (only sensible for a de-peaked/label-prior model)
+            self.ctc_decode = sect.get("ctc_decode", "spike")
         else:
             ckpt = sect.get("frame_checkpoint", "") or _latest_frame_checkpoint(cfg)
             if not ckpt or not Path(ckpt).is_file():
@@ -193,8 +196,10 @@ class SegmentalDecoder:
             if aux is None or "wave" not in aux.extras:
                 raise SystemExit("decoder emissions=ctc needs the waveform (pipeline provides it)")
             logp = self._ctc_log_probs(aux.extras["wave"], aux.extras.get("sr", 16000), T)
-            return self._spike_decode(logp, frame_s)
-        logp = self.frame.log_probs(feats)                            # [T, C]
+            if self.ctc_decode == "spike":
+                return self._spike_decode(logp, frame_s)
+        else:
+            logp = self.frame.log_probs(feats)                        # [T, C]
         beta = np.zeros(T)
         if aux is not None and aux.boundary_logits is not None:
             beta = np.asarray(aux.boundary_logits)[:T]
