@@ -92,7 +92,10 @@ emissions = "ctc"            # PROMOTED 2026-07-15; @24ep: SER 0.339, timed-F1 0
 # PROMOTED 2026-07-15 (S11, gold-arbitrated): +4 more mixed epochs w/ label-prior
 # regularizer — test SER 0.316, gold SER 0.170/timed-F1 0.741 (test timed-F1
 # 0.314 is against refs measured ~60-80 ms late; see SIGNOFFS S11/S12)
-ctc_model = "artifacts/ctc_deprior/out/ctc_model"
+# PROMOTED 2026-07-15 (S15 covers): deprior +8ep on clean_v2 labels + 2,095
+# cross-cover agreement crops (134 covers, support>=0.5, conf>=0.85, w=0.3):
+# v2-refs SER 0.263 -> 0.252, timed-F1 0.710 -> 0.725
+ctc_model = "artifacts/ctc_covers/out/ctc_model"
 ctc_decode = "spike"         # spike | viterbi (semi-Markov over CTC emissions; needs a de-peaked model)
 ctc_prior_alpha = 0.0        # viterbi only: decode-time posterior/prior^alpha de-peaking (MMS-FA style)
 ctc_onset_shift = -1         # spike onset advance in frames (CTC spikes fire ~1 frame late)
