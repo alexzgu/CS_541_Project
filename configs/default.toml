@@ -81,7 +81,7 @@ num_layers = 2
 dropout = 0.5
 
 [decoder.segmental]          # P3
-emissions = "ctc"            # PROMOTED 2026-07-15: SER 0.722->0.364, timed-F1 0.210->0.305
+emissions = "ctc"            # PROMOTED 2026-07-15; @24ep: SER 0.339, timed-F1 0.330 (from 0.722/0.210)
 ctc_model = "artifacts/ctc_local/out/ctc_model"
 frame_checkpoint = "runs/frame-20260709-235542/best.pt"  # 86-song 768-d model (P5.2 head rejected)
 d_max = 60
