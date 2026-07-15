@@ -53,6 +53,12 @@ class SegmentalDecoder:
             # spike: greedy peaky decode; viterbi: semi-Markov DP over the CTC
             # emissions (only sensible for a de-peaked/label-prior model)
             self.ctc_decode = sect.get("ctc_decode", "spike")
+            # MMS-FA style decode-time de-peaking for viterbi: divide posteriors
+            # by the per-song class prior (training-time priors get absorbed
+            # into the lm_head bias, so this must happen at inference)
+            self.ctc_prior_alpha = float(sect.get("ctc_prior_alpha", 0.0))
+            # CTC spikes fire late; per-model calibration (frames, usually -1|0)
+            self.ctc_onset_shift = int(sect.get("ctc_onset_shift", -1))
         else:
             ckpt = sect.get("frame_checkpoint", "") or _latest_frame_checkpoint(cfg)
             if not ckpt or not Path(ckpt).is_file():
@@ -197,7 +203,11 @@ class SegmentalDecoder:
                 raise SystemExit("decoder emissions=ctc needs the waveform (pipeline provides it)")
             logp = self._ctc_log_probs(aux.extras["wave"], aux.extras.get("sr", 16000), T)
             if self.ctc_decode == "spike":
-                return self._spike_decode(logp, frame_s)
+                return self._spike_decode(logp, frame_s, onset_shift=self.ctc_onset_shift)
+            if self.ctc_prior_alpha > 0:
+                prior = np.exp(logp).mean(0)                          # [C]
+                logp = logp - self.ctc_prior_alpha * np.log(prior + 1e-12)
+                logp = logp - np.log(np.exp(logp).sum(-1, keepdims=True))
         else:
             logp = self.frame.log_probs(feats)                        # [T, C]
         beta = np.zeros(T)
