@@ -150,6 +150,12 @@ temperature = 0.1
 steps = 2000
 batch_size = 512
 
+[subtitles]
+# Viewers perceive subtitles that lead the sung onset as "in time" (S12
+# feedback). Applied to DISPLAY formats (srt/vtt/ass) at write time only —
+# the csv output and all eval metrics keep the model's true timings.
+display_lead_ms = 100
+
 [eval]
 tolerances_ms = [20, 50]
 split = "paper"

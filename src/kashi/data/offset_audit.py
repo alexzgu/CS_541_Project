@@ -116,6 +116,64 @@ def audit(ids: list[int], out_json: str | Path | None = None) -> dict:
     return report
 
 
+MIN_ABS_MS = 50      # correction rule (S12): |gold-calibrated fault| >= this ...
+MIN_SHARP = 1.5      # ... AND the correlation peak is unambiguous
+
+
+def apply_corrections(report: dict | str | Path, dry_run: bool = False) -> dict[int, int]:
+    """Shift each qualifying song's reference rows by its measured constant
+    (S12-approved). Originals are backed up to data/clean/subtitles_pre_s12/
+    once; refuses to run twice. Returns {song: applied_shift_ms}."""
+    import shutil
+
+    if not isinstance(report, dict):
+        report = json.loads(Path(report).read_text())
+    base = report["gold_baseline_ms"]
+    backup = Path("data/clean/subtitles_pre_s12")
+    applied: dict[int, int] = {}
+    for sid_s, corr_ms in sorted(report["corrected_ms"].items(), key=lambda kv: int(kv[0])):
+        sid = int(sid_s)
+        if abs(corr_ms) < MIN_ABS_MS:
+            continue
+        if (backup / f"{sid}.csv").exists():
+            print(f"[apply] song {sid}: already corrected (backup exists) — skipped")
+            continue
+        raw_ms, sharp, _, _ = song_offset(sid)          # re-measure for sharpness
+        fault_ms = raw_ms - base
+        if sharp < MIN_SHARP:
+            print(f"[apply] song {sid}: fault {fault_ms:+.0f} ms but sharpness "
+                  f"{sharp:.1f} < {MIN_SHARP} — SKIPPED (unreliable measurement)")
+            continue
+        shift_s = -fault_ms / 1000.0
+        src = Path(subtitle_path(sid))
+        if dry_run:
+            print(f"[apply] song {sid}: would shift {shift_s*1000:+.0f} ms")
+            applied[sid] = round(shift_s * 1000)
+            continue
+        backup.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, backup / src.name)
+        with open(src, newline="") as f:
+            rd = csv.DictReader(f)
+            fields = list(rd.fieldnames)
+            rows = [dict(r) for r in rd]
+        for r in rows:
+            r["start"] = str(round(max(0.0, float(r["start"]) + shift_s), 3))
+            r["end"] = str(round(max(0.0, float(r["end"]) + shift_s), 3))
+        with open(src, "w", newline="") as f:
+            wr = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
+            wr.writeheader()
+            wr.writerows(rows)
+        applied[sid] = round(shift_s * 1000)
+        print(f"[apply] song {sid}: shifted {shift_s*1000:+.0f} ms "
+              f"(fault {fault_ms:+.0f}, sharpness {sharp:.1f})")
+    print(f"[apply] {'would correct' if dry_run else 'corrected'} {len(applied)} songs; "
+          f"originals in {backup}/")
+    return applied
+
+
 if __name__ == "__main__":
-    ids = [int(x) for x in sys.argv[1:]] or [i for i in range(93)]
-    audit(ids, out_json="runs/ref_offset_full.json")
+    if len(sys.argv) > 1 and sys.argv[1] in ("apply", "apply-dry"):
+        apply_corrections("runs/ref_offset_full.json", dry_run=sys.argv[1] == "apply-dry")
+    else:
+        ids = [int(x) for x in sys.argv[1:]] or [i for i in range(93)]
+        audit(ids, out_json="runs/ref_offset_full.json")

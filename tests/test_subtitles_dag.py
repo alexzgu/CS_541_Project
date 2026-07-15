@@ -36,6 +36,16 @@ def test_writers():
     assert "Dialogue: 0,0:00:01.00,0:00:01.45,Karaoke" in ass
 
 
+def test_display_lead_shifts_display_formats_only(tmp_path):
+    from kashi.subtitles import read_csv, write_outputs
+
+    out = write_outputs(SEGS, tmp_path, "x", ["csv", "srt"], display_lead_ms=100)
+    srt = out["srt"].read_text()
+    assert "00:00:00,900 --> 00:00:01,350" in srt  # 1.0-1.45 line leads by 100 ms
+    back = read_csv(out["csv"])
+    assert back[1].start == 1.0 and back[1].end == 1.2  # csv keeps true timings
+
+
 def test_dag_skip_and_rerun(cfg, tmp_path):
     from kashi import dag
 

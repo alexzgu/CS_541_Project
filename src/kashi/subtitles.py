@@ -223,20 +223,32 @@ def write_outputs(
     stem: str,
     formats: list[str],
     romaji_line: bool = False,
+    display_lead_ms: float = 0.0,
 ) -> dict[str, Path]:
+    """display_lead_ms shifts the DISPLAY formats (srt/vtt/ass) earlier so
+    subtitles appear slightly before the sung onset — viewers perceive that as
+    in-time (S12 feedback). The csv keeps the true model timings: it is the
+    data/eval format and must stay honest."""
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    lead = max(0.0, float(display_lead_ms)) / 1000.0
+    disp = segments
+    if lead > 0:
+        from dataclasses import replace
+
+        disp = [replace(s, start=max(0.0, s.start - lead), end=max(0.0, s.end - lead))
+                for s in segments]
     out: dict[str, Path] = {}
     for fmt in formats:
         path = out_dir / f"{stem}.{fmt}"
         if fmt == "csv":
             write_csv(segments, path)
         elif fmt == "srt":
-            path.write_text(to_srt(segments, romaji_line), encoding="utf-8")
+            path.write_text(to_srt(disp, romaji_line), encoding="utf-8")
         elif fmt == "vtt":
-            path.write_text(to_vtt(segments, romaji_line), encoding="utf-8")
+            path.write_text(to_vtt(disp, romaji_line), encoding="utf-8")
         elif fmt == "ass":
-            path.write_text(to_ass(segments), encoding="utf-8")
+            path.write_text(to_ass(disp), encoding="utf-8")
         else:
             raise ValueError(f"unknown subtitle format: {fmt}")
         out[fmt] = path

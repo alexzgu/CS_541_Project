@@ -117,7 +117,8 @@ def transcribe(
 
     out_files = timed(
         "write", 0.95,
-        lambda: write_outputs(segments, out_dir, input_path.stem, formats, romaji_line=romaji),
+        lambda: write_outputs(segments, out_dir, input_path.stem, formats, romaji_line=romaji,
+                              display_lead_ms=float(cfg.get("subtitles.display_lead_ms", 0.0))),
     )
     tick("done", 1.0)
     return TranscriptionResult(segments=segments, out_files=out_files, timings=timings)

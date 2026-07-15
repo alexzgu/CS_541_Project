@@ -6,14 +6,17 @@ Reply per ID. Decided items stay for the record.
 
 | ID | Question | Context |
 |---|---|---|
-| S12-final | **Apply the per-song reference corrections to `data/clean`?** S12 was tentatively approved 2026-07-15; the side-by-side review package is at `s12_review/` (open `index.html`: pick a song, the video plays with uncorrected AND corrected karaoke tracks; method fully documented in `METHOD.md` + per-song figures). After you review: reply "S12 apply" (labels shift, timing metrics re-baseline) or "S12 reject". | your call after reviewing `s12_review/` |
+| S13 | Dataset v2 Tier 1+2: mechanical normalization (sokuon merge, chunk split → `data/clean_v2`) + Claude-assisted standardization pilot on 3 songs | `docs/dataset_v2_plan.md`; recovers ~2,000+ of the 6,131 excluded rows mechanically |
+| S14 | Lead-vocal separator trial (off-the-shelf UVR karaoke models, local) to make chorus/overlap labelable; custom separator training stays parked | `docs/dataset_v2_plan.md` Tier 3 |
+| S15 | Covers: playlist URLs + scoped download OK (S2 exception), or local paths | `docs/dataset_v2_plan.md` Tier 4 — agreement-filtered self-training, DTW label transfer, robustness eval |
 
 ## Decided (2026-07-15, second batch)
 
 | ID | Decision | Status |
 |---|---|---|
 | S11 gate-exception promotion | **yes** | `ctc_model = artifacts/ctc_deprior/out/ctc_model` stands (test SER 0.316, gold SER 0.170, gold timed-F1 0.741; shift −1 gold-validated) |
-| S12 per-song ref timing correction | **tentative yes** | measured offsets (gold-calibrated): test 81 −50, 83 −30, 85 −30, 89 −130, 90 −90, 91 −70, 92 0 ms; corpus-wide slight-early with outliers. Review package `s12_review/` built for validation before any label changes (see S12-final above) |
+| S12 per-song ref timing correction | **yes — APPLIED 2026-07-15** | 18 songs shifted +50..+130 ms (17 + song 88 after de-styling; backups `data/clean/subtitles_pre_s12/`). Rebaseline (same champion): timed-F1 0.314→**0.699**, bF1@50 0.412→**0.717**, PC 0.963; song 89 timed-F1 0.017→0.906. Review package kept at `s12_review/`. Perceptual note adopted as `subtitles.display_lead_ms = 100` (srt/vtt/ass lead the true timings; csv/eval stay honest) |
+| S12b styling-repeat condensation | **yes (user-suggested)** | 7 songs de-styled (67 ms color-fade frames merged; song 88: 3,264→422 rows; いい-type real doubles protected by the duration criterion; backups `data/clean/subtitles_pre_condense/`); song 88's offset became measurable afterwards (+100 ms applied) |
 
 ## Decided (2026-07-09/10)
 
