@@ -289,6 +289,11 @@ def cmd_loop(args) -> None:
 
         harvest_ctc(cfg, out_dir=args.out, limit=args.limit)
         return
+    if args.what == "covers-harvest":
+        from .train.covers import harvest_covers
+
+        harvest_covers(cfg, out_dir=args.out, min_support=args.min_support)
+        return
     from .train.pseudo import loop
 
     loop(cfg, rounds=args.rounds, min_conf=args.min_conf, weak_weight=args.weak_weight)
@@ -442,14 +447,17 @@ def build_parser() -> argparse.ArgumentParser:
 
     sp = sub.add_parser("loop", help="self-training: harvest pseudo-labels, retrain, evaluate")
     _add_common(sp)
-    sp.add_argument("what", choices=["unsup", "ctc-harvest"],
+    sp.add_argument("what", choices=["unsup", "ctc-harvest", "covers-harvest"],
                     help="unsup: frame-era weak-label loop; ctc-harvest: "
-                         "spike-decode pool into CTC pseudo-transcript crops")
+                         "spike-decode pool into CTC pseudo-transcript crops; "
+                         "covers-harvest: cross-cover agreement-filtered crops (S15)")
     sp.add_argument("--rounds", type=int, default=1)
     sp.add_argument("--min-conf", type=float, default=0.9)
     sp.add_argument("--weak-weight", type=float, default=0.3)
-    sp.add_argument("--out", default=None, help="ctc-harvest output dir (default artifacts/pseudo_ctc)")
+    sp.add_argument("--out", default=None, help="harvest output dir override")
     sp.add_argument("--limit", type=int, default=None, help="ctc-harvest: only first N pool songs")
+    sp.add_argument("--min-support", type=float, default=0.5,
+                    help="covers-harvest: min fraction of 3-grams reproduced by other covers")
     sp.set_defaults(fn=cmd_loop)
 
     return p
