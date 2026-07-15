@@ -29,3 +29,4 @@ __pycache__/
 data/unlabeled/
 .env
 s12_review/media/
+s12_review/pred/tmp_*/
