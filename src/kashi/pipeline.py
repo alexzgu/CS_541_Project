@@ -91,7 +91,8 @@ def transcribe(
 
     encoder = create(cfg, "encoder")
     feats = timed("encode", 0.45, lambda: encoder.encode(wave, sr))
-    aux = FrameAux(rms_db=audio_mod.log_rms_db(wave, sr, cfg.frame_ms)[: len(feats)])
+    aux = FrameAux(rms_db=audio_mod.log_rms_db(wave, sr, cfg.frame_ms)[: len(feats)],
+                   extras={"wave": wave, "sr": sr})
 
     mode = cfg["pipeline.mode"]
     frame_s = cfg.frame_ms / 1000.0

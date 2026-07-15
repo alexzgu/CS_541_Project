@@ -45,16 +45,22 @@ class SegmentalDecoder:
         self.lam_b = float(sect.get("lambda_b", 0.5))
         self.lam_lm = float(sect.get("lambda_lm", 0.0))
 
-        ckpt = sect.get("frame_checkpoint", "") or _latest_frame_checkpoint(cfg)
-        if not ckpt or not Path(ckpt).is_file():
-            raise SystemExit(
-                "decoder 'segmental' needs a trained frame classifier: run "
-                "`kashi train frame`, then set decoder.segmental.frame_checkpoint"
-            )
-        payload = torch.load(ckpt, map_location="cpu", weights_only=True)
-        self.frame = FrameClassifier(**payload["hparams"])
-        self.frame.load_state_dict(payload["state_dict"])
-        self.frame.eval()
+        self.emissions = sect.get("emissions", "frame")   # frame | ctc
+        self.frame = None
+        self._ctc = None
+        if self.emissions == "ctc":
+            self.ctc_dir = sect.get("ctc_model", "artifacts/ctc_local/out/ctc_model")
+        else:
+            ckpt = sect.get("frame_checkpoint", "") or _latest_frame_checkpoint(cfg)
+            if not ckpt or not Path(ckpt).is_file():
+                raise SystemExit(
+                    "decoder 'segmental' needs a trained frame classifier: run "
+                    "`kashi train frame`, then set decoder.segmental.frame_checkpoint"
+                )
+            payload = torch.load(ckpt, map_location="cpu", weights_only=True)
+            self.frame = FrameClassifier(**payload["hparams"])
+            self.frame.load_state_dict(payload["state_dict"])
+            self.frame.eval()
 
         self.log_dur = log_duration_table(cfg, self.d_max)      # [C, d_max]
         d_min = int(sect.get("d_min", 2))
@@ -126,9 +132,68 @@ class SegmentalDecoder:
         return segs
 
     # ------------------------------------------------------------------
+    def _ctc_log_probs(self, wave: np.ndarray, sr: int, T: int) -> np.ndarray:
+        """Emissions straight from the CTC model (blank = 109 = <silence>)."""
+        import torch
+
+        if self._ctc is None:
+            from transformers import AutoModelForCTC
+
+            dev = "cuda" if torch.cuda.is_available() else "cpu"
+            self._ctc = AutoModelForCTC.from_pretrained(self.ctc_dir).to(dev).eval()
+            self._ctc_dev = dev
+        w = (wave - wave.mean()) / (wave.std() + 1e-7)
+        hop = sr * self.cfg.frame_ms // 1000
+        chunk, ov = int(30.0 * sr), int(2.0 * sr)
+        parts, step = [], chunk - ov
+        with torch.inference_mode():
+            for s in range(0, len(w), step):
+                piece = torch.from_numpy(w[max(0, s - ov): s + chunk].copy()).float()
+                if self._ctc_dev == "cuda":
+                    with torch.autocast("cuda", torch.float16):
+                        lg = self._ctc(piece[None].cuda()).logits[0].float().cpu()
+                else:
+                    lg = self._ctc(piece[None]).logits[0]
+                lead = (s - max(0, s - ov)) // hop
+                keep = min((chunk - ov) // hop, len(lg) - lead)
+                parts.append(lg[lead: lead + keep])
+                if s + chunk >= len(w):
+                    break
+        em = torch.log_softmax(torch.cat(parts), -1).numpy()
+        if len(em) < T:
+            em = np.pad(em, ((0, T - len(em)), (0, 0)), mode="edge")
+        return em[:T]
+
+    def _spike_decode(self, logp: np.ndarray, frame_s: float,
+                      max_dur_s: float = 0.6, onset_shift: int = -1) -> list[Segment]:
+        """Greedy CTC decoding of peaky emissions (textless): collapse repeats,
+        drop blank; token onset = first frame of its run (the spike), extent =
+        up to the next onset capped at max_dur_s. Confidence = spike posterior."""
+        path = logp.argmax(-1)
+        probs = np.exp(logp[np.arange(len(path)), path])
+        spikes: list[tuple[int, int, float]] = []   # (frame, class, prob)
+        prev = -1
+        for t, c in enumerate(path):
+            if c != prev and c != SILENCE_ID:
+                spikes.append((t, int(c), float(probs[t])))
+            prev = c
+        out: list[Segment] = []
+        for k, (t, c, p) in enumerate(spikes):
+            t0 = max(0, t + onset_shift)   # CTC spikes fire ~1 frame late
+            end_f = spikes[k + 1][0] + onset_shift if k + 1 < len(spikes) else t0 + int(max_dur_s / frame_s)
+            end_f = min(max(t0 + 1, end_f), t0 + int(max_dur_s / frame_s))
+            out.append(Segment(t0 * frame_s, end_f * frame_s,
+                               TOKENS[c], confidence=round(p, 3)))
+        return out
+
     def decode(self, feats: np.ndarray, aux: FrameAux | None = None) -> list[Segment]:
         frame_s = self.cfg.frame_ms / 1000.0
         T = len(feats)
+        if self.emissions == "ctc":
+            if aux is None or "wave" not in aux.extras:
+                raise SystemExit("decoder emissions=ctc needs the waveform (pipeline provides it)")
+            logp = self._ctc_log_probs(aux.extras["wave"], aux.extras.get("sr", 16000), T)
+            return self._spike_decode(logp, frame_s)
         logp = self.frame.log_probs(feats)                            # [T, C]
         beta = np.zeros(T)
         if aux is not None and aux.boundary_logits is not None:
