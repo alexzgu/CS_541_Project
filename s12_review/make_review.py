@@ -55,21 +55,27 @@ def titles() -> dict[int, str]:
         return {int(r["Index"]): r["Title"] for r in csv.DictReader(f, delimiter="\t")}
 
 
-def read_rows(sid: int) -> tuple[list[dict], list[str]]:
-    with open(ROOT / f"data/clean/subtitles/{sid}.csv", newline="") as f:
-        rd = csv.DictReader(f)
-        return [dict(r) for r in rd], list(rd.fieldnames)
+def read_rows(sid: int, uncorrected: bool = False) -> list[dict]:
+    """Current labels, or (uncorrected=True) the pre-S12 backup when one exists —
+    data/clean now already CONTAINS the applied corrections."""
+    p = ROOT / f"data/clean/subtitles/{sid}.csv"
+    if uncorrected:
+        b = ROOT / f"data/clean/subtitles_pre_s12/{sid}.csv"
+        p = b if b.exists() else p
+    with open(p, newline="") as f:
+        return [dict(r) for r in csv.DictReader(f)]
 
 
-def audit_song(sid: int):
+def audit_song(sid: int, rows: list[dict]):
+    """Re-measure on the given rows (pass the UNCORRECTED rows to reproduce
+    the original fault measurement)."""
     wave = audio_mod.load_audio(str(ROOT / f"data/clean/audio/vocals/{sid}.mp3"), sr=16000)
     env = onset_envelope(wave)
-    rows, fields = read_rows(sid)
     train = ref_train(rows, len(env))
     lags, corr = cross_correlate(env, train)
     best = int(np.argmax(corr))
     sharp = float((corr[best] - np.median(corr)) / (corr.std() + 1e-9))
-    return rows, fields, env, lags, corr, float(lags[best] * HOP_S * 1000), sharp
+    return env, lags, corr, float(lags[best] * HOP_S * 1000), sharp
 
 
 def onsets_of(rows) -> np.ndarray:
@@ -133,36 +139,46 @@ def figure(sid: int, env, lags, corr, onsets, shift_s: float, base_ms: float,
     plt.close(fig)
 
 
+def predict(sid: int) -> list:
+    """Champion pipeline prediction for a test song (cached under pred/)."""
+    cache = OUT / "pred" / f"{sid}.json"
+    if cache.exists():
+        return json.loads(cache.read_text())
+    from kashi.config import Config
+    from kashi.pipeline import transcribe
+
+    cfg = Config.load()
+    res = transcribe(cfg, ROOT / f"data/clean/audio/vocals/{sid}.mp3",
+                     out_dir=OUT / "pred" / f"tmp_{sid}", formats=["csv"], separate=False)
+    toks = [(round(s.start, 3), round(s.end, 3), s.token)
+            for s in res.segments if not s.is_silence]
+    cache.parent.mkdir(exist_ok=True)
+    cache.write_text(json.dumps(toks))
+    return toks
+
+
 def main() -> None:
     (OUT / "figures").mkdir(parents=True, exist_ok=True)
     (OUT / "media").mkdir(exist_ok=True)
-    (OUT / "subtitles_corrected").mkdir(exist_ok=True)
     full = json.load(open(ROOT / "runs" / "ref_offset_full.json"))
     base_ms = full["gold_baseline_ms"]
     ttl = titles()
 
     songs = []
     for sid in PACKAGE:
-        rows, fields, env, lags, corr, raw_ms, sharp = audit_song(sid)
+        rows_u = read_rows(sid, uncorrected=True)
+        rows_c = read_rows(sid)
+        env, lags, corr, raw_ms, sharp = audit_song(sid, rows_u)
         fault_ms = raw_ms - base_ms                      # <0 = labels early
-        corrected = abs(fault_ms) >= MIN_ABS_MS and sharp >= MIN_SHARP
-        shift_s = -fault_ms / 1000.0 if corrected else 0.0
 
-        out_rows = []
-        for r in rows:
-            q = dict(r)
-            # str(round(...)) matches the source files' float repr style
-            q["start"] = str(round(max(0.0, float(r["start"]) + shift_s), 3))
-            q["end"] = str(round(max(0.0, float(r["end"]) + shift_s), 3))
-            out_rows.append(q)
-        with open(OUT / "subtitles_corrected" / f"{sid}.csv", "w", newline="") as f:
-            wr = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
-            wr.writeheader()
-            wr.writerows(out_rows)
+        def lyric_of(rows):
+            return [(round(float(r["start"]), 3), round(float(r["end"]), 3), r["token"])
+                    for r in rows if r["token"] != "<silence>"
+                    and r.get("exclude", "False").strip().lower() != "true"]
 
-        lyric = [(round(float(r["start"]), 3), round(float(r["end"]), 3), r["token"])
-                 for r in rows if r["token"] != "<silence>"
-                 and r.get("exclude", "False").strip().lower() != "true"]
+        lyric, lyric_c = lyric_of(rows_u), lyric_of(rows_c)
+        corrected = (ROOT / f"data/clean/subtitles_pre_s12/{sid}.csv").exists()
+        shift_s = (lyric_c[0][0] - lyric[0][0]) if corrected and lyric and lyric_c else 0.0
         figure(sid, env, lags, corr, np.array([t for t, _, _ in lyric]),
                shift_s, base_ms, raw_ms, sharp, corrected)
 
@@ -179,7 +195,8 @@ def main() -> None:
             "fault_ms": round(fault_ms), "sharp": round(sharp, 1),
             "corrected": corrected, "shift_ms": round(shift_s * 1000),
             "video": f"media/{sid}.webm", "vocals": f"media/{sid}_vocals.mp3",
-            "fig": f"figures/{sid}.png", "tokens": lyric,
+            "fig": f"figures/{sid}.png", "tokens": lyric, "tokens_c": lyric_c,
+            "pred": predict(sid) if sid in TEST_IDS else None,
         })
         print(f"song {sid}: fault {fault_ms:+.0f} ms sharp {sharp:.1f} "
               f"{'-> corrected' if corrected else '-> unchanged'} ({len(lyric)} tokens)")

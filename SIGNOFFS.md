@@ -4,11 +4,7 @@ Reply per ID. Decided items stay for the record.
 
 ## Open
 
-| ID | Question | Context |
-|---|---|---|
-| S13 | Dataset v2 Tier 1+2: mechanical normalization (sokuon merge, chunk split → `data/clean_v2`) + Claude-assisted standardization pilot on 3 songs | `docs/dataset_v2_plan.md`; recovers ~2,000+ of the 6,131 excluded rows mechanically |
-| S14 | Lead-vocal separator trial (off-the-shelf UVR karaoke models, local) to make chorus/overlap labelable; custom separator training stays parked | `docs/dataset_v2_plan.md` Tier 3 |
-| S15 | Covers: playlist URLs + scoped download OK (S2 exception), or local paths | `docs/dataset_v2_plan.md` Tier 4 — agreement-filtered self-training, DTW label transfer, robustness eval |
+*(none — S13/S14/S15 approved 2026-07-15, see below)*
 
 ## Decided (2026-07-15, second batch)
 
@@ -17,6 +13,9 @@ Reply per ID. Decided items stay for the record.
 | S11 gate-exception promotion | **yes** | `ctc_model = artifacts/ctc_deprior/out/ctc_model` stands (test SER 0.316, gold SER 0.170, gold timed-F1 0.741; shift −1 gold-validated) |
 | S12 per-song ref timing correction | **yes — APPLIED 2026-07-15** | 18 songs shifted +50..+130 ms (17 + song 88 after de-styling; backups `data/clean/subtitles_pre_s12/`). Rebaseline (same champion): timed-F1 0.314→**0.699**, bF1@50 0.412→**0.717**, PC 0.963; song 89 timed-F1 0.017→0.906. Review package kept at `s12_review/`. Perceptual note adopted as `subtitles.display_lead_ms = 100` (srt/vtt/ass lead the true timings; csv/eval stay honest) |
 | S12b styling-repeat condensation | **yes (user-suggested)** | 7 songs de-styled (67 ms color-fade frames merged; song 88: 3,264→422 rows; いい-type real doubles protected by the duration criterion; backups `data/clean/subtitles_pre_condense/`); song 88's offset became measurable afterwards (+100 ms applied) |
+| S13 dataset v2 Tier 1+2 | **yes** | Tier 1 DONE + **`data.version = clean_v2` adopted**: 4,290 rows recovered (728 sokuon merges, 1,441 chunk splits; `kashi.data.normalize`); champion on v2 test refs: **SER 0.263** / timed-F1 0.710 (recovered tokens were already predicted). `gold_v2` built the same way (103 rows). Tier 2 pilot queued on songs 81 (multi-singer), 23 (English-heavy, 300 rows), 21 (`<gap>`/stylized) |
+| S14 lead-vocal separator trial | **yes** | off-the-shelf UVR karaoke-model trial queued (needs `audio-separator` install; component slot exists); custom separator training stays parked until user provides pair data |
+| S15 covers | **yes — playlists provided** | downloaded to `data/unlabeled/covers/{iris_out,king,ifuudoudou}` (79+25+35 items; transient CDN failures retried; 2 private + 1 removed unrecoverable). Treat as unlabeled; expect tempo/key/intro-offset variation across covers. Next: htdemucs separation → cross-cover agreement filter → DTW label transfer |
 
 ## Decided (2026-07-09/10)
 

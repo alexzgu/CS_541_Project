@@ -112,8 +112,10 @@ Full table: `runs/ref_offset_full.txt` / `.json`.
   structure-preserving transform.
 - It does not change tokens, so SER and all transcript metrics are unaffected.
   Only timed-token F1 / boundary metrics re-baseline.
-- Nothing in `data/clean` changes until S12-final approval. The corrected files
-  staged here live in `s12_review/subtitles_corrected/` only.
+- STATUS: corrections were applied to `data/clean` on 2026-07-15 after user
+  approval (18 songs; originals backed up in `data/clean/subtitles_pre_s12/`).
+  The player now compares backup (blue) vs applied (aqua), plus the model's
+  prediction (violet) on test songs.
 
 ## How to review (this folder)
 

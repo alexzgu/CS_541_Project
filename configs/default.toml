@@ -5,7 +5,11 @@
 [data]
 frame_ms = 20
 sample_rate = 16000
-version = "clean"            # clean | clean_v2 | gold
+# clean_v2 ADOPTED 2026-07-15 (S13 Tier 1): sokuon merges + chunk splits recover
+# 4,290 rows; champion re-eval on v2 test refs: SER 0.263, timed-F1 0.710
+# (vs 0.316/0.699 on clean) — the model already predicted the recovered tokens.
+# gold_v2 built the same way; duration/bigram fits not yet re-run on v2.
+version = "clean_v2"         # clean | clean_v2 | gold
 
 [paths]
 data_dir = "data"

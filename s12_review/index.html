@@ -56,6 +56,7 @@
   .tok.past { opacity: 0.45; }
   .tok.act-blue { background: var(--blue); color: #fff; }
   .tok.act-aqua { background: var(--aqua); color: #fff; }
+  .tok.act-violet { background: var(--violet); color: #fff; }
 
   .figwrap { margin-top: 18px; }
   .figwrap img { max-width: 100%; border: 1px solid var(--grid); border-radius: 8px; }
@@ -67,10 +68,11 @@
 <div class="app">
   <div class="side">
     <h1>S12 review — label timing</h1>
-    <p class="sub">Pick a song. The video plays with <b>both</b> subtitle tracks:
-      <span style="color:var(--blue)">■ uncorrected</span> (current labels) and
-      <span style="color:var(--aqua)">■ corrected</span> (proposed shift).
-      Method: <a href="METHOD.md">METHOD.md</a></p>
+    <p class="sub">Pick a song. The video plays with the subtitle tracks side by side:
+      <span style="color:var(--blue)">■ uncorrected</span> (pre-S12 labels),
+      <span style="color:var(--aqua)">■ corrected</span> (applied shift), and on
+      test songs <span style="color:var(--violet)">■ the model's own prediction</span>
+      (textless — no reference used). Method: <a href="METHOD.md">METHOD.md</a></p>
     <div id="cards"></div>
   </div>
   <div class="main">
@@ -97,6 +99,12 @@
       <div class="head"><span class="chip" style="background:var(--aqua)"></span>
         <span class="name">corrected</span><span class="note" id="corrnote"></span></div>
       <div class="line" id="lane1"></div><div class="line next" id="lane1n"></div>
+    </div>
+    <div class="lane" id="predlane" style="display:none">
+      <div class="head"><span class="chip" style="background:var(--violet)"></span>
+        <span class="name">model prediction</span>
+        <span class="note">champion pipeline output, textless — no reference used</span></div>
+      <div class="line" id="lane2"></div><div class="line next" id="lane2n"></div>
     </div>
     <div class="figwrap">
       <img id="fig" alt="measurement figure">
@@ -138,9 +146,10 @@ function pickSong(s) {
   $('corrnote').textContent = s.corrected ? `labels shifted +${s.shift_ms} ms later`
                                           : 'identical to uncorrected (no change proposed)';
   $('fig').src = s.fig;
-  const shift = s.shift_ms / 1000;
-  lanes = [lines(s.tokens), lines(s.tokens.map(t => [t[0] + shift, t[1] + shift, t[2]]))];
-  ptr = [0, 0];
+  lanes = [lines(s.tokens), lines(s.tokens_c)];
+  if (s.pred) lanes.push(lines(s.pred));
+  $('predlane').style.display = s.pred ? '' : 'none';
+  ptr = [0, 0, 0];
   setSource(document.querySelector('#m-vocals').classList.contains('on') ? 'vocals' : 'video');
 }
 
@@ -159,7 +168,7 @@ function setSource(mode) {
 }
 
 function renderLane(k, t) {
-  const color = k === 0 ? 'act-blue' : 'act-aqua';
+  const color = ['act-blue', 'act-aqua', 'act-violet'][k];
   const L = lanes[k];
   if (!L.length) return;
   while (ptr[k] < L.length - 1 && t >= L[ptr[k] + 1][0][0]) ptr[k]++;
@@ -178,7 +187,10 @@ function renderLane(k, t) {
 }
 
 function tick() {
-  if (cur) { const t = media.currentTime; renderLane(0, t); renderLane(1, t); }
+  if (cur) {
+    const t = media.currentTime;
+    for (let k = 0; k < lanes.length; k++) renderLane(k, t);
+  }
   requestAnimationFrame(tick);
 }
 
