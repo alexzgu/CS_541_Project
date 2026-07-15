@@ -6,10 +6,14 @@ Reply per ID. Decided items stay for the record.
 
 | ID | Question | Context |
 |---|---|---|
-| S11 | **Retroactive OK: promotion with a gate exception (2026-07-15).** New default `ctc_model = artifacts/ctc_deprior/out/ctc_model` wins test SER (0.316 vs 0.332), gold SER (0.170 vs 0.195) and gold timed-F1 (0.741 vs 0.731) but loses test timed-F1 by 0.017. An onset-shift sweep proved the frozen-test references carry systematic per-song timing offsets (shift −4 "fixes" test timed-F1 to 0.53 but wrecks gold to 0.42; song 92 behaves gold-like; song 89 is broken at every shift). Gold (hand-corrected) is the project's designated timing arbiter, so I promoted and kept the gold-validated shift −1. Revert = one config line; both models kept on disk. | reply "S11 ok" or "S11 revert" |
-| S12 | **May I correct reference labels by per-song constant timing offsets?** A model-free audit (spectral-flux onset envelope × reference onset train; gold songs = calibration, reading −40 ms instrument bias) finds, bias-corrected: test refs **30–130 ms EARLY** — 81: −50, 83: −30, 85: −30, 89: −130, 90: −90, 91: −70, 92: 0 ms — matching the onset-shift sweep per-song (92 clean, 89 worst). Control songs show it is NOT an import-batch fault: original-batch train (20/30/40/50) reads −20..−30 and t2-extra train (66/70/75/78) −20..−70 — i.e. the v1 corpus runs slightly early overall with heavy per-song outliers (89/90/91/70): source-subtitle variance, the goal-3 "±50 ms misaligned labels", now measurable. Proposed fix: shift each song's reference rows by its measured constant (test songs and train outliers ≥50 ms), guarded by the existing `qa.max_mean_shift_ms`. Re-baselines historical timed-F1/boundary numbers (SER unaffected). Full audit: `runs/ref_offset_audit.txt`. | approve to correct refs |
+| S12-final | **Apply the per-song reference corrections to `data/clean`?** S12 was tentatively approved 2026-07-15; the side-by-side review package is at `s12_review/` (open `index.html`: pick a song, the video plays with uncorrected AND corrected karaoke tracks; method fully documented in `METHOD.md` + per-song figures). After you review: reply "S12 apply" (labels shift, timing metrics re-baseline) or "S12 reject". | your call after reviewing `s12_review/` |
 
-*(none else)*
+## Decided (2026-07-15, second batch)
+
+| ID | Decision | Status |
+|---|---|---|
+| S11 gate-exception promotion | **yes** | `ctc_model = artifacts/ctc_deprior/out/ctc_model` stands (test SER 0.316, gold SER 0.170, gold timed-F1 0.741; shift −1 gold-validated) |
+| S12 per-song ref timing correction | **tentative yes** | measured offsets (gold-calibrated): test 81 −50, 83 −30, 85 −30, 89 −130, 90 −90, 91 −70, 92 0 ms; corpus-wide slight-early with outliers. Review package `s12_review/` built for validation before any label changes (see S12-final above) |
 
 ## Decided (2026-07-09/10)
 

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>S12 review — reference timing corrections, side by side</title>
+<style>
+  :root {
+    --surface: #fcfcfb; --surface-2: #f1f0ee; --ink: #0b0b0b; --ink-2: #52514e;
+    --grid: #e5e4e0; --blue: #2a78d6; --aqua: #1baf7a; --violet: #4a3aa7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface: #1a1a19; --surface-2: #242422; --ink: #ffffff; --ink-2: #c3c2b7;
+      --grid: #3a3936; --blue: #3987e5; --aqua: #199e70; --violet: #9085e9;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--surface); color: var(--ink);
+         font: 14px/1.45 system-ui, "Noto Sans CJK JP", sans-serif; }
+  .app { display: grid; grid-template-columns: 300px 1fr; min-height: 100vh; }
+
+  .side { border-right: 1px solid var(--grid); padding: 12px; overflow-y: auto; }
+  .side h1 { font-size: 15px; margin: 4px 4px 10px; }
+  .side .sub { color: var(--ink-2); font-size: 12px; margin: 0 4px 12px; }
+  .card { border: 1px solid var(--grid); border-radius: 8px; padding: 8px 10px;
+          margin-bottom: 8px; cursor: pointer; }
+  .card:hover { background: var(--surface-2); }
+  .card.on { border-color: var(--violet); background: var(--surface-2); }
+  .card .t { font-size: 12px; color: var(--ink-2); overflow: hidden;
+             text-overflow: ellipsis; white-space: nowrap; }
+  .card .row { display: flex; justify-content: space-between; align-items: baseline; }
+  .badge { font-size: 11px; padding: 1px 7px; border-radius: 999px; color: #fff; }
+  .badge.fix { background: var(--aqua); }
+  .badge.keep { background: var(--ink-2); }
+
+  .main { padding: 16px 20px 40px; max-width: 1060px; }
+  .main h2 { font-size: 16px; margin: 0 0 2px; }
+  .meta { color: var(--ink-2); font-size: 12.5px; margin-bottom: 10px; }
+  video, audio { width: 100%; max-height: 46vh; background: #000; border-radius: 8px; }
+  audio { max-height: none; background: transparent; }
+
+  .controls { display: flex; gap: 8px; align-items: center; margin: 10px 0 14px; flex-wrap: wrap; }
+  .controls .lbl { color: var(--ink-2); font-size: 12px; }
+  button.ctl { border: 1px solid var(--grid); background: var(--surface-2); color: var(--ink);
+               border-radius: 6px; padding: 4px 12px; cursor: pointer; font-size: 13px; }
+  button.ctl.on { border-color: var(--violet); color: var(--violet); font-weight: 600; }
+
+  .lane { border: 1px solid var(--grid); border-radius: 10px; padding: 10px 14px 12px; margin-bottom: 10px; }
+  .lane .head { display: flex; gap: 8px; align-items: baseline; margin-bottom: 6px; }
+  .chip { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  .lane .name { font-size: 12.5px; font-weight: 600; }
+  .lane .note { font-size: 12px; color: var(--ink-2); }
+  .line { font-size: 26px; letter-spacing: 1px; min-height: 40px; }
+  .line.next { font-size: 15px; color: var(--ink-2); min-height: 22px; margin-top: 2px; }
+  .tok { padding: 1px 2px; border-radius: 5px; cursor: pointer; }
+  .tok.past { opacity: 0.45; }
+  .tok.act-blue { background: var(--blue); color: #fff; }
+  .tok.act-aqua { background: var(--aqua); color: #fff; }
+
+  .figwrap { margin-top: 18px; }
+  .figwrap img { max-width: 100%; border: 1px solid var(--grid); border-radius: 8px; }
+  .figwrap .cap { font-size: 12px; color: var(--ink-2); margin-top: 4px; }
+  a { color: var(--violet); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="side">
+    <h1>S12 review — label timing</h1>
+    <p class="sub">Pick a song. The video plays with <b>both</b> subtitle tracks:
+      <span style="color:var(--blue)">■ uncorrected</span> (current labels) and
+      <span style="color:var(--aqua)">■ corrected</span> (proposed shift).
+      Method: <a href="METHOD.md">METHOD.md</a></p>
+    <div id="cards"></div>
+  </div>
+  <div class="main">
+    <h2 id="title"></h2>
+    <div class="meta" id="meta"></div>
+    <video id="video" controls preload="metadata"></video>
+    <audio id="aud" controls preload="metadata" style="display:none"></audio>
+    <div class="controls">
+      <span class="lbl">source</span>
+      <button class="ctl on" id="m-video">video</button>
+      <button class="ctl" id="m-vocals">vocals only</button>
+      <span class="lbl" style="margin-left:12px">speed</span>
+      <button class="ctl" data-rate="0.5">0.5×</button>
+      <button class="ctl" data-rate="0.75">0.75×</button>
+      <button class="ctl on" data-rate="1">1×</button>
+      <span class="lbl" style="margin-left:12px">click any token to jump there</span>
+    </div>
+    <div class="lane">
+      <div class="head"><span class="chip" style="background:var(--blue)"></span>
+        <span class="name">uncorrected</span><span class="note">current data/clean labels</span></div>
+      <div class="line" id="lane0"></div><div class="line next" id="lane0n"></div>
+    </div>
+    <div class="lane">
+      <div class="head"><span class="chip" style="background:var(--aqua)"></span>
+        <span class="name">corrected</span><span class="note" id="corrnote"></span></div>
+      <div class="line" id="lane1"></div><div class="line next" id="lane1n"></div>
+    </div>
+    <div class="figwrap">
+      <img id="fig" alt="measurement figure">
+      <div class="cap">Top: the measurement — cross-correlation of the vocal onset envelope
+        with the label-onset train; the peak is this song's offset, the dashed line is the
+        instrument bias measured on the hand-corrected gold songs. Bottom: an 8-second
+        excerpt — gray = where vocal energy appears; blue ticks = current label onsets;
+        aqua ticks = after the proposed shift.</div>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let cur = null, media = $('video'), lanes = [[], []], ptr = [0, 0];
+
+function lines(tokens, gap = 0.6, maxLen = 16) {
+  const out = []; let line = [];
+  tokens.forEach((t, i) => {
+    if (line.length && (t[0] - line[line.length - 1][1] >= gap || line.length >= maxLen)) {
+      out.push(line); line = [];
+    }
+    line.push([...t, i]);
+  });
+  if (line.length) out.push(line);
+  return out;
+}
+
+function pickSong(s) {
+  cur = s;
+  document.querySelectorAll('.card').forEach(c => c.classList.toggle('on', +c.dataset.id === s.id));
+  $('title').textContent = `#${s.id} — ${s.title}`;
+  const fault = s.fault_ms === 0 ? '±0' : (s.fault_ms > 0 ? '+' + s.fault_ms : s.fault_ms);
+  $('meta').textContent = `${s.set} song · measured label fault ${fault} ms `
+    + `(sharpness ${s.sharp}) · ${s.corrected ? 'correction: shift all rows +' + s.shift_ms + ' ms'
+    : (s.sharp < 1.5 ? 'measurement rejected (flat correlation) — no correction'
+       : 'below the 50 ms threshold — no correction')}`;
+  $('corrnote').textContent = s.corrected ? `labels shifted +${s.shift_ms} ms later`
+                                          : 'identical to uncorrected (no change proposed)';
+  $('fig').src = s.fig;
+  const shift = s.shift_ms / 1000;
+  lanes = [lines(s.tokens), lines(s.tokens.map(t => [t[0] + shift, t[1] + shift, t[2]]))];
+  ptr = [0, 0];
+  setSource(document.querySelector('#m-vocals').classList.contains('on') ? 'vocals' : 'video');
+}
+
+function setSource(mode) {
+  const t = media ? media.currentTime : 0;
+  $('m-video').classList.toggle('on', mode === 'video');
+  $('m-vocals').classList.toggle('on', mode === 'vocals');
+  $('video').style.display = mode === 'video' ? '' : 'none';
+  $('aud').style.display = mode === 'vocals' ? '' : 'none';
+  $('video').pause(); $('aud').pause();
+  media = mode === 'video' ? $('video') : $('aud');
+  const src = mode === 'video' ? cur.video : cur.vocals;
+  if (media.getAttribute('src') !== src) { media.setAttribute('src', src); media.load(); }
+  media.currentTime = t || 0;
+  media.playbackRate = +document.querySelector('button[data-rate].on').dataset.rate;
+}
+
+function renderLane(k, t) {
+  const color = k === 0 ? 'act-blue' : 'act-aqua';
+  const L = lanes[k];
+  if (!L.length) return;
+  while (ptr[k] < L.length - 1 && t >= L[ptr[k] + 1][0][0]) ptr[k]++;
+  while (ptr[k] > 0 && t < L[ptr[k]][0][0]) ptr[k]--;
+  const line = L[ptr[k]], next = L[ptr[k] + 1];
+  const el = $('lane' + k);
+  el.innerHTML = '';
+  line.forEach(([s, e, tok, gi]) => {
+    const sp = document.createElement('span');
+    sp.textContent = tok;
+    sp.className = 'tok' + (t >= s && t < e ? ' ' + color : (t >= e ? ' past' : ''));
+    sp.onclick = () => { media.currentTime = Math.max(0, s - 0.8); media.play(); };
+    el.appendChild(sp);
+  });
+  $('lane' + k + 'n').textContent = next ? next.map(x => x[2]).join('') : '';
+}
+
+function tick() {
+  if (cur) { const t = media.currentTime; renderLane(0, t); renderLane(1, t); }
+  requestAnimationFrame(tick);
+}
+
+$('m-video').onclick = () => setSource('video');
+$('m-vocals').onclick = () => setSource('vocals');
+document.querySelectorAll('button[data-rate]').forEach(b => b.onclick = () => {
+  document.querySelectorAll('button[data-rate]').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  media.playbackRate = +b.dataset.rate;
+});
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.code === 'Space') { e.preventDefault(); media.paused ? media.play() : media.pause(); }
+  if (e.code === 'ArrowLeft') media.currentTime -= 2;
+  if (e.code === 'ArrowRight') media.currentTime += 2;
+});
+
+SONGS.forEach(s => {
+  const c = document.createElement('div');
+  c.className = 'card'; c.dataset.id = s.id;
+  const badge = s.corrected ? `<span class="badge fix">+${s.shift_ms} ms fix</span>`
+                            : `<span class="badge keep">no change</span>`;
+  c.innerHTML = `<div class="row"><b>#${s.id} <span style="color:var(--ink-2);font-weight:400">${s.set}</span></b>${badge}</div>
+                 <div class="t">${s.title}</div>`;
+  c.onclick = () => pickSong(s);
+  $('cards').appendChild(c);
+});
+pickSong(SONGS[0]);
+tick();
+</script>
+</body>
+</html>
