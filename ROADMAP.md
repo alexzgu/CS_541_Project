@@ -338,6 +338,8 @@ Web app per §3.7 over pipeline progress callbacks.
 ① `loop unsup` (≥100 scraped songs; c_k ≥ 0.9; weak weight 0.3; stop after 2 dry rounds). ② temporal InfoNCE head; adopt if segmenter-F1 or decoder SER improves; then supcon with phonetic soft negatives. ③ covers via audio↔audio DTW positives. ④ cloud SSL pretraining if budgeted.
 **Accept:** each experiment = run dir + keep/drop verdict; winners enter defaults via promotion only.
 
+**OUTCOME (2026-07-15):** ① redesigned for the CTC-spike era and **PROMOTED**: `kashi loop ctc-harvest` spike-decodes the 266-song pool into 12.8k pseudo-transcript crops (8.0 h; frozen-test leak excluded by YouTube id); +4 epochs on labeled + 9.6k crops (conf ≥ 0.85, weight 0.3) → SER 0.339→0.332, timed-F1 0.330→0.331, while the equal-compute labeled-only control regressed (0.347/0.316) — the gain is attributable to the unsupervised data. Frame-era `loop unsup` retained for emissions=frame ablations only. ② tested earlier and rejected (128-d head, no gate pass). ③ not attempted. ④ still open (cloud).
+
 ### P6 — Research track — parallel, open-ended
 `discover` unit-inventory report (inferred units vs 110; majority-vote confusion); HSMM durations if HMM boundary residuals look non-geometric; autocorr vs ripser-H1 (one notebook, one table); confidence calibration (reliability diagram vs gold).
 **Accept:** written findings; anything beating a P2/P3 component on gold promotes through the registry.

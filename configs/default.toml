@@ -82,7 +82,10 @@ dropout = 0.5
 
 [decoder.segmental]          # P3
 emissions = "ctc"            # PROMOTED 2026-07-15; @24ep: SER 0.339, timed-F1 0.330 (from 0.722/0.210)
-ctc_model = "artifacts/ctc_local/out/ctc_model"
+# P5.1 PROMOTED 2026-07-15: +4 epochs on labeled + 9.6k pseudo-transcript crops
+# (kashi loop ctc-harvest, conf>=0.85, w=0.3): SER 0.332, timed-F1 0.331; the
+# equal-compute labeled-only control REGRESSED (0.347/0.316) — pseudo data is the difference
+ctc_model = "artifacts/ctc_p5mix/out/ctc_model"
 frame_checkpoint = "runs/frame-20260709-235542/best.pt"  # 86-song 768-d model (P5.2 head rejected)
 d_max = 60
 d_min = 3                    # >= 60 ms per mora (silence exempt)
