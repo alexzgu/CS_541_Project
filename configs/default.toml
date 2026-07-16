@@ -96,7 +96,9 @@ emissions = "ctc"            # PROMOTED 2026-07-15; @24ep: SER 0.339, timed-F1 0
 # cross-cover agreement crops (134 covers, support>=0.5, conf>=0.85, w=0.3):
 # v2-refs SER 0.263 -> 0.252, timed-F1 0.710 -> 0.725
 ctc_model = "artifacts/ctc_covers/out/ctc_model"
-ctc_decode = "spike"         # spike | viterbi (semi-Markov over CTC emissions; needs a de-peaked model)
+ctc_decode = "spike"         # spike | beam | viterbi; beam = spike positions + top-K/bigram DP
+ctc_beam_k = 5               # beam: acoustic candidates per spike (the soft "bucket")
+ctc_beam_lm = 0.5            # beam: bigram weight (tuned on gold+train, never on test)
 ctc_prior_alpha = 0.0        # viterbi only: decode-time posterior/prior^alpha de-peaking (MMS-FA style)
 ctc_onset_shift = -1         # spike onset advance in frames (CTC spikes fire ~1 frame late)
 frame_checkpoint = "runs/frame-20260709-235542/best.pt"  # 86-song 768-d model (P5.2 head rejected)

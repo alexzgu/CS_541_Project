@@ -28,6 +28,30 @@ def _latest_frame_checkpoint(cfg) -> Path | None:
     return runs[-1] if runs else None
 
 
+def beam_pick(cands: list[list[int]], scores: list[np.ndarray],
+              log_A: np.ndarray, lam: float) -> list[int]:
+    """Exact DP over per-spike candidate tokens with a bigram prior.
+    cands[i] = top-K token ids at spike i, scores[i] = their acoustic log-probs.
+    Returns the chosen index into cands[i] for each spike."""
+    N = len(cands)
+    if N == 0:
+        return []
+    K = max(len(c) for c in cands)
+    V = np.full((N, K), -np.inf)
+    bk = np.zeros((N, K), dtype=int)
+    V[0, : len(cands[0])] = scores[0]
+    for i in range(1, N):
+        trans = lam * log_A[np.ix_(cands[i - 1], cands[i])]        # [K_prev, K_i]
+        tot = V[i - 1, : len(cands[i - 1]), None] + trans
+        bk[i, : len(cands[i])] = np.argmax(tot, axis=0)
+        V[i, : len(cands[i])] = tot[bk[i, : len(cands[i])], np.arange(len(cands[i]))] + scores[i]
+    ks = [int(np.argmax(V[-1]))]
+    for i in range(N - 1, 0, -1):
+        ks.append(int(bk[i, ks[-1]]))
+    ks.reverse()
+    return ks
+
+
 @register("decoder", "segmental")
 class SegmentalDecoder:
     def __init__(self, cfg):
@@ -59,6 +83,9 @@ class SegmentalDecoder:
             self.ctc_prior_alpha = float(sect.get("ctc_prior_alpha", 0.0))
             # CTC spikes fire late; per-model calibration (frames, usually -1|0)
             self.ctc_onset_shift = int(sect.get("ctc_onset_shift", -1))
+            # beam: top-K per spike + bigram DP (needs `kashi fit lm`)
+            self.ctc_beam_k = int(sect.get("ctc_beam_k", 5))
+            self.ctc_beam_lm = float(sect.get("ctc_beam_lm", 0.5))
         else:
             ckpt = sect.get("frame_checkpoint", "") or _latest_frame_checkpoint(cfg)
             if not ckpt or not Path(ckpt).is_file():
@@ -76,9 +103,10 @@ class SegmentalDecoder:
         if d_min > 1:  # morae are >= ~50 ms; silence may stay short
             self.log_dur[:, : d_min - 1] = -1e9
             self.log_dur[SILENCE_ID, : d_min - 1] = np.log(1e-4)
-        self.log_A = log_bigram(cfg) if self.lam_lm > 0 else None
-        if self.lam_lm > 0 and self.log_A is None:
-            raise SystemExit("lambda_lm > 0 but no bigram — run `kashi fit lm`")
+        need_lm = self.lam_lm > 0 or getattr(self, "ctc_decode", "") == "beam"
+        self.log_A = log_bigram(cfg) if need_lm else None
+        if need_lm and self.log_A is None:
+            raise SystemExit("bigram required (lambda_lm > 0 or ctc_decode=beam) — run `kashi fit lm`")
 
     # ------------------------------------------------------------------
     def _viterbi_chunk(self, logp: np.ndarray, beta: np.ndarray) -> list[tuple[int, int, int]]:
@@ -173,6 +201,42 @@ class SegmentalDecoder:
             em = np.pad(em, ((0, T - len(em)), (0, 0)), mode="edge")
         return em[:T]
 
+    def _beam_decode(self, logp: np.ndarray, frame_s: float,
+                     max_dur_s: float = 0.6) -> list[Segment]:
+        """Spike lattice + bigram rescoring: keep the spike POSITIONS from the
+        greedy path (the reliable part of peaky CTC), but choose each spike's
+        token by exact DP over the top-K acoustic candidates with a bigram LM —
+        the acoustic top-K acts as a soft 'similar-sounding bucket', and lexical
+        context picks the member (kernel-adjacent substitutions like だ/た)."""
+        path = logp.argmax(-1)
+        spike_f: list[int] = []
+        prev = -1
+        for t, c in enumerate(path):
+            if c != prev and c != SILENCE_ID:
+                spike_f.append(t)
+            prev = int(c)
+        if not spike_f:
+            return []
+        cands: list[list[int]] = []
+        scores: list[np.ndarray] = []
+        for t in spike_f:
+            order = np.argsort(logp[t])[::-1]
+            cs = [int(c) for c in order if c != SILENCE_ID][: self.ctc_beam_k]
+            cands.append(cs)
+            scores.append(logp[t, cs])
+        ks = beam_pick(cands, scores, self.log_A, self.ctc_beam_lm)
+        N = len(spike_f)
+        out: list[Segment] = []
+        for i, t in enumerate(spike_f):
+            c = cands[i][ks[i]]
+            t0 = max(0, t + self.ctc_onset_shift)
+            end_f = (spike_f[i + 1] + self.ctc_onset_shift if i + 1 < N
+                     else t0 + int(max_dur_s / frame_s))
+            end_f = min(max(t0 + 1, end_f), t0 + int(max_dur_s / frame_s))
+            out.append(Segment(t0 * frame_s, end_f * frame_s, TOKENS[c],
+                               confidence=round(float(np.exp(logp[t, c])), 3)))
+        return out
+
     def _spike_decode(self, logp: np.ndarray, frame_s: float,
                       max_dur_s: float = 0.6, onset_shift: int = -1) -> list[Segment]:
         """Greedy CTC decoding of peaky emissions (textless): collapse repeats,
@@ -204,6 +268,8 @@ class SegmentalDecoder:
             logp = self._ctc_log_probs(aux.extras["wave"], aux.extras.get("sr", 16000), T)
             if self.ctc_decode == "spike":
                 return self._spike_decode(logp, frame_s, onset_shift=self.ctc_onset_shift)
+            if self.ctc_decode == "beam":
+                return self._beam_decode(logp, frame_s)
             if self.ctc_prior_alpha > 0:
                 prior = np.exp(logp).mean(0)                          # [C]
                 logp = logp - self.ctc_prior_alpha * np.log(prior + 1e-12)
