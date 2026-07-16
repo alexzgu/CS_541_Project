@@ -99,6 +99,8 @@ ctc_model = "artifacts/ctc_covers/out/ctc_model"
 ctc_decode = "spike"         # spike | beam | viterbi; beam = spike positions + top-K/bigram DP
 ctc_beam_k = 5               # beam: acoustic candidates per spike (the soft "bucket")
 ctc_beam_lm = 0.5            # beam: bigram weight (tuned on gold+train, never on test)
+ctc_insert_theta = 0.0       # >0: recover held continuation vowels/ん from gap posteriors
+ctc_insert_min_gap_s = 0.24  # only gaps long enough for an extra mora
 ctc_prior_alpha = 0.0        # viterbi only: decode-time posterior/prior^alpha de-peaking (MMS-FA style)
 ctc_onset_shift = -1         # spike onset advance in frames (CTC spikes fire ~1 frame late)
 frame_checkpoint = "runs/frame-20260709-235542/best.pt"  # 86-song 768-d model (P5.2 head rejected)

@@ -28,6 +28,57 @@ def _latest_frame_checkpoint(cfg) -> Path | None:
     return runs[-1] if runs else None
 
 
+_CONTINUATION = {"a": ("あ",), "i": ("い",), "u": ("う",), "e": ("い", "え"),
+                 "o": ("う", "お")}   # long-vowel phonotactics: あ段+あ, え段+い/え, お段+う/お
+
+
+def continuation_candidates(prev_token: str) -> list[str]:
+    """Vowels that can legally continue prev_token's nucleus, plus ん."""
+    from ..phonetics import decompose as _dec
+
+    try:
+        _, _, v = _dec(prev_token)
+    except Exception:  # noqa: BLE001 — non-moraic token
+        return ["ん"]
+    return list(_CONTINUATION.get(v, ())) + ["ん"]
+
+
+def propose_continuations(logp: np.ndarray, spike_f: list[int], spike_c: list[int],
+                          frame_s: float, theta: float, min_gap_s: float = 0.24,
+                          core_s: float = 0.10) -> list[tuple[int, int]]:
+    """Deleted-vowel recovery (error histogram: う/い/ん = half of deletions).
+    Peaky CTC argmaxes blank while a vowel is HELD, but the runner-up posterior
+    mass in the inter-spike gap sits on that vowel. For each gap long enough
+    for an extra mora, if a legal continuation vowel's mean posterior over the
+    gap window exceeds theta (and beats the alternatives), propose inserting it
+    at its posterior peak. Returns [(frame, token_id)]; pure function."""
+    from ..tokens import TOKEN_INDEX, TOKENS
+
+    out: list[tuple[int, int]] = []
+    min_gap = int(min_gap_s / frame_s)
+    core = int(core_s / frame_s)
+    for i in range(len(spike_f)):
+        t0 = spike_f[i]
+        t1 = spike_f[i + 1] if i + 1 < len(spike_f) else min(len(logp), t0 + int(0.6 / frame_s))
+        if t1 - t0 < min_gap:
+            continue
+        w0, w1 = t0 + core, t1 - 1
+        if w1 <= w0:
+            continue
+        cands = [TOKEN_INDEX[t] for t in continuation_candidates(TOKENS[spike_c[i]])
+                 if t in TOKEN_INDEX and TOKEN_INDEX[t] != spike_c[i]]
+        if not cands:
+            continue
+        win = np.exp(logp[w0:w1, :])
+        means = win[:, cands].mean(axis=0)
+        best = int(np.argmax(means))
+        if means[best] < theta:
+            continue
+        peak = w0 + int(np.argmax(win[:, cands[best]]))
+        out.append((peak, cands[best]))
+    return out
+
+
 def beam_pick(cands: list[list[int]], scores: list[np.ndarray],
               log_A: np.ndarray, lam: float) -> list[int]:
     """Exact DP over per-spike candidate tokens with a bigram prior.
@@ -86,6 +137,10 @@ class SegmentalDecoder:
             # beam: top-K per spike + bigram DP (needs `kashi fit lm`)
             self.ctc_beam_k = int(sect.get("ctc_beam_k", 5))
             self.ctc_beam_lm = float(sect.get("ctc_beam_lm", 0.5))
+            # deleted-vowel recovery: insert a held continuation vowel/ん when
+            # its mean gap posterior exceeds theta (0 = off; tuned on gold+train)
+            self.ctc_insert_theta = float(sect.get("ctc_insert_theta", 0.0))
+            self.ctc_insert_min_gap_s = float(sect.get("ctc_insert_min_gap_s", 0.24))
         else:
             ckpt = sect.get("frame_checkpoint", "") or _latest_frame_checkpoint(cfg)
             if not ckpt or not Path(ckpt).is_file():
@@ -250,6 +305,12 @@ class SegmentalDecoder:
             if c != prev and c != SILENCE_ID:
                 spikes.append((t, int(c), float(probs[t])))
             prev = c
+        if getattr(self, "ctc_insert_theta", 0.0) > 0 and spikes:
+            ins = propose_continuations(
+                logp, [t for t, _, _ in spikes], [c for _, c, _ in spikes], frame_s,
+                self.ctc_insert_theta, self.ctc_insert_min_gap_s)
+            spikes += [(f, c, float(np.exp(logp[f, c]))) for f, c in ins]
+            spikes.sort()
         out: list[Segment] = []
         for k, (t, c, p) in enumerate(spikes):
             t0 = max(0, t + onset_shift)   # CTC spikes fire ~1 frame late
