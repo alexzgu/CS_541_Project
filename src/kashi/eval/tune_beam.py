@@ -70,9 +70,15 @@ def lev(a: list, b: list) -> int:
 
 
 def main() -> None:
+    import sys
+
     cfg = Config.load()
     decoder = create(cfg, "decoder")
-    log_A = log_bigram(cfg)
+    if len(sys.argv) > 1:  # alternate LM artifact (e.g. text-trained bigram)
+        log_A = np.load(sys.argv[1])["log_bigram"]
+        print(f"using LM {sys.argv[1]}")
+    else:
+        log_A = log_bigram(cfg)
     songs = {}
     for sid in GOLD + TRAIN_SAMPLE:
         songs[sid] = (lattice(cfg, decoder, sid), refs_for(sid))
