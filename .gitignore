@@ -31,3 +31,4 @@ data/unlabeled/
 s12_review/media/
 s12_review/pred/tmp_*/
 s13_pilot/media/
+ctc_out.zip
