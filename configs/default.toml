@@ -35,7 +35,7 @@ train_right = 80
 test_right = 93
 
 [separator.uvr]
-model_filename = "model_mel_band_roformer_ep_3005_sdr_11.ckpt"
+model_filename = "model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt"  # full registry name (same model)
 output_dir = "data/clean/audio/vocals"
 
 [separator.demucs]
@@ -95,7 +95,10 @@ emissions = "ctc"            # PROMOTED 2026-07-15; @24ep: SER 0.339, timed-F1 0
 # PROMOTED 2026-07-15 (S15 covers): deprior +8ep on clean_v2 labels + 2,095
 # cross-cover agreement crops (134 covers, support>=0.5, conf>=0.85, w=0.3):
 # v2-refs SER 0.263 -> 0.252, timed-F1 0.710 -> 0.725
-ctc_model = "artifacts/ctc_covers/out/ctc_model"
+# PROMOTED 2026-07-17 (provisional, S16): covers champion +8ep on corpus-152
+# (T1 admission): test SER 0.2450 (-0.012), timed-F1 0.7145 (-0.0011, noise),
+# bF1@50 unchanged; gold SER exactly tied, gold timed-F1 +0.0054 -> candidate
+ctc_model = "artifacts/ctc_t1/out/ctc_model"
 ctc_decode = "spike"         # spike | beam | viterbi; beam = spike positions + top-K/bigram DP
 ctc_beam_k = 5               # beam: acoustic candidates per spike (the soft "bucket")
 ctc_beam_lm = 0.5            # beam: bigram weight (tuned on gold+train, never on test)

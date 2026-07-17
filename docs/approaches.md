@@ -12,7 +12,7 @@ The task is textless syllable-level transcription of sung Japanese into timed hi
 | TDA (ripser H1) voicing | signal | parked (P6) | never benchmarked vs autocorr; same quantity, heavier dependency |
 | speed-perturb augmentation | signal | live, unattributed | only tried inside rejected `ctc_bundle` (fails gates by ~0.008) |
 | frozen wav2vec2/HuBERT features + heads | signal→symbol | superseded | frame-acc 0.382/110; SER floor 0.722 (frame era) |
-| HuBERT CTC fine-tune + spike decode | signal→symbol | **promoted — champion path** | SER 0.722→0.364 at bootstrap; 0.252 today |
+| HuBERT CTC fine-tune + spike decode | signal→symbol | **promoted — champion path** | SER 0.722→0.364 at bootstrap; 0.245 today |
 | de-peaking: training-time label prior | signal→symbol | rejected as de-peak; kept as regularizer | prior absorbed into lm_head bias; SER 0.332→0.316 |
 | de-peaking: decode-time prior + Viterbi | signal→symbol | rejected | SER 0.78 vs 0.32 spike; non-spike frames carry no token mass |
 | insertion decoding (held-vowel recovery) | signal→symbol | rejected | gap frames pure blank; +0.007 SER of junk at permissive θ |
@@ -23,6 +23,7 @@ The task is textless syllable-level transcription of sung Japanese into timed hi
 | bucket hierarchy (coarse→fine classifier) | phonetic | rejected by measurement | 7% of errors within-bucket at 62-bucket granularity |
 | sokuon merge + chunk split (clean_v2) | phonetic | promoted | SER 0.316→0.263, zero model change |
 | as-sung kana for English/vocables (Tier 2) | phonetic | live (8 songs applied) | +2,657 morae; test refs enriched via song 85 (SER re-baselined 0.2570) |
+| T1 furigana corpus admission (corpus-152) | phonetic | **provisional champion (S16)** | +59 labeled songs (train +66%); SER 0.257→0.245, gold-arbitrated |
 | lyrics bigram beam rescoring | language | rejected | best λ=0.25 gains 0.0015 SER |
 | text bigram (Tatoeba, 4.5M transitions) | language | rejected, direction closed | worse than lyrics bigram at every λ |
 | any substitution-only rescoring | language | closed | lattice oracle 0.2572 vs greedy 0.2894 — ~0.03 cap |
@@ -30,7 +31,7 @@ The task is textless syllable-level transcription of sung Japanese into timed hi
 | sticky HDP-HMM/HSMM unit discovery | language (proto) | rejected for realign; P6 open | snapped gold F1@50 0.528 < v1's 0.552 |
 | pool self-training, round 1 | data-as-model | promoted | SER 0.339→0.332; equal-compute labeled-only control regressed |
 | pool self-training, round 2 | data-as-model | rejected | SER 0.3547 regresses; greedy identical — one round holds the value |
-| cross-cover 3-gram consensus | data-as-model | **promoted — current champion** | SER 0.263→0.252, timed-F1 0.710→0.725, 5/7 songs |
+| cross-cover 3-gram consensus | data-as-model | promoted — prior champion (S16 base) | SER 0.263→0.252, timed-F1 0.710→0.725, 5/7 songs |
 | label repair (S12 + de-styling + clean_v2) | data-as-model | promoted | ~half the total timing gain; SER 0.316→0.263 |
 | karaoke lead-isolation separator (S14) | data-as-model | parked | duet SER 0.300 vs 0.170 — mutes one duet voice |
 
@@ -77,7 +78,7 @@ The task is textless syllable-level transcription of sung Japanese into timed hi
 **CTC fine-tune + spike decoding — the champion path.**
 - What: fine-tune the HuBERT backbone with CTC on (audio, token-sequence) pairs — timestamps never enter the loss — then decode greedily: each non-blank argmax spike emits a token; onset = spike − 1 frame (gold-validated); extent capped at next onset / 0.6 s; silence gap-fill.
 - Code: training `colab/ctc_bootstrap.ipynb` via `colab/run_nb.py`; decoding `SegmentalDecoder._spike_decode` / `_ctc_log_probs` in `src/kashi/components/decoders.py`.
-- Result: SER 0.722→0.364 at the S9 bootstrap (12 ep, greedy 0.198), 0.339 at 24 epochs, 0.252 today after data-level gains.
+- Result: SER 0.722→0.364 at the S9 bootstrap (12 ep, greedy 0.198), 0.339 at 24 epochs, 0.245 today after data-level gains.
 - Buys: sequence supervision is immune to the label timing jitter that twice masqueraded as model error; segmentation learned implicitly. Costs: no per-term score decomposition (interpretability lost vs the segmental decoder); the peaky solution concentrates all information at onsets — the root of every failure below.
 - Related rejection: warm-start from a beatrice phoneme-CTC checkpoint never escapes blank collapse in 12 epochs (conflicting blank conventions; the mirror escapes at epoch 6).
 
@@ -120,6 +121,11 @@ The task is textless syllable-level transcription of sung Japanese into timed hi
 - Result: batch 1 (songs 23 +660, 21 +281) and batch 2 (60/24/11/40/69 + TEST song 85 from source text only, +1,716) applied after user review of `s13_pilot/`; test refs grew 3,291→3,514 tokens, re-baselining the champion at SER 0.2570 / timed-F1 0.7156 — song 85's own SER improved 0.488→0.434 because the refs now credit the English spans the model already sings in kana. Batch 1's +973 train tokens were unattributable inside `ctc_bundle`; ~1.8k tail rows over ~80 songs remain for batch 3.
 - The song-40 point (user): for scat vocables like "ri lu la" an English-vs-Japanese classification is meaningless — the phonetic level is the right abstraction, and the mora inventory covers them regardless of language.
 - Buys: recovers signal a language-level label schema had excluded. Costs: listening and judgment, O(10–20 songs/session).
+
+**T1 furigana corpus admission (corpus-152 retrain, S16).**
+- What: 59 songs (ids 93–151) admitted from the T1 dataset — a kanji+furigana half-density subtitle format. Furigana readings are extracted (漢字(かな)→かな) and run through the standard clean_v2 normalizer — no new policy, the phonetics are read straight off the annotations rather than judged by ear. Corpus now 152 labeled / 145 train / 7 frozen test; train segments +~66% (bigram priors now 80,561 segments / 78,529 transitions). The retrain is the covers champion checkpoint + 8 ep on the full corpus, 3,049 crops (was 1,571 pre-admission), LABEL_PRIOR_ALPHA=0.3, ~90 s/ep on an RTX A3000.
+- Result: greedy no-LM test SER 0.2045→0.1808 by epoch (best ep 7) against the covers champion probed at ~0.20 on the same crops — the new labels are worth ~0.02 greedy SER. End-to-end gate (spike decode): SER 0.2570→0.2450 (−0.012, passes); timed-F1 0.7156→0.7145 (−0.0011, timing noise — misses the letter of the F1 gate); boundary@50 F1 identical 0.7237. Gold arbitration breaks the tie the F1 gate leaves: pooled gold SER is EXACTLY tied (both models make 256 edits on 1,459 gold-window tokens, distributed differently — the candidate is clearly better on the hardest gold song 19, 0.438→0.390, slightly worse on song 0, 0.138→0.171), and gold timed-F1 favors the candidate +0.0054 (0.7414→0.7469). Promoted provisionally under the S11 gold-arbitration precedent — here with a 15× smaller timing delta — as leaderboard `ctc_t1_152`; SIGNOFFS.md S16, pending user ratification.
+- Buys: honest labeled-phonetic scaling — furigana is a ready-made phonetic transcript, so admission is near-free (none of Tier-2's per-song listening) and it delivered ~5× the gain of the last decode-side attempts. This is where the champion crown moved off a data-as-model trick and onto plain labeled-data scale, reinforcing that with the decode program closed (greedy within ~0.03 of the lattice oracle) residual gains live in model/data. Costs: furigana accuracy is inherited from the source dataset, not audited song-by-song; the win clears SER but sits inside timed-F1 noise, hence provisional until ratified.
 
 ## Language level
 
@@ -175,9 +181,9 @@ The task is textless syllable-level transcription of sung Japanese into timed hi
 
 1. **Peaky CTC concentrates all sequence information at onsets.** Three decode-side programs died on the same fact: span-sum semi-Markov (SER 0.994), decode-time prior + Viterbi (0.78), held-vowel insertion (gaps are pure blank). Extents and deletions are model/training problems, not decoder problems.
 2. **Label quality masqueraded as model error twice** — S12 timing (timed-F1 0.314→0.699; song 89 0.017→0.906) and clean_v2 refs (SER 0.316→0.263), both with zero model change — and once nearly caused a test-tuned regression (onset shift −4 was fitting label noise; gold caught it).
-3. **New data sources beat continued optimization.** Labeled-only continuation regressed (0.347), pool round 2 regressed, v2-labels-only tied; fresh voices via covers delivered the current champion (0.252).
+3. **New data sources beat continued optimization.** Labeled-only continuation regressed (0.347), pool round 2 regressed, v2-labels-only tied; fresh voices via covers delivered the 0.252 champion, and admitting 59 more labeled songs (T1 furigana, corpus-152) delivered the current one (0.245, provisional) — both wins were new data, not new decoding.
 4. **Measure the ceiling before building.** The bucket hierarchy (7% within-bucket) and all LM rescoring (oracle 0.2572 vs greedy 0.2894) were closed by cheap measurements, not by failed training runs.
-5. **Every level contributed, at its own moment.** Signal fixed the refs (S12); signal-to-symbol delivered the step change (SER 0.722→0.364); phonetics defined correctness for as-sung material (0.316→0.263) and the error geometry; language priors carried the weak-acoustics frame era (0.797→0.744), then stopped paying against ~0.9-confident spikes; data-as-model owns every gain since (0.339→0.252).
+5. **Every level contributed, at its own moment.** Signal fixed the refs (S12); signal-to-symbol delivered the step change (SER 0.722→0.364); phonetics defined correctness for as-sung material (0.316→0.263), the error geometry, and the latest gain via labeled-corpus scale (0.257→0.245, S16); language priors carried the weak-acoustics frame era (0.797→0.744), then stopped paying against ~0.9-confident spikes; data-as-model owns the gains between (0.339→0.252).
 
 ## Maintenance
 

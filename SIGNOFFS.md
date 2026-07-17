@@ -4,7 +4,9 @@ Reply per ID. Decided items stay for the record.
 
 ## Open
 
-*(none — S13/S14/S15 approved 2026-07-15, see below)*
+| ID | Question | Provisional state |
+|---|---|---|
+| S16 corpus-152 champion | Ratify promotion of `artifacts/ctc_t1/out/ctc_model` (covers champion +8ep on the 152-song corpus after T1 admission)? Letter of the adopt-only-if-better gate: SER passes big (0.2570→**0.2450**), timed-F1 misses by 0.0011 (0.7156→0.7145, noise-level; bF1@50 identical 0.7237). Gold arbitration: SER **exactly tied** (256 errors / 1,459 tokens for both models, differently distributed — candidate much better on the hardest gold song 19: 0.438→0.390), gold timed-F1 **favors the candidate** +0.0054 (0.7414→0.7469) | **Promoted provisionally 2026-07-17** (config points at ctc_t1; one-line revert). Same shape as the approved S11 exception but with a 15× smaller timing delta and positive gold timing. Full numbers: `runs/leaderboard.csv` row `ctc_t1_152`, logs `artifacts/ctc_t1/` |
 
 ## Decided (2026-07-15, second batch)
 
