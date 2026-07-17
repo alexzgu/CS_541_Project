@@ -1,0 +1,542 @@
+# S13 Batch-3 Tier-2 draft report
+
+## Inventory (exclude=True rows, all non-test songs)
+- non-test songs: 145  |  with >=1 excluded row: 137
+- total exclude=True rows: 7951
+- batch-3 target songs (non-test, not in batches 1-2, have draftable blocks): 126
+- source of full-line context: 59 T1-admitted (ids 93-151), 66 original raw, 1 no source file
+
+### Top-20 songs by excluded-row count
+| id | excl rows | title |
+|---|---|---|
+| 106 | 556 | GETCHA! ⧸ calliope × suisei(cover) |
+| 113 | 416 | 【ORIGINAL MV】BITE! カム! BITE! ｜｜ Hakos Baelz  |
+| 95 | 412 | 【MV】おーしゃんうぇーぶ・Party☆らぃ【#UMISEA 好評配信中！】 |
+| 137 | 325 | 【original anime MV】III【hololive⧸宝鐘マリン＆こぼ・かなえ |
+| 118 | 255 | 魔眼ウインク ⧸ 鷹嶺ルイ(official) |
+| 134 | 242 | 【MV】饗宴ソリダリティ～SHAKE★NABE～ ⧸ 秘密結社holoX【#SSholo |
+| 96 | 201 | 【MV】DODEKAMBITIOUS【#ドデカルテット】 |
+| 115 | 190 | 【MV】迷宮なラビリンス ⧸ 秘密結社holoX【#SSholoX】 |
+| 101 | 172 | ビビデバ ⧸ 星街すいせい(official) |
+| 105 | 163 | 【Original animation MV】Tokyo Wabi-Sabi Lulla |
+| 132 | 159 | ひみつのおしごと ⧸ 鷹嶺ルイ(official) |
+| 120 | 150 | 【 MV 】We are GAMERS !!!! 【 白上フブキ⧸大神ミオ⧸猫又おかゆ⧸ |
+| 129 | 146 | 【Animation MV】 What an amazing swing ⧸角巻わため【 |
+| 140 | 145 | 【#hololivesummer2023】2ndテーマ『アバンチュール♡ホリック』MV |
+| 117 | 128 | ホロライブ言えるかな？hololive SUPER EXPO 2024 ver. |
+| 111 | 125 | 【original anime MV】美少女無罪♡パイレーツ【hololive⧸宝鐘マリ |
+| 12 | 121 | 愛昧ショコラーテ／角巻わため【original】 |
+| 149 | 121 | 【ORIGINAL MV】HIDE & SEEK 〜なかよくケンカしな！〜 ｜｜ Hak |
+| 122 | 116 | 【MV】motto☆いちごオレ／さくらみこ（hololive × HoneyWorks） |
+| 130 | 116 | 【 MV 】REALITY FANTASY ⧸ HOLOLIVE FANTASY (兎田 |
+
+## Drafting result
+- blocks drafted: **2422**
+- blocks skipped: **96**
+    - metadata/credits: 78
+    - no mappable content: 15
+    - symbol/marker only: 3
+- LOW-CONF blocks (best-guess, need ear-review): **383**
+
+### Skip rationale
+- **metadata/credits**: credit crawls (作詞/作曲/編曲/歌唱/vocals:/illust:/mix/mv…) and title／artist lines — not sung lyrics.
+- **symbol/marker only**: pure punctuation / ♪ / ＆ / lone <gap> runs.
+- **no mappable content**: lone sokuon っ (v2 policy: no token) and 〜/ー held-vowel rows with no preceding sung mora to extend.
+
+## Validation
+- generator validation: 0 inventory-invalid readings across 2422 drafts.
+- independent re-check of the emitted file vs make_drafts machinery: 2422 keys re-parsed; 0 keys NOT matching a real block; 0 inventory-invalid readings.
+- **all drafted morae are in the 110-token inventory: YES**
+
+## LOW-CONF reason categories
+- `en-fallback` (377 blocks): English syllable not in the curated loan map (rule fallback)
+- `digit-count` (3 blocks): bare digits guessed as English number words
+- `greek` (3 blocks): Greek text romanised phonetically (song 87)
+- `kanji-noctx` (2 blocks): kanji read without line context (orphan pykakasi, unreliable)
+
+### LOW-CONF blocks per song
+  0:3  1:6  2:2  4:3  8:1  18:1  19:10  20:1  30:1  42:2  46:8  50:4  51:3  52:1  53:16  54:1  57:5  59:10  62:3  63:2  66:4  67:3  84:4  86:2  87:8  88:4  94:12  95:23  96:9  98:6  101:7  102:14  105:5  106:15  107:4  108:3  109:3  112:3  113:19  115:7  116:1  117:11  118:16  119:2  120:8  122:12  123:2  125:1  126:1  127:2  129:22  130:4  132:6  134:9  136:3  137:17  140:14  143:2  148:2  149:6  150:3  151:1
+
+### Full LOW-CONF list (383 blocks) — (id, t0) reading  <- source
+- (0, 84.73) [en-fallback] ちゅうーせみー  <- choo|se|me
+- (0, 90.71) [en-fallback] ちゅうーせみー  <- choo|se|me
+- (0, 102.72) [en-fallback] ちゅうーせみーちゅうーせみー  <- choo|se|me|choo|se|me
+- (1, 23.41) [en-fallback] だずずずずずずず  <- だ|z|z|z|z|z|z|z
+- (1, 65.18) [en-fallback] ずずずずずずず  <- z|z|z|z|z|z|z
+- (1, 76.89) [en-fallback] わおわおていくあるっくあろうんど  <- wow|wow|take|a|look|a|round
+- (1, 113.33) [en-fallback] ていくあるっくあろうんどていくあるっくあろうんど  <- take|a|look|a|round|take|a|look|a|round
+- (1, 181.83) [en-fallback] ずずずずずずず  <- z|z|z|z|z|z|z
+- (1, 188.64) [en-fallback] ずずずずずずず  <- z|z|z|z|z|z|z
+- (2, 34.53) [kanji-noctx] ちょう  <- 超
+- (2, 67.13) [en-fallback] おーいえあー  <- oh|ye|ah
+- (4, 3.82) [en-fallback] おーく  <- o|k
+- (4, 52.5) [en-fallback] おーく  <- o|k
+- (4, 54.91) [digit-count] わんつーすりー  <- 1|2|3
+- (8, 47.33) [en-fallback] すちゅあすめるる  <- such|a|smell
+- (18, 67.15) [en-fallback] ぷれいいんぐざろーるおぶまいせるふとるーめずおどわっとあむあいあぷすいちょあいむ…  <- play|ing|the|role|of|my|self|true|meth|od|what…
+- (19, 35.59) [en-fallback] く  <- q
+- (19, 45.09) [en-fallback] だずいんぐ  <- daz|ing
+- (19, 60.94) [en-fallback] ぶぷむ  <- b|p|m
+- (19, 66.85) [en-fallback] あぶく  <- a|b|c
+- (19, 87.97) [en-fallback] くえど  <- q|e|d
+- (19, 98.98) [en-fallback] あすあぷ  <- a|s|a|p
+- (19, 111.19) [en-fallback] あぶ  <- a|b
+- (19, 162.35) [en-fallback] ぶぷむ  <- b|p|m
+- (19, 168.25) [en-fallback] くすいず  <- x|y|z
+- (19, 202.92) [en-fallback] くえど  <- q|e|d
+- (20, 5.82) [en-fallback] しゅーといんぐすたーあわーるどおぶあうるふぁくしょんあうえいつ  <- shoot|ing|star|a|world|of|our|fic|tion|a|waits
+- (30, 76.39) [en-fallback] ようれきどぢんぐみー  <- youre|kid|ding|me
+- (42, 46.7) [en-fallback] えいむ  <- aim
+- (42, 188.0) [en-fallback] ぺおぷるえぷっとゆあはんどすあっぷ  <- peo|ple|put|your|hands|up
+- (46, 7.29) [en-fallback] ははははばぶい  <- ha|ha|ha|ha|bab|y
+- (46, 23.21) [en-fallback] おーぶえらぶりこぼちゃん  <- o|v|e|love|ly|ko|bo|chan
+- (46, 29.71) [en-fallback] おーぶえらぶりわたみー  <- o|v|e|love|ly|wa|ta|me
+- (46, 42.79) [en-fallback] おーぶえらぶりきあら  <- o|v|e|love|ly|ki|a|ra
+- (46, 49.3) [en-fallback] おーぶえらぶりほろらいぶ  <- o|v|e|love|ly|ho|lo|live
+- (46, 82.17) [en-fallback] むむむむふふあはああんいえーほろらいぶひあういーごー  <- mmmm|fu|fu|a|ha|a|a|n|yeah|ho|lo|live|here|we|…
+- (46, 91.78) [en-fallback] おーぶえらぶりほろらいぶ  <- o|v|e|love|ly|ho|lo|live
+- (46, 98.31) [en-fallback] おーぶえらぶりほろらいぶ  <- o|v|e|love|ly|ho|lo|live
+- (50, 1.65) [en-fallback] うえるかむ  <- wel|come
+- (50, 10.89) [en-fallback] とぶしょー  <- t|v|show
+- (50, 29.41) [en-fallback] あれゆーりーどい  <- are|you|read|y
+- (50, 43.86) [en-fallback] おーく  <- o|k
+- (51, 56.91) [en-fallback] ぱすてるちーたいむ  <- pa|s|te|l|tea|time
+- (51, 128.18) [en-fallback] ぱすてるちーたいむ  <- pa|s|te|l|tea|time
+- (51, 174.32) [en-fallback] ぱすてるちーとあいみー  <- pa|s|te|l|tea|t|i|me
+- (52, 213.33) [en-fallback] ごおどないとごおどたいむ  <- good|night|good|time
+- (53, 3.29) [en-fallback] くらっぷゆあはんどす  <- clap|your|hands
+- (53, 6.59) [en-fallback] くらっぷゆあはんどす  <- clap|your|hands
+- (53, 15.7) [en-fallback] いぶりぼでぃいくらっぷゆあはんどす  <- eve|ry|bod|y|clap|your|hands
+- (53, 19.84) [en-fallback] くらっぷゆあはんどす  <- clap|your|hands
+- (53, 33.02) [digit-count] ふぉーすりーつーわん  <- 4|3|2|1
+- (53, 42.89) [en-fallback] ほろらいぶずすたーず  <- ho|lo|live|5th|stars
+- (53, 45.8) [en-fallback] さあぢぶいんぐ  <- さぁ|div|ing
+- (53, 47.53) [en-fallback] ちむいんぐ  <- tim|ing
+- (53, 49.6) [en-fallback] すいむみんぐすいむみんぐ  <- swim|ming|swim|ming
+- (53, 60.78) [en-fallback] しゅあくいんぐ  <- shak|ing
+- (53, 67.38) [en-fallback] すてっぷぴんぐ  <- step|ping
+- (53, 74.42) [en-fallback] すとり  <- sto|ry
+- (53, 84.37) [en-fallback] くらっぷゆあはんどす  <- clap|your|hands
+- (53, 87.67) [en-fallback] くらっぷゆあはんどす  <- clap|your|hands
+- (53, 96.81) [en-fallback] いぶりぼでぃいくらっぷゆあはんどす  <- eve|ry|bod|y|clap|your|hands
+- (53, 100.92) [en-fallback] くらっぷゆあはんどす  <- clap|your|hands
+- (54, 2.02) [en-fallback] へるろへるろいぶりわん  <- hel|lo|hel|lo|eve|ry|one
+- (57, 29.87) [en-fallback] ぼるいんぐ  <- bor|ing
+- (57, 79.36) [en-fallback] のーどうぶと  <- no|doubt
+- (57, 89.67) [en-fallback] くすくすくすくす  <- xxxx
+- (57, 92.14) [en-fallback] あいあいと  <- ai|ight
+- (57, 98.11) [en-fallback] はんどすあっぷあんどわあとすあっぷ  <- hands|up|and|whats|up
+- (59, 44.06) [en-fallback] うぐり  <- ug|ly
+- (59, 92.21) [en-fallback] らぷたっぷたっぷたっぷ  <- rap|tap|tap|tap
+- (59, 97.25) [en-fallback] るうぶ  <- luv
+- (59, 102.19) [en-fallback] どらぐおんどらぐおん  <- drag|on|drag|on
+- (59, 126.58) [en-fallback] うんくんあうん  <- un|known
+- (59, 174.69) [en-fallback] らぷたっぷたっぷたっぷ  <- rap|tap|tap|tap
+- (59, 184.7) [en-fallback] ふるあぷあっぷふるあぷあっぷ  <- flap|up|flap|up
+- (59, 224.71) [en-fallback] らぷたっぷたっぷたっぷ  <- rap|tap|tap|tap
+- (59, 229.71) [en-fallback] るうぶ  <- luv
+- (59, 234.72) [en-fallback] どらぐおんどらぐおん  <- drag|on|drag|on
+- (62, 8.79) [en-fallback,kanji-noctx] まのあやごじょうかいおのぼりだいすけたかんあしゅいきあーあへあーとちゅおーるえん…  <- takanashikiaraheartchallengerlyricsayashinno真野…
+- (62, 210.79) [en-fallback] あいにーどとてるるゆーざっとあいらぶゆーずろうぐはあんどずろうぐは  <- i|need|to|tell|you|that|i|love|you|through|and…
+- (62, 217.87) [en-fallback] ずあーえすのーわんえるせいんじすわーるどざっとあいうあうるどとれいどふぉーゆー  <- theres|no|one|else|in|this|world|that|i|would|…
+- (63, 1.25) [en-fallback] ぶいおるえと  <- violet
+- (63, 66.25) [en-fallback] ふぇするるえみえんんえふえいせいれるいるうちあえいふぁんすく  <- fe|cel|lemienne|phei|seire|lilutia|ei|finceq
+- (66, 3.39) [en-fallback] だーくんえすすういるふぁであうえいらいとういるがいどゆあうえいほーぷはずですすん…  <- dark|ness|will|fade|a|way|light|will|guide|you…
+- (66, 16.53) [en-fallback] あーいすくあえすらおふですぱあー  <- iryscaesuraofdespair
+- (66, 60.64) [en-fallback] ですぱあー  <- des|pair
+- (66, 71.02) [en-fallback] だーくんえすすういるふぁであうえいほーぷういるりーどゆあうえいあいむひあとちゃん…  <- dark|ness|will|fade|a|way|hope|will|lead|your|…
+- (67, 33.55) [en-fallback] きすす  <- ki|ss
+- (67, 126.01) [en-fallback] るおんえりがーる  <- lone|ly|girl
+- (67, 143.63) [en-fallback] ねえめいびーめるち  <- ねぇ|may|be|mel|ty
+- (84, 10.69) [en-fallback] ほるおるいぶえいどるぷろじえくとくあんどいごろうんど  <- hololiveidolprojectcandygoround
+- (84, 46.53) [en-fallback] くらっぷくらっぷくらっぷいぶりぼでぃいくらっぷはんどすあっぷ  <- clap|clap|clap|eve|ry|bod|y|clap|hands|up
+- (84, 54.57) [en-fallback] むーんらいとまーりごーろうんどきゃんでぃごーろうんどりーどいごーらいぶ  <- moon|light|mer|ry|go|round|can|dy|go|round|rea…
+- (84, 68.92) [en-fallback] すたーらいとまーりごーろうんどきゃんでぃごーろうんどぱーおーるえるわーるど  <- star|light|mer|ry|go|round|can|dy|go|round|par…
+- (86, 29.95) [en-fallback] ふおーおーおー  <- f|o|o|o
+- (86, 86.34) [en-fallback] すとおーるい  <- s|t|o|r|y
+- (87, 5.86) [greek] えくろごいあーろすえくぶえいねいろごす  <- εκ|λό|γου|άλ|λος|εκ|βαί|νει|λό|γος
+- (87, 17.27) [en-fallback] がうるぐられふるえくと  <- gawrgurareflect
+- (87, 94.08) [en-fallback] るっくあっとじすそーくおーるえどじえむおぶざしーおどどあんどすくらうんいどんとゆ…  <- look|at|this|so|called|gem|of|the|sea|odd|amp|…
+- (87, 116.47) [en-fallback] へは  <- heh
+- (87, 179.5) [en-fallback] そーゆーしんくずあとすおーるはっ  <- so|you|think|thats|all|huh
+- (87, 183.04) [en-fallback] じゃすとごんなりーぶらいくいっつんおずいんぐ  <- just|gon|na|leave|like|its|noth|ing
+- (87, 186.71) [en-fallback] ごーいんぐういずあうとみーあいどんとのーわっとようれしんくいんぐりたーんとざしー…  <- go|ing|with|out|me|i|dont|know|what|youre|thin…
+- (87, 236.16) [greek] おいでんかこんあむいぐえすかるおい  <- ου|δέν|κα|κόν|αμ|ιγ|ές|καλ|ού
+- (88, 17.7) [en-fallback] ぶおくあるしゅあこすばえるず  <- vocalshakosbaelz
+- (88, 257.57) [en-fallback] らららるあるあるあららら  <- la|lala|lalala|lala|la
+- (88, 263.71) [en-fallback] らららるあるあるあららららららららららららららららるあるあるあららら  <- la|lala|lalala|lala|la|lalalala|la|lala|la|lal…
+- (88, 276.59) [en-fallback] らららるあるあるあららららららららららららららららるあるあるあららららららららら…  <- la|lala|lalala|lala|la|lalalala|la|lala|la|lal…
+- (94, 6.22) [en-fallback] ごおど  <- good！
+- (94, 83.67) [en-fallback] ばどでい  <- 「bad|day」
+- (94, 88.91) [en-fallback] べあうちふぁるらいふや  <- 「beau|ti|ful|life」|「や、
+- (94, 103.92) [en-fallback] ごおど  <- good！
+- (94, 106.66) [en-fallback] ぐれあと  <- great！
+- (94, 109.46) [en-fallback] ごおど  <- good！
+- (94, 115.03) [en-fallback] ごおど  <- good！
+- (94, 117.87) [en-fallback] ぐれあと  <- great！
+- (94, 120.64) [en-fallback] ごおど  <- good！
+- (94, 122.41) [en-fallback] えくすするるえんと  <- ex|cel|lent！
+- (94, 161.08) [en-fallback] ごおど  <- good！
+- (94, 163.88) [en-fallback] ぐれあと  <- great！
+- (95, 14.06) [en-fallback] びんぐーぢぶえ  <- びんぐー！|（dive！）
+- (95, 34.55) [en-fallback] るおーばーざびーあと  <- る！|o|ver|the|be|a|t
+- (95, 47.06) [en-fallback] ぷ  <- （p
+- (95, 47.43) [en-fallback] ぷ  <- p
+- (95, 47.56) [en-fallback] ぷはいぷ  <- p|海(ハイ)！）|（p
+- (95, 48.5) [en-fallback] ぷ  <- p
+- (95, 48.63) [en-fallback] ぷ  <- p
+- (95, 49.17) [en-fallback] ぷ  <- （p
+- (95, 49.53) [en-fallback] ぷみぷたはい  <- p|み・|p|た・|海(ハイ)！）
+- (95, 50.2) [en-fallback] ぷなーぷぷはいうえるうおーかむとざどりーむうおーすてーじ  <- （p|ナー！|p|p|海(ハイ)！）|〜wel|（魚(うお)〜|come|to|the|dr…
+- (95, 67.42) [en-fallback] うーぶうえーぶみーゆーろぶえみー  <- うー！|ブ・|うぇーぶ！）|ミー？|you|lo|ve|me？
+- (95, 88.57) [en-fallback] くーしいーしいーしいーしいーしいーしいーすすすすすすすすすすす  <- くー！）|（しぃー！|しぃー！|しぃー！|しぃー！|しぃー！|しぃー！|s|s|s|s|s|…
+- (95, 106.29) [en-fallback] てぶ  <- て、|b
+- (95, 111.73) [en-fallback] ぷ  <- （p
+- (95, 112.16) [en-fallback] ぷ  <- p
+- (95, 112.3) [en-fallback] ぷはいぷ  <- p|海(ハイ)！）|（p
+- (95, 113.2) [en-fallback] ぷ  <- p
+- (95, 113.33) [en-fallback] ぷ  <- p
+- (95, 113.86) [en-fallback] ぷ  <- （p
+- (95, 114.26) [en-fallback] ぷぷ  <- p|p
+- (95, 114.63) [en-fallback] はいぷわーぷぷはいこうおー  <- 海(ハイ)！）|（p|ワ〜|p|p|海(ハイ)！）|こ、|（魚(うお)〜
+- (95, 148.26) [en-fallback] ぼーどいなうえいふうーーーーとおくうーうーうーおる  <- ボード！|“イ|ナ”|(way|（フゥ〜〜〜〜！！|too|coooooool!)
+- (95, 156.81) [en-fallback] ふのーわんいずあくつおーりぷれいいんぐいんすとるめんとすういああんえいるばんどゆ…  <- ふ...|no|one|is|ac|tu|al|ly|play|ing|in|stru|me…
+- (96, 13.3) [en-fallback] よびっぐびっぐびっぐびっぐげるげるびっぐびっぐげすとげすとびっぐびっぐびっぐびっ…  <- よ！|(big!|big!|big|big|ger!|ger!|big|big|gest!)…
+- (96, 60.98) [en-fallback] ぼいすびーどでかむびちあうすいえーびっぐびっぐげるびっぐげすと  <- bo|y|s|be|do|de|ka|m|bi|tious|(いぇー！)|big!|big|…
+- (96, 65.75) [en-fallback] おーくびっぐびっぐげるびっぐげすと  <- o|k|big!|big|ger!|big|gest!
+- (96, 78.5) [en-fallback] よびっぐびっぐびっぐびっぐげるげるびっぐびっぐげすとげすとびっぐびっぐびっぐびっ…  <- よ！|(big!|big!|big|big|ger!|ger!|big|big|gest!)…
+- (96, 115.13) [en-fallback] ぎるるすびーどでかむびちあうすいえーびっぐびっぐげるびっぐげすと  <- gi|rl|s|be|do|de|ka|m|bi|tious|(いぇー！)|big!|big…
+- (96, 120.54) [en-fallback] びっぐびっぐげるびっぐげすと  <- big!|big|ger!|big|gest!
+- (96, 165.62) [en-fallback] いぶりぼでぃどでかむびちあうすいえーびっぐびっぐげるびっぐげすと  <- eve|ry|bo|dy|do|de|ka|m|bi|tious|(いぇー！)|big!|b…
+- (96, 170.35) [en-fallback] おーくびっぐびっぐげるびっぐげすと  <- o|k|big!|big|ger!|big|gest!
+- (96, 190.51) [en-fallback] よびっぐびっぐびっぐびっぐげるげるびっぐびっぐげすとげすとびっぐびっぐびっぐびっ…  <- よ！|(big!|big!|big|big|ger!|ger!|big|big|gest!)…
+- (98, 41.16) [en-fallback] ますとあーぴえす  <- mast|er|piece
+- (98, 82.93) [en-fallback] おーかい  <- (o|kay!!)
+- (98, 123.47) [en-fallback] あんおずあーらいふ  <- an|oth|er|life
+- (98, 157.17) [en-fallback] びーるいえぶえいんゆあせるふ  <- be|lieve|in|your|self
+- (98, 159.98) [en-fallback] かい  <- kay!!)
+- (98, 185.37) [en-fallback] おーかい  <- (o|kay!!)
+- (101, 22.94) [en-fallback] ざぱーちあいんとすたーとえどへい  <- (the|par|ty|ain\'|t|start|ed)|hey
+- (101, 47.93) [en-fallback] どりぶいん  <- driv|in
+- (101, 55.94) [en-fallback] だんくいん  <- danc|in
+- (101, 82.43) [en-fallback] だだだだんす  <- da|da|da|da|n|ce!
+- (101, 97.18) [en-fallback] じゃんぷいんじゃんぷいんあうとあうとちゅいとちちゅいとちばんばんちゅいとちばんば…  <- jump|in|jump|in|out|out|chit|ty|chit|ty|bang|b…
+- (101, 131.91) [en-fallback] どりぶいん  <- driv|in
+- (101, 139.92) [en-fallback] だんくいん  <- danc|in
+- (102, 38.05) [en-fallback] すとぷざふらっしゅばっく  <- stop|the|flash|back
+- (102, 45.16) [en-fallback] いんそうず  <- (in|south
+- (102, 46.0) [en-fallback] あーん  <- ern
+- (102, 46.53) [en-fallback] ういんどす  <- winds)
+- (102, 49.53) [en-fallback] いとすまぐ  <- (itʼs|mag
+- (102, 50.37) [en-fallback] いく  <- ic
+- (102, 50.9) [en-fallback] らいす  <- rays)
+- (102, 63.45) [en-fallback] めいびーらぶすとらいまいはーと  <- may|be|love|stray|my|heart
+- (102, 76.79) [en-fallback] どんとごーあうえい  <- donʼt|go|a|way
+- (102, 116.6) [en-fallback] すたいざふらっしゅらいと  <- stay|the|flash|light
+- (102, 141.96) [en-fallback] めいびーらぶすとらいまいはーと  <- may|be|love|stray|my|heart
+- (102, 176.86) [en-fallback] たーんあろうんど  <- turn|a|round
+- (102, 203.09) [en-fallback] めいびーらぶすとらいまいはーと  <- may|be|love|stray|my|heart
+- (102, 237.99) [en-fallback] たーんあろうんど  <- turn|a|round
+- (105, 0.92) [en-fallback] とっくとっくとっくときょわびさびるうるるあばい  <- tok|tok|tok|to|kyo|wa|bi-|sa|bi|lull|a|by
+- (105, 29.95) [en-fallback] ちゃいるどほおどめむおーりえすはは  <- child|hood|mem|o|ries|ha...|ha...
+- (105, 46.9) [en-fallback] みどないと  <- mid|night
+- (105, 66.12) [en-fallback] とっくとっくとっくときょわびさびるうるるあばい  <- tok|tok|tok|to|kyo|wa|bi-|sa|bi|lull|a|by
+- (105, 132.32) [en-fallback] ときょわびさびるうるるあばい  <- to|kyo|wa|bi-|sa|bi|lull|a|by
+- (106, 12.7) [en-fallback] あんてんなうあいのーおーるあぼうとゆーべいぶあいどんとわんとざはんどばぐすざもん…  <- 暗|転|now|i|know|all|a|bout|you|babe|i|don\'t|wa…
+- (106, 23.61) [en-fallback] あんいうえいふっき  <- an|y|way|吹っ|切
+- (106, 31.08) [en-fallback] あいむもぶいんぐおんあんどあいむねばあーえばあーたーんいんぐばっくあろうんどあろ…  <- i\'m|mov|ing|on|and|i\'m|nev|er|ev|er|turn|ing…
+- (106, 49.27) [en-fallback] なうあいきゃんふぃんあるりおーぺんまいあいず  <- now|i|can|fi|nal|ly|o|pen|my|eyes
+- (106, 78.36) [en-fallback] げっとちゃあうとまいらいふぼーいあいるげっとちゃげっとちゃげっとちゃうーぷすでれ…  <- (get|cha|out|my|life|boy|i\'ll|get|cha|get|cha…
+- (106, 94.28) [en-fallback] らいくなななななあいどんとわんとざはんどばぐすざもんえいおあざでぃあもんどりんぐ…  <- like|na|na|na|na|na|i|don\'t|want|the|hand|bag…
+- (106, 111.09) [en-fallback] あいむもぶいんぐおんあんどあいむねばあーえばあーたーんいんぐばっくあろうんどあろ…  <- i\'m|mov|ing|on|and|i\'m|nev|er|ev|er|turn|ing…
+- (106, 129.28) [en-fallback] なうあいきゃんふぃんあるりおーぺんまいあいずいま  <- now|i|can|fi|nal|ly|o|pen|my|eyes|今
+- (106, 141.29) [en-fallback] おーるざるいえすあんどいぶりみすていくおーるざごおどぶいえすあんどざはーとぶれい…  <- all|the|lies|and|eve|ry|mis|take|all|the|good|…
+- (106, 162.41) [en-fallback] ゆーりーどい  <- you|read|y?
+- (106, 171.46) [en-fallback] ぎぞあいどぼうらく  <- 偽|造|i|d|暴|落
+- (106, 173.16) [en-fallback] かちふぉーおんくんいーすえんかつ  <- 価|値|four|on|knees|円|滑
+- (106, 174.93) [en-fallback] せいかつりいぐんすなが  <- 生|活|re|igns|流
+- (106, 182.23) [en-fallback] のーぷれすすれのっととぷれすすやあいるげっとちゃげっとちゃげっとちゃ  <- no|pres|sure|not|to|press|ya|i’ll|get|cha|get|…
+- (106, 189.24) [en-fallback] なうあいきゃんふぃんあるりおーぺんまいあいず  <- now|i|can|fi|nal|ly|o|pen|my|eyes
+- (107, 129.55) [en-fallback] ゆーふおーゆーふおー  <- u|f|o|u|f|o
+- (107, 131.75) [en-fallback] ゆーふおー  <- u|f|o
+- (107, 139.16) [en-fallback] ゆーふおーゆーふおー  <- u|f|o|u|f|o
+- (107, 141.36) [en-fallback] ゆーふおー  <- u|f|o
+- (108, 50.47) [en-fallback] すてぷ  <- s|tep
+- (108, 116.37) [en-fallback] すてぷ  <- s|tep
+- (108, 193.14) [en-fallback] すてぷ  <- s|tep
+- (109, 57.91) [en-fallback] ぶらんどにゅーわーるど  <- brand|new|world
+- (109, 131.75) [en-fallback] だんくいんぐたいむ  <- danc|ing|time
+- (109, 176.06) [en-fallback] あれゆーりーどい  <- are|you|read|y?
+- (112, 10.66) [en-fallback] いぶりえもしょんすはずあふぃん  <- eve|ry|e|mo|tions|has|a|fin
+- (112, 17.9) [en-fallback] いっとたくすみーとべあうちふぁるぷるあすす  <- it|takes|me|to|beau|ti|ful|places
+- (112, 198.31) [en-fallback] いぶりえもしょんすはずあふぃんいっとたくすみーとべあうちふぁるぷるあすす  <- eve|ry|e|mo|tions|has|a|fin|it|takes|me|to|bea…
+- (113, 27.68) [en-fallback] ばうわおわおかむきーぷあうるせくれっとうおんとゆー  <- （bow|wow|wow）|カム(come)withme!|keep|our|se|cret…
+- (113, 34.05) [en-fallback] きーぷあうるせくれっとうおんとゆー  <- keep|our|se|cret|won’t|you?
+- (113, 37.69) [en-fallback] きーぷあうるせくれっとうおんとゆー  <- keep|our|se|cret|won’t|you?
+- (113, 40.76) [en-fallback] ののーわんえるせきゃんえばあーのー  <- の？|no|one|else|can|ev|er|know!
+- (113, 48.6) [en-fallback] らいくあきゃっとちえいすいんぐあらとうおっちあうとなうういるかむふぉーゆー  <- like|a|cat|chas|ing|a|rat.|watch|out|now|we’ll…
+- (113, 63.15) [en-fallback] らいくあげいむざっとねばあーえんどすらいくあふぁるむざっとねばあーえんどす  <- like|a|game|that|nev|er|ends.|like|a|film|that…
+- (113, 70.19) [en-fallback] ういるちえいすいっととざばーいえんどうんちるざごーるどいずいんあうるはんどすばい…  <- we’ll|chase|it|to|the|ver|y|end|un|til|the|gol…
+- (113, 77.19) [en-fallback] ちゅちゅすたーとざちえいすはうゆーごんなきーぷざっとぽくあーふぁす  <- ♡|chu|chu♡|start|the|chase|how|you|gon|na|keep…
+- (113, 83.4) [en-fallback] ういあせくれっとあげんとすちゅちゅいんざれいすゆーねばあーのーうえんうえれごんな…  <- we’re|se|cret|a|gents！|chu|chu♡|in|the|race|yo…
+- (113, 104.29) [en-fallback] ちゅちゅかむきーぷあうるせくれっとうおんとゆー  <- chu|chu）|カム(come)withme!|keep|our|se|cret|won’…
+- (113, 110.43) [en-fallback] きーぷあうるせくれっとうおんとゆー  <- keep|our|se|cret|won’t|you?
+- (113, 114.06) [en-fallback] きーぷあうるせくれっとうおんとゆー  <- keep|our|se|cret|won’t|you?
+- (113, 117.7) [en-fallback] のーわんえるせういるえばあーのー  <- no|one|else|will|ev|er|know!
+- (113, 124.04) [en-fallback] るらいくあきゃっとちえいすいんぐあらとうおっちあうとなうういるかむふぉーゆー  <- る？|like|a|cat|chas|ing|a|rat.|watch|out|now|we…
+- (113, 139.52) [en-fallback] らいくあげいむざっとねばあーえんどすらいくあふぁるむざっとねばあーえんどす  <- like|a|game|that|nev|er|ends.|like|a|film|that…
+- (113, 146.56) [en-fallback] ういるちえいすいっととざばーいえんどうんちるざごーるどいずいんあうるはんどす  <- we’ll|chase|it|to|the|ver|y|end|un|til|the|gol…
+- (113, 168.59) [en-fallback] らいくあらとちえいすいんぐあきゃっとうおっちあうとなうぜいかむふぉーゆー  <- like|a|rat|chas|ing|a|cat.|watch|out|now|they|…
+- (113, 182.5) [en-fallback] ちゅちゅちゅちゅちゅるうちゅちゅちゅちゅちゅちゅるうちゅ  <- chu|chu|chu|chu|chu|lu|chu|chu|chu|chu|chu|chu…
+- (113, 188.34) [en-fallback] ばうわおわおわおわおあうわおばうわおわおわおわおあうわお  <- bow|wow|wow|wow|wow|ow|wow|bow|wow|wow|wow|wow…
+- (115, 61.71) [en-fallback] くす  <- x
+- (115, 79.16) [en-fallback] ごえららぱたぱららぱたららぱたぱららぱたくすららぱたぱららぱたららぱたぱらぷたぱ…  <- 声(ごえ)！|la|la|pa|ta|pa|la|la|pa|ta|la|la|pa|ta|…
+- (115, 121.37) [en-fallback] ろおむ  <- roo|m
+- (115, 127.24) [en-fallback] わんしゅおとわんきる  <- one|shot|one|kill
+- (115, 135.59) [en-fallback] いくす  <- い？|x
+- (115, 170.32) [en-fallback] なららぱたぱららぱたららぱたぱららぱたくすららぱたぱららぱたららぱたぱらぷたぱら…  <- な！|la|la|pa|ta|pa|la|la|pa|ta|la|la|pa|ta|pa|l…
+- (115, 206.59) [en-fallback] すばいほろくす  <- ス」|by|ho|lo|x
+- (116, 94.51) [en-fallback] おーく  <- o|k?
+- (117, 11.93) [en-fallback] あずきはい  <- a|z|ki|（は|い！）
+- (117, 29.78) [en-fallback] きゃんゆーどざほろりぶえ  <- （can|you|do|the|ho|lo|li|ve?）
+- (117, 75.19) [en-fallback] ほろくす  <- ho|lo|x！）
+- (117, 83.37) [en-fallback] あいど  <- i|d！）
+- (117, 94.64) [en-fallback] びほろらいぶをはつおんできますかさかはかむみーらふぁるかんほろらいぶれっつしんぐ…  <- （bi|（「ホロライブ」を発音できますか？）|sa|kah|ka|mu|me|la|fal|…
+- (117, 122.61) [en-fallback] えんぐるいしゅ  <- eng|lish！）
+- (117, 128.68) [en-fallback] へいかむおんぷろみせはいるいすいっつあいるいす  <- （hey|come|on|pro|mise!）|hi|rys!|it’s|i|rys!
+- (117, 135.19) [en-fallback] かむひああどぶえんと  <- （come|here|ad|vent）
+- (117, 146.53) [en-fallback] あんどほろらいぶでぶいずりぐるおすす  <- (and|ho|lo|live|dev_|is|re|gloss)
+- (117, 159.11) [en-fallback] にきゃんゆーどざほろりぶえ  <- に！）|（can|you|do|the|ho|lo|li|ve?）
+- (117, 163.55) [en-fallback] いえーいふぁお  <- いぇーい！|foo！
+- (118, 18.23) [en-fallback] そるりとびーるあて  <- sor|ry|to|be|late
+- (118, 24.01) [en-fallback] どゆーりめむべるみー  <- do|you|re|mem|ber|me?
+- (118, 40.29) [en-fallback] あいむくらずい  <- i\'m|cra|zy
+- (118, 49.77) [en-fallback] すいーとぶえんぐえあんす  <- sweet|venge|ance
+- (118, 70.52) [en-fallback] ふらんちく  <- fran|tic
+- (118, 76.49) [en-fallback] せいららるおぶいん  <- say|la|la|lov|in
+- (118, 78.46) [en-fallback] ぎむみーあんど  <- gim|me|&amp;(アンド)
+- (118, 80.0) [en-fallback] せいらいらいりあー  <- say|lie|lie|li|ar
+- (118, 105.82) [en-fallback] あいあいあいあいるるきるゆー  <- （eye|eye|eye）|eye|\'ll|kill|you
+- (118, 135.82) [en-fallback] ふらんちく  <- fran|tic
+- (118, 143.56) [en-fallback] すすとららびー  <- c\'est|la|la|vie
+- (118, 150.37) [en-fallback] すすとらびー  <- c\'est|la|vie
+- (118, 157.64) [en-fallback] せいららるおぶいん  <- say|la|la|lov|in
+- (118, 159.64) [en-fallback] ぎむみーあんど  <- gim|me|&amp;(アンド)
+- (118, 161.18) [en-fallback] せいらいらいりあー  <- say|lie|lie|li|ar
+- (118, 187.0) [en-fallback] あいあいあいあいあいあいあいるるきるゆーらららららららららららららららららららう…  <- （eye|eye|eye）|eye|eye|eye|eye|\'ll|kill|you|la…
+- (119, 42.79) [en-fallback] るどどどくくえー  <- l|d|d|d|k|k|（え～）
+- (119, 114.67) [en-fallback] であーぷれとちぷれとちまいすいーとえすとらぶびと  <- dear|pret|ty|pret|ty|my|sweet|est|rab|bit.
+- (120, 4.36) [en-fallback] ぐあむえるすういーあれがむあーすぐあむえるすういーあれがむあーす  <- （g.|a.|m.|e.|r.|s）|we|are|gam|ers!!!!|（g.|a.|m…
+- (120, 36.42) [en-fallback] むく  <- m|c
+- (120, 73.76) [en-fallback] ぶ  <- b
+- (120, 93.01) [en-fallback] ぐあむえるすういーあれがむあーすぐあむえるす  <- （g.|a.|m.|e.|r.|s）|we|are|gam|ers!!!!|（g.|a.|m…
+- (120, 121.97) [en-fallback] おーく  <- o|k
+- (120, 186.87) [en-fallback,greek] おあれゆーりーどい  <- う（´・ω・｀）|（are|you|read|y?）
+- (120, 213.7) [en-fallback] ぱーふぁくと  <- （per|fect!!）
+- (120, 245.73) [en-fallback] ぐあむえるすういーあれがむあーすぐあむえるすういーあれがむあーす  <- （g.|a.|m.|e.|r.|s）|we|are|gam|ers!!!!|（g.|a.|m…
+- (122, 65.68) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (122, 68.35) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (122, 76.29) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (122, 78.96) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (122, 139.96) [en-fallback] もとともととかわい  <- （mo|t|to☆|mo|t|to）|可愛(かわい)
+- (122, 142.56) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (122, 150.53) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (122, 153.2) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (122, 185.0) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (122, 187.67) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (122, 195.65) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (122, 198.28) [en-fallback] もとともとと  <- （mo|t|to☆|mo|t|to）
+- (123, 13.93) [en-fallback] ぢんぐどんぐ  <- ding-|dong
+- (123, 18.6) [en-fallback] ぢんぐどんぐ  <- ding-|dong
+- (125, 52.64) [en-fallback] はいはいはいはいふおーおー  <- high!|(high!|high!|high!|f|o|o
+- (126, 124.97) [en-fallback] おーくおーく  <- o|k|(o|k!)
+- (127, 89.34) [en-fallback] すぐあーあんどみるく  <- sug|er|&amp;|milk
+- (127, 91.11) [en-fallback] くえちー  <- q.|e.|tea
+- (129, 11.49) [en-fallback] ばーいないすおーくふぁるるあうみーるいすてんとまいふるうふふいふるあう  <- ver|y|nice|o|k|fol|low|me|lis|ten|to|my|fluff|…
+- (129, 38.39) [en-fallback] まるぶえるあうす  <- mar|vel|ous!
+- (129, 45.83) [en-fallback] わっとあんあまずいんぐ  <- what|an|a|maz|ing
+- (129, 50.37) [en-fallback] ふぁうーわああ  <- fooo|whaa!
+- (129, 54.7) [en-fallback] ふぁお  <- (foo!)
+- (129, 58.04) [en-fallback] ふぁうーわああくろうどえどくろうどえど  <- fooo|whaa!|crowd|ed|(crowd|ed!)
+- (129, 62.85) [en-fallback] だうん  <- dawn!!!
+- (129, 92.14) [en-fallback] まるぶえるあうす  <- mar|vel|ous!
+- (129, 94.08) [en-fallback] すいんぐまぐいくからだ  <- swing|mag|ic|身体(からだ)
+- (129, 99.62) [en-fallback] わっとあんあまずいんぐ  <- what|an|a|maz|ing
+- (129, 104.12) [en-fallback] ふぁうーわああ  <- fooo|whaa!
+- (129, 108.46) [en-fallback] ふぁお  <- (foo!)
+- (129, 111.8) [en-fallback] ふぁうーわああくろうどえどくろうどえど  <- fooo|whaa!|crowd|ed|(crowd|ed!)
+- (129, 116.63) [en-fallback] だうん  <- dawn!!!
+- (129, 120.47) [en-fallback] だうん  <- dawn!!!
+- (129, 134.99) [en-fallback] おーばーざぼるだー  <- o|ver|the|bor|der
+- (129, 145.9) [digit-count] いえーすいんぐいんぐぱーちあっぷすりーつーわん  <- yeah!|swing|ing|par|ty|up!|3|2|1...
+- (129, 152.14) [en-fallback] ふぁうーわああ  <- fooo|whaa!
+- (129, 156.47) [en-fallback] ふぁお  <- (foo!)
+- (129, 159.81) [en-fallback] ふぁうーわああ  <- fooo|whaa!
+- (129, 164.65) [en-fallback] だうん  <- dawn!!!
+- (129, 180.0) [en-fallback] だうん  <- dawn!!!
+- (130, 152.84) [en-fallback] ほろりぶえ  <- ho|lo！|li|ve！
+- (130, 157.77) [en-fallback] ほろりぶえ  <- ho|lo！|li|ve！
+- (130, 162.71) [en-fallback] ほろりぶえ  <- ho|lo！|li|ve！
+- (130, 167.62) [en-fallback] ほろりぶえぼうけん  <- ho|lo！|li|ve！|「冒(ぼう)|険(けん)！
+- (132, 66.82) [en-fallback] うあはていくおふ  <- (wah!)|take|off
+- (132, 70.25) [en-fallback] おはは  <- (ohh)
+- (132, 75.79) [en-fallback] おはは  <- (ohh)
+- (132, 86.47) [en-fallback] えいあいと  <- (aiight)
+- (132, 121.97) [en-fallback] うあはびーとゆー  <- (wah!)|beat|you
+- (132, 167.48) [en-fallback] うあはていくおふしゅーびーどーびーどびーどどーへいしゅーびーどーびーどびーどどー…  <- (wah!)|take|off|shoo|be|doo|be|do|be|do|doo|(h…
+- (134, 15.7) [en-fallback] かいだーくんえすすだーくんえすす  <- 回(かい)！|dark|ness！|dark|ness！
+- (134, 55.07) [en-fallback] べーふーくもんえび  <- ベー！|（ふー！）|c’|mon！|エ・|ビ・
+- (134, 66.68) [en-fallback] えぶえんとふー  <- e|vent！|（ふー！）
+- (134, 94.98) [en-fallback] るーどるらーどるらー  <- るー！|dol|lar|dol|lar
+- (134, 119.37) [en-fallback] えぶえんとふーふぉーゆー  <- e|vent！|（ふー！）|for|you！
+- (134, 167.92) [en-fallback] ぴんほろくすなべ  <- 品(ぴん)！|『ho|lo|x|鍋(なべ)』
+- (134, 176.69) [en-fallback] はいしゃけなびーえぶえんと  <- （ハ|イ！）|sha|ke★|na|be|e|vent！
+- (134, 189.61) [en-fallback] えぶえんとふー  <- e|vent！|（ふー！）
+- (134, 205.96) [en-fallback] かいだーくんえすすだーくんえすす  <- 回(かい)！|dark|ness！|dark|ness！
+- (136, 34.12) [en-fallback] ぐろりでいずぐろりでいずぐろりでいずぐろりでいずぐろりでいず  <- g|lo|ry|days|g|lo|ry|days|g|lo|ry|days|g|lo|ry…
+- (136, 92.34) [en-fallback] ぐろりでいず  <- g|lo|ry|days
+- (136, 150.5) [en-fallback] ぐろりでいずぐろりでいずぐろりでいずぐろりでいずぐろりでいず  <- g|lo|ry|days|g|lo|ry|days|g|lo|ry|days|g|lo|ry…
+- (137, 11.66) [en-fallback] のーあうるよるははじまったばかりんあいとすじゃすとびーがんあいあげてこうぜれっつ…  <- の～？|our|夜は始まったばかり|night’s|just|be|gun|aye|アゲてこ…
+- (137, 17.7) [en-fallback] ふぁす  <- face
+- (137, 21.27) [en-fallback] すういーと  <- sweat
+- (137, 30.11) [en-fallback] んふろむかいがんからかいがんしょあとしょあまいおどればふろあにあらしがおこるもぶ…  <- ん♡)|from|海岸から海岸|shore|to|shore|my|踊ればフロアに嵐が起こる…
+- (137, 42.63) [en-fallback] ゆーわんならいどおんういずざおーぐす  <- you|wan|na|ride|on|with|the|o|gs
+- (137, 47.46) [en-fallback] れいえーばばいはんどすあっぷ  <- れ？|(yeah|ba|by)|hands|up
+- (137, 55.51) [en-fallback] あうるよるははじまったばかりんあいとすじゃすとびーがんあいあげてこうぜれっつぶら…  <- our|夜は始まったばかり|night’s|just|be|gun|aye|アゲてこうぜ！|…
+- (137, 64.01) [en-fallback] ういーわんなぱーちおーばばいおーるしせんはどくせんあいずおんみーあいあじわうさい…  <- we|wan|na|par|ty|(oh|ba|by)|all|視線は独占|eyes|on|…
+- (137, 86.4) [en-fallback] べすとえすとがーる  <- best|est|girl
+- (137, 98.38) [en-fallback] ってきゃぶりんぐなみでもかきけせないねつをちょうだいいんざひーとざっときゃんとび…  <- って、|きゃ♡|bring|波でもかき消せない熱をちょうだい|in|the|heat|tha…
+- (137, 105.19) [en-fallback] あいむじゃすとちゅいるるいんぐあのんあるのまいたいをのむもっくたいるまいたいしっ…  <- i’m|just|chill|ing|a|ノンアルのマイタイを飲む|mock|tail|ma…
+- (137, 114.2) [en-fallback] ぼでぃいもんえい  <- bod|y|mon|ey
+- (137, 120.2) [en-fallback] びーもえあがるしであぼんふぃりあうるこのねっきできみをたかみへさそうるあーいんぐ…  <- be|燃えあがる|side|a|bon|fi|re|our|この熱気でキミを高みへ誘う|lu…
+- (137, 136.52) [en-fallback] まいわたしてらすすぽっとらいとぶらいとすぽとらいと  <- my|私照らすスポットライト|bright|spot|light
+- (137, 144.19) [en-fallback] れいえーばばいはんどすあっぷ  <- れ？|(yeah|ba|by)|hands|up
+- (137, 152.24) [en-fallback] あうるよるははじまったばかりんあいとすじゃすとびーがんあいあげてこうぜれっつぶら…  <- our|夜は始まったばかり|night’s|just|be|gun|aye|アゲてこうぜ！|…
+- (137, 160.74) [en-fallback] ういーわんなぱーちおーばばいおーるしせんはどくせんあいずおんみーあいあじわうさい…  <- we|wan|na|par|ty|(oh|ba|by)|all|視線は独占|eyes|on|…
+- (140, 49.97) [en-fallback] ぶ  <- v.
+- (140, 51.97) [en-fallback] と  <- t.
+- (140, 52.64) [en-fallback] る  <- r.
+- (140, 53.3) [en-fallback] はおーるあいく  <- h.|o.|l.|i.|c)
+- (140, 70.12) [en-fallback] ごおどふぃーるいんぐ  <- good|feel|ing
+- (140, 75.33) [en-fallback] うす  <- us）
+- (140, 78.76) [en-fallback] まいはーとうおんとすとぷぽうんどいんぐどきどきいえー  <- （my|heart|won’t|stop|pound|ing.|do|ki|do|ki|ye…
+- (140, 124.61) [en-fallback] ぶ  <- v.
+- (140, 126.61) [en-fallback] と  <- t.
+- (140, 127.28) [en-fallback] る  <- r.
+- (140, 149.13) [en-fallback] はおーるあいく  <- (h.|o.|l.|i.|c)
+- (140, 166.12) [en-fallback] ごおどふぃーるいんぐ  <- good|feel|ing
+- (140, 171.32) [en-fallback] うす  <- us）
+- (140, 174.76) [en-fallback] まいはーとうおんとすとぷぽうんどいんぐどきどきいえー  <- （my|heart|won’t|stop|pound|ing.|do|ki|do|ki|ye…
+- (143, 158.07) [en-fallback] くりごんなくぱり  <- c|ry|gon|na|c|『パ|ry
+- (143, 185.34) [en-fallback] あんどりえす  <- and|li|e|s
+- (148, 205.02) [en-fallback] ふぁうんどあにゅーでいはぶすとれんぐず  <- found|a|new|day|have|strength
+- (148, 212.56) [en-fallback] しゃうといっとあうとらうどでぃーぷいんあうるへあーとすたいむとうえいくあっぷれっ…  <- shout|it|out|loud|deep|in|our|hearts|time|to|w…
+- (149, 21.57) [en-fallback] りーどいおあのっとひああいかむ  <- “read|y|or|not|here|i|come!”
+- (149, 55.17) [en-fallback] へあれゆーのんりーどいのん  <- へ！|are|you|(ノン！|read|y?|ノン！)
+- (149, 60.44) [en-fallback] るあれゆーいえすりーどいいえす  <- ル！|are|you|(いえす！|read|y?|いえす！)
+- (149, 82.63) [en-fallback] ばろうんどあんどろうんど  <- バ！|round|and|round
+- (149, 134.25) [en-fallback] るぢぐいんさあぢぐいんさあ  <- る！|dig|in!|(さぁ！|dig|in!!|さぁ！)
+- (149, 145.53) [en-fallback] へあれゆーのんりーどいのん  <- へ！|are|you|(ノン！|read|y?|ノン！)
+- (150, 7.06) [en-fallback] へいうんはぷぷいわーるど  <- hey|un|hap|py|world
+- (150, 10.09) [en-fallback] いんとぢすおあだー  <- in|to|dis|or|der
+- (150, 155.41) [en-fallback] へいるおすあーすじすいずまいぱーあでぃせ  <- hey|los|ers|this|is|my|par|a|dise
+- (151, 73.86) [en-fallback] すたいあっぷぷりーず  <- stay|up|please
+
+### Skipped blocks (96)
+- (13, 109.61) [no mappable content]  っ
+- (15, 58.99) [no mappable content]  っ
+- (33, 256.81) [no mappable content]  っ
+- (52, 144.03) [metadata/credits]  mixingengineernnznofutone
+- (61, 113.2) [metadata/credits]  artquasarcake|mvbumblingbeebo|originaladoutafromon…
+- (62, 17.7) [metadata/credits]  takanashikiaraheartchallengerlogoartistspiritsnare…
+- (62, 190.14) [no mappable content]  っ
+- (70, 45.23) [no mappable content]  っ
+- (70, 104.36) [no mappable content]  っ
+- (70, 116.34) [no mappable content]  っ
+- (70, 240.53) [no mappable content]  っ
+- (70, 247.27) [no mappable content]  っ
+- (70, 257.91) [no mappable content]  っ
+- (75, 21.61) [metadata/credits]  programmingampallotherinstruments秋浦智裕agehaspringsp…
+- (82, 59.33) [no mappable content]  っ
+- (93, 0.52) [metadata/credits]  作詞作曲：shito|可愛くてごめん／honeyworks|編曲：honeyworks|イラスト：逢…
+- (93, 203.05) [metadata/credits]  あｗ|vocals:ロボ子さん、アキ・ローゼンタール、癒月ちょこ、猫又おかゆ、|vocals:宝鐘マ…
+- (94, 69.45) [no mappable content]  〜
+- (94, 146.13) [metadata/credits]  vocal:湊あくあ、大空スバル、桃鈴ねね|寿司☆でしょ！／negi☆u
+- (94, 148.9) [metadata/credits]  music&amp;lyrics:nekohacker
+- (94, 151.7) [metadata/credits]  mixingengineer：masahirokawata
+- (94, 154.5) [metadata/credits]  illust：tivsdillust：桜沢かなた
+- (95, 0.12) [metadata/credits]  （わん！|つー！|さん！|sea！）|作詞作曲：宮腰侑子|おーしゃんうぇーぶ・party☆らぃ／um…
+- (95, 82.03) [metadata/credits]  タイム！|湊あくあ、宝鐘マリン、沙花叉クロヱ、|歌唱：umisea|（しぃー！|しぃー！）|一伊那尓…
+- (96, 137.79) [metadata/credits]  作詞作編曲：medansy|dodekambitious／ドデカルテット
+- (96, 139.02) [metadata/credits]  歌唱：大空スバル、さくらみこ、猫又おかゆ、兎田ぺこら|mix：犬絵|illust：qp:flappe…
+- (97, 0.38) [metadata/credits]  作詞：音莉飴kaoru|ピパポ☆ピピプ／babacorn|作曲：音莉飴kaoru|編曲：butter…
+- (98, 0.38) [metadata/credits]  作詞：ohtora|シンメトリー／regloss|作曲：ohtora、maeshimasoshi|編…
+- (99, 0.72) [metadata/credits]  作詞：megri|君になりたかった／bluejourney|作曲：如月結愛(arterefact)|…
+- (100, 7.09) [metadata/credits]  作曲・編曲：ハム|アワーツリー／さくらみこ|作詞：さくらみこ、ハム|recording&amp;mi…
+- (101, 5.19) [metadata/credits]  作詞：ツミキ|ビビデバ／星街すいせい|作曲：ツミキ|編曲：ツミキmixedby:nnzn|歌唱：星街…
+- (102, 11.89) [metadata/credits]  作詞：松本武史|shinkiro／ぐらマリン|作曲：カンケ|編曲：柏崎三十郎|歌唱：宝鐘マリン、がう…
+- (103, 3.52) [metadata/credits]  day|by|day|作詞作曲編曲：澤田空海理|astro／bluejourney|イラスト：ソじま…
+- (104, 0.58) [metadata/credits]  作詞・作曲：deco*27|ばかばっか／鷹嶺ルイ|編曲：naokiitai(musicformusi…
+- (105, 12.33) [metadata/credits]  la|作詞：honeyworksmarumochi|tokyowabi-sabilullaby／がう…
+- (105, 12.63) [metadata/credits]  la|la|la|la|la|作曲：honeyworksmarumochi|編曲：honeywork…
+- (106, 214.5) [metadata/credits]  music:giga&amp;kiravocals:hoshimachisuiseimoricall…
+- (107, 1.55) [metadata/credits]  作詞：ピノキオピー|ネコカブリーナ／猫又おかゆ|作曲：ピノキオピー|編曲：ピノキオピー|歌唱：猫又お…
+- (108, 1.35) [metadata/credits]  作詞：佐藤陽介|nowonstep／角巻わため|作曲：佐藤陽介|編曲：佐藤陽介|歌唱：角巻わため
+- (109, 0.68) [metadata/credits]  作詞：ohtora|瞬間ハートビート／regloss|作曲：ohtora、maeshimasoshi…
+- (110, 7.32) [metadata/credits]  作詞・作曲：deco*27|愛言葉ⅳ／deco*27(coveredby大空スバル)|動画師：rol…
+- (111, 159.84) [metadata/credits]  作詞：ナナホシ管弦楽団|美少女無罪♡パイレーツ／宝鐘マリン|作曲：岩見陸|編曲：ナナホシ管弦楽団|歌…
+- (112, 256.54) [metadata/credits]  作曲：岡野昭仁tasuku|fins／角巻わため|作詞：新藤晴一|編曲：tasuku|歌：角巻わため
+- (113, 1.28) [metadata/credits]  da|bite!カム!bite!／ハコス・ベールズ、戌神ころね作詞：藤村鼓乃美（hifumiinc.…
+- (113, 83.2) [symbol/marker only]  ＆
+- (113, 154.87) [no mappable content]  っ！
+- (113, 208.69) [symbol/marker only]  ！|！|」
+- (114, 1.12) [metadata/credits]  作詞：shitogom|同担☆拒否／honeyworks(feat.かぴ)(coveredby桃鈴ね…
+- (115, 15.87) [metadata/credits]  la|la|pa|ta|pa|la|la|pa|ta|la|la|pa|ta|pa|la|la|pa…
+- (116, 2.29) [metadata/credits]  作詞：すりぃ|ホロホーク／鷹嶺ルイ|作曲：すりぃ|編曲：すりぃ|歌唱：鷹嶺ルイ
+- (118, 1.69) [metadata/credits]  作詞作曲：てにをは|魔眼ウインク／鷹嶺ルイ|歌唱：鷹嶺ルイ
+- (119, 24.68) [metadata/credits]  い！|ハイ！|作詞：honeyworksmarumochi|ブライダルドリーム／兎田ぺこら宝鐘マリン…
+- (119, 29.01) [metadata/credits]  歌唱：兎田ぺこら宝鐘マリン
+- (120, 129.48) [no mappable content]  〜
+- (120, 150.27) [metadata/credits]  作詞作曲編曲：pandaboymixingengineer：菊池司（arterefact）|wear…
+- (121, 5.19) [metadata/credits]  正体／いろはにほへっとあ|：須田景凪|allprogramming|cg：nihe|directio…
+- (122, 11.16) [metadata/credits]  作詞：gomshito|motto☆いちごオレ／monafeat.honeyworks(covere…
+- (123, 199.18) [metadata/credits]  ho|ly|date♡|作詞：こだまさおり|merryholydate♡／hololiveidolp…
+- (124, 13.16) [metadata/credits]  作詞：角巻わため|revival／角巻わため|作曲、編曲：junky|イラスト：猫山桜梨|歌唱：角巻…
+- (125, 15.5) [metadata/credits]  青春アーカイブ／hololiveidolproject|wow|歌：ときのそら、白上フブキ、湊あくあ…
+- (125, 54.94) [symbol/marker only]  !)
+- (126, 103.55) [metadata/credits]  作詞：ケンモチヒデフミ|watameister／角巻わため|作曲：ケンモチヒデフミ|編曲：ケンモチヒ…
+- (127, 9.06) [metadata/credits]  作詞：はるまきごはん|ゼロトーキング／はるまきごはん(coveredbyシオリ・ノヴェラ)|作曲・編…
+- (128, 171.66) [metadata/credits]  tsubasa／鷹嶺ルイ作詞:鷹嶺ルイ・杉山勝彦
+- (128, 175.12) [metadata/credits]  tsubasa／鷹嶺ルイ作曲・編曲:杉山勝彦
+- (129, 1.42) [metadata/credits]  作詞：tophamhat-kyo(faketype.)|whatanamazingswing／角巻わ…
+- (130, 0.02) [metadata/credits]  作詞：山崎真吾(supalove)|リアリティ×ファンタジー／ホロライブファンタジー兎田ぺこら、不知…
+- (131, 11.6) [metadata/credits]  よ！|作詞：honeyworksmarumochi|かわいこちぇっく！／戌神ころね|作曲：honey…
+- (131, 88.2) [metadata/credits]  よ！|歌唱：戌神ころね
+- (132, 178.9) [metadata/credits]  take|off|歌詞：tophamhat-kyo(faketype.)|ひみつのおしごと／鷹嶺ルイ…
+- (133, 11.89) [metadata/credits]  作詞：shito、gom|誇り高きアイドル／honeyworks|作曲：shito|編曲：honey…
+- (134, 1.49) [metadata/credits]  music/lyrics：宮腰侑子|饗宴ソリダリティ〜shake★nabe〜秘密結社holox|ar…
+- (134, 48.2) [no mappable content]  っ」
+- (134, 214.73) [metadata/credits]  わい！|（woh|woh|woh|woh|woh|woh|woh）|歌唱：秘密結社holox
+- (135, 2.39) [metadata/credits]  作詞：deco*27|シュガーラッシュ／micomet|作曲：takuinouedeco*27|編曲…
+- (136, 0.32) [metadata/credits]  歌詞・作曲・編曲：toriena|glorydays／ロボ子さん|mixingengineer：fu…
+- (137, 180.53) [metadata/credits]  ん？|just|このコンビしか勝たん！|two|best|ies|so|fly!|ah-|ah-|a…
+- (138, 1.15) [metadata/credits]  1.|2.|3.|4.|作詞：honeyworksmarumochi|リア充★撲滅運動／紫咲シオン|…
+- (139, 3.52) [metadata/credits]  作詞・作曲：tkn|mumei／七詩ムメイ|mix、master：tkn|mv：大鳥|歌唱：七詩ムメ…
+- (140, 1.28) [metadata/credits]  歌唱：癒月ちょこ、猫又おかゆ、宝鐘マリン、|歌唱：白銀ノエル、常闇トワ、|歌唱：雪花ラミィ、パヴォリ…
+- (141, 173.22) [metadata/credits]  作詞・作曲：凛々咲|あの日の僕らへ／bluejourney
+- (141, 175.89) [metadata/credits]  編曲：岡本辰平
+- (141, 178.56) [metadata/credits]  歌：湊あくあ、天音かなた、雪花ラミィ
+- (142, 0.68) [metadata/credits]  作詞：honeyworksmarumochi|教室に青／星街すいせい|作曲：honeyworks|編…
+- (143, 7.56) [metadata/credits]  歌：沙花叉クロヱ|パラライズ／沙花叉クロヱ|作詞作曲：てにをは|illust：路地犬movie：40…
+- (144, 1.49) [metadata/credits]  作詞・作曲・編曲：三好啓太|はじまりの魔法-charm-／魔法少女ホロウィッチ|歌唱：紫咲シオン、沙…
+- (145, 101.69) [metadata/credits]  歌詞：奥井亜紀|スカイソナー／不知火フレア|作曲：奥井亜紀|編曲：後藤康二(ck510)|歌：不知火…
+- (146, 0.52) [metadata/credits]  作詞：azari|whisperwhisperwhisper／azari(coveredbyシオリ・…
+- (147, 0.22) [metadata/credits]  作詞：taketerusunamori(miraikodaiorchestra)|忘れじの言の葉／未…
+- (148, 7.99) [metadata/credits]  歌詞：藤村鼓乃美|colour／hakosbaelz、角巻わため|作曲：エンドウシンゴ|編曲：エンド…
+- (149, 1.89) [metadata/credits]  作詞：おぐらあすか（hifumiinc.）|hide&amp;seek〜なかよくケンカしな！〜ハコス…
+- (150, 104.39) [metadata/credits]  vocals:hakosbaelz|psycho／ハコス・ベールズ|lyrics:zaq|music…
+- (151, 82.6) [metadata/credits]  mix/edit：よしけん|bemyguest／azari(coveredbyオーロ・クロニー)
+- (151, 84.44) [metadata/credits]  illustrations：朔
+- (151, 89.97) [metadata/credits]  mv：rumskii
+- (151, 91.81) [metadata/credits]  vocals：オーロ・クロニー
+

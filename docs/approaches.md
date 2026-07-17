@@ -18,12 +18,14 @@ The task is textless syllable-level transcription of sung Japanese into timed hi
 | insertion decoding (held-vowel recovery) | signal→symbol | rejected | gap frames pure blank; +0.007 SER of junk at permissive θ |
 | forced alignment as training bootstrap (S9) | signal→symbol | adopted, bootstrap only | enables CTC; FA-extended frame targets halve timed-F1 (0.114) |
 | beatrice phoneme-CTC warm start | signal→symbol | rejected | never escapes blank collapse in 12 ep (blank-convention clash) |
+| training curriculum: warm-lineage vs from-scratch | signal→symbol | measured — lineage holds | cold-start 0.2108 vs warm 0.1808 greedy, identical corpus-152 |
 | temporal-contrastive projection head | signal→symbol | rejected | frame-acc 0.396→0.351 |
 | articulatory kernel k(·,·), three uses | phonetic | adopted | PC 0.963; residual subs are kernel-adjacent (だ↔た) |
 | bucket hierarchy (coarse→fine classifier) | phonetic | rejected by measurement | 7% of errors within-bucket at 62-bucket granularity |
 | sokuon merge + chunk split (clean_v2) | phonetic | promoted | SER 0.316→0.263, zero model change |
 | as-sung kana for English/vocables (Tier 2) | phonetic | live (8 songs applied) | +2,657 morae; test refs enriched via song 85 (SER re-baselined 0.2570) |
 | T1 furigana corpus admission (corpus-152) | phonetic | **provisional champion (S16)** | +59 labeled songs (train +66%); SER 0.257→0.245, gold-arbitrated |
+| romaji parallel-track QA (ro_dual) | phonetic (orthography) | direction closed (measurement) | 98.81% agreement / 70,289 morae; 0 label errors surfaced |
 | lyrics bigram beam rescoring | language | rejected | best λ=0.25 gains 0.0015 SER |
 | text bigram (Tatoeba, 4.5M transitions) | language | rejected, direction closed | worse than lyrics bigram at every λ |
 | any substitution-only rescoring | language | closed | lattice oracle 0.2572 vs greedy 0.2894 — ~0.03 cap |
@@ -98,6 +100,13 @@ The task is textless syllable-level transcription of sung Japanese into timed hi
 - What: 128-d InfoNCE head over frozen features, nearby frames as positives.
 - Result: rejected — frame-acc 0.396→0.351, SER 0.786. Unsupervised invariance objectives can discard exactly the local detail a 110-way frame classifier needs. (Sibling: weak-teacher frame pseudo-labeling, P5.1 v1, also rejected — frame-acc 0.396→0.394.)
 
+**Cold-start collapse, the training curriculum, and cloud offload.**
+- What: can corpus-152 train from scratch (vs the warm bootstrap→pseudo→covers→corpus-152 lineage), and can cloud (Kaggle T4) stand in for the local Ampere card?
+- Code: `colab/kaggle_push.py` / `colab/kaggle_watch.py` (push-button offload); artifacts `artifacts/ctc_scratch152`; leaderboard `ctc_scratch152_local`, `ctc_cloud_warm4`.
+- Result (environment, not data): from-scratch on T4 collapsed twice (12 ep, loss pinned at the ~4.33 all-blank plateau, test SER 1.0) under LABEL_PRIOR_ALPHA both 0.3 and 0.0 — regularizer exonerated. The identical recipe run LOCALLY succeeds — collapse breaks at epoch 4, greedy test SER 0.2108 by ep 12 — so the blocker is the cloud environment (unpinned latest `transformers`, and/or T4 fp16 autocast vs the Ampere card), not the T1 data or the prior. The S9 blank-collapse FA guard caught it both times. Mitigation: the canonical notebook now pins `transformers==5.13.0`.
+- Infra: production cloud jobs are WARM continuations, so the collapse is operationally moot — a warm +4 ep from the uploaded champion (Kaggle dataset `kashi-ckpt`) ran the full loop on T4 (guard passed, FA'd all 152 songs, packaged `ctc_out.zip`, auto-fetched by `kaggle_watch.py`), greedy 0.1842 vs champion 0.1808 = the known same-data continuation oscillation. Cloud offload for larger/longer models is now push-button, zero manual uploads.
+- Curriculum: cold-start 0.2108 vs warm-lineage 0.1808 on identical data — the incremental path holds a ~0.03 greedy edge over from-scratch. Training curriculum is load-bearing, not just data volume.
+
 ## Phonetic level
 
 **Articulatory kernel k(·,·).**
@@ -126,6 +135,12 @@ The task is textless syllable-level transcription of sung Japanese into timed hi
 - What: 59 songs (ids 93–151) admitted from the T1 dataset — a kanji+furigana half-density subtitle format. Furigana readings are extracted (漢字(かな)→かな) and run through the standard clean_v2 normalizer — no new policy, the phonetics are read straight off the annotations rather than judged by ear. Corpus now 152 labeled / 145 train / 7 frozen test; train segments +~66% (bigram priors now 80,561 segments / 78,529 transitions). The retrain is the covers champion checkpoint + 8 ep on the full corpus, 3,049 crops (was 1,571 pre-admission), LABEL_PRIOR_ALPHA=0.3, ~90 s/ep on an RTX A3000.
 - Result: greedy no-LM test SER 0.2045→0.1808 by epoch (best ep 7) against the covers champion probed at ~0.20 on the same crops — the new labels are worth ~0.02 greedy SER. End-to-end gate (spike decode): SER 0.2570→0.2450 (−0.012, passes); timed-F1 0.7156→0.7145 (−0.0011, timing noise — misses the letter of the F1 gate); boundary@50 F1 identical 0.7237. Gold arbitration breaks the tie the F1 gate leaves: pooled gold SER is EXACTLY tied (both models make 256 edits on 1,459 gold-window tokens, distributed differently — the candidate is clearly better on the hardest gold song 19, 0.438→0.390, slightly worse on song 0, 0.138→0.171), and gold timed-F1 favors the candidate +0.0054 (0.7414→0.7469). Promoted provisionally under the S11 gold-arbitration precedent — here with a 15× smaller timing delta — as leaderboard `ctc_t1_152`; SIGNOFFS.md S16, pending user ratification.
 - Buys: honest labeled-phonetic scaling — furigana is a ready-made phonetic transcript, so admission is near-free (none of Tier-2's per-song listening) and it delivered ~5× the gain of the last decode-side attempts. This is where the champion crown moved off a data-as-model trick and onto plain labeled-data scale, reinforcing that with the decode program closed (greedy within ~0.03 of the lattice oracle) residual gains live in model/data. Costs: furigana accuracy is inherited from the source dataset, not audited song-by-song; the win clears SER but sits inside timed-F1 noise, hence provisional until ratified.
+
+**Romaji parallel-track label QA (ro_dual).**
+- What: 138/152 songs ship a parallel ROMAJI phonetic track (dual-subtitle uploads) — a second orthographic rendering of the same morae — aligned homophone-aware (は=わ, を=お, へ=え, じ=ぢ, ず=づ) against the hiragana labels as a redundancy cross-check.
+- Output: `runs/ro_dual_qa_report.md`; leaderboard `ro_dual_qa`.
+- Result: 98.81% agreement over 70,289 aligned morae, 131/138 songs ≥ 0.95. Only 82 clean isolated substitutions across train songs, and every interpretable one is a ROMAJI-side artifact — kana-ized English proper nouns (マリン vs `marine`), song 35's glitched track prepending a phantom `d`, dropped consonants — ZERO genuine hiragana-label errors. Falsified the prior belief that romaji tracks carry no English (77/138 do, 1,887 Latin tokens), but the labels correctly exclude those spans. Kept only as a per-song sanity metric — not an S12-class lever, not a Tier-2 source.
+- Buys: a free orthographic redundancy channel straight from upload metadata, zero listening. Costs: it measured CLEAN — confirming label quality is no longer the low-hanging fruit of the S12/clean_v2 era; residual gains live in model/data, so this closes a lever rather than opening one.
 
 ## Language level
 
@@ -184,6 +199,7 @@ The task is textless syllable-level transcription of sung Japanese into timed hi
 3. **New data sources beat continued optimization.** Labeled-only continuation regressed (0.347), pool round 2 regressed, v2-labels-only tied; fresh voices via covers delivered the 0.252 champion, and admitting 59 more labeled songs (T1 furigana, corpus-152) delivered the current one (0.245, provisional) — both wins were new data, not new decoding.
 4. **Measure the ceiling before building.** The bucket hierarchy (7% within-bucket) and all LM rescoring (oracle 0.2572 vs greedy 0.2894) were closed by cheap measurements, not by failed training runs.
 5. **Every level contributed, at its own moment.** Signal fixed the refs (S12); signal-to-symbol delivered the step change (SER 0.722→0.364); phonetics defined correctness for as-sung material (0.316→0.263), the error geometry, and the latest gain via labeled-corpus scale (0.257→0.245, S16); language priors carried the weak-acoustics frame era (0.797→0.744), then stopped paying against ~0.9-confident spikes; data-as-model owns the gains between (0.339→0.252).
+6. **The training curriculum is load-bearing, not just the data.** Identical corpus-152 reaches greedy 0.2108 trained from scratch vs 0.1808 down the incremental warm lineage (bootstrap→pseudo→covers→corpus-152) — ~0.03 from path alone. Consistent with the beatrice warm-start clash and the cloud cold-start collapse: CTC's cold-start alignment discovery is fragile, so how you reach a checkpoint matters alongside the labels in it.
 
 ## Maintenance
 

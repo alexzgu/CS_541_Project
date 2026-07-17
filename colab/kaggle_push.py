@@ -46,7 +46,7 @@ METADATA = {
     "enable_tpu": False,
     "enable_internet": True,
     "keywords": [],
-    "dataset_sources": [DATASET],
+    "dataset_sources": [DATASET, "alexzgu/kashi-ckpt"],  # pack + warm-start checkpoint (flat: root is the model dir)
     "kernel_sources": [],
     "competition_sources": [],
     "model_sources": [],
@@ -75,9 +75,23 @@ def apply_overrides(nb: dict, overrides: dict) -> list[str]:
     return applied
 
 
+def normalize_nb(nb: dict) -> None:
+    """Kaggle executes with papermill, which hard-fails without a kernelspec
+    (the web editor adds one on save; raw API pushes must bring their own).
+    Cell ids are required from nbformat 4.5 and warned about below."""
+    nb.setdefault("metadata", {})["kernelspec"] = {
+        "display_name": "Python 3", "language": "python", "name": "python3"}
+    nb["metadata"].setdefault("language_info", {"name": "python"})
+    if nb.get("nbformat", 4) >= 4 and nb.get("nbformat_minor", 0) < 5:
+        nb["nbformat_minor"] = 5
+    for i, cell in enumerate(nb["cells"]):
+        cell.setdefault("id", f"cell-{i}")
+
+
 def main() -> int:
     overrides = json.loads(sys.argv[1]) if len(sys.argv) > 1 and not sys.argv[1].startswith("--") else {}
     nb = json.loads(CANONICAL.read_text())
+    normalize_nb(nb)
     applied = apply_overrides(nb, overrides)
     missing = set(overrides) - set(applied)
     if missing:
