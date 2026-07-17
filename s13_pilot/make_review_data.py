@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "s13_pilot"
 DATASET_REPO = ROOT.parent / "karaoke_subtitle_dataset"
-SONGS = [23, 21]
+SONGS = [60, 24, 11, 40, 69, 85]   # batch 2 (batch 1: 23, 21 — applied 2026-07-16)
 
 
 def titles() -> dict[int, str]:

@@ -1,4 +1,19 @@
-# Tier-2 pilot drafts (S13) — songs 23, 21, 81 — FOR REVIEW
+# Tier-2 drafts (S13)
+
+## Batch 2 — songs 60, 24, 11, 40, 69, 85 — FOR REVIEW (in the player)
+
++1,716 morae: 60 愛Dee (+423; spelled letters えるつざゆー…, てぃ→ち per
+ロマンチック folding, ゔ→ぶ), 24 (+411, straight English), 11 曇天羊 (+311,
+incl. Calliope's rap verse), 40 (+127, constructed scat language mapped
+syllable-for-syllable), 69 (+221), **85 (TEST song, +223 — drafted from
+source text ONLY, no model assistance; its ambiguous "tease y e a h" block
+at 116.9 s stays excluded)**. Note: applying 85 changes frozen-test
+references (more ref tokens; SER/timed-F1 re-baseline) — approve it
+explicitly or say "apply all but 85".
+
+## Batch 1 — songs 23, 21 — APPLIED 2026-07-16 (user-approved)
+
+*(original pilot notes below)*
 
 Nothing in `data/clean_v2` is changed. Drafts live in this folder as
 `{23,21}_draft.csv`; regenerate with `python s13_pilot/make_drafts.py`
