@@ -9,7 +9,12 @@ sample_rate = 16000
 # 4,290 rows; champion re-eval on v2 test refs: SER 0.263, timed-F1 0.710
 # (vs 0.316/0.699 on clean) — the model already predicted the recovered tokens.
 # gold_v2 built the same way; duration/bigram fits not yet re-run on v2.
-version = "clean_v2"         # clean | clean_v2 | gold
+# clean_v3 ADOPTED 2026-07-17 (S17a/b): PHONETIC label space — labels are the
+# SUNG sound (worklist は→わ/へ→え instance-level, blanket を→お/づ→ず/ぢ→じ)
+# + T1 repairs (610 composite rows decomposed, 490 overlaps midpointed, 115
+# unfixable→excluded); test 81/83/85 relabeled (Option A), 89-92 pending ear
+# wave. Built by kashi.data.phonetic; manifest data/clean_v3/CHANGES.tsv.
+version = "clean_v3"         # clean | clean_v2 | clean_v3 | gold
 
 [paths]
 data_dir = "data"
@@ -98,7 +103,11 @@ emissions = "ctc"            # PROMOTED 2026-07-15; @24ep: SER 0.339, timed-F1 0
 # PROMOTED 2026-07-17 (provisional, S16): covers champion +8ep on corpus-152
 # (T1 admission): test SER 0.2450 (-0.012), timed-F1 0.7145 (-0.0011, noise),
 # bF1@50 unchanged; gold SER exactly tied, gold timed-F1 +0.0054 -> candidate
-ctc_model = "artifacts/ctc_t1/out/ctc_model"
+# S16 RATIFIED + S17 APPLIED 2026-07-17: +8ep on clean_v3 (phonetic labels).
+# v3-refs baseline: test SER 0.2516 / timed-F1 0.7200 / bF1@50 0.7312 (test
+# SER carries ~+0.01 artifact: 89-92 refs still orthographic pending ear
+# wave). Gold (fully phonetic): SER 0.1885->0.1583, timed-F1 0.7365->0.7672.
+ctc_model = "artifacts/ctc_v3/out/ctc_model"
 ctc_decode = "spike"         # spike | beam | viterbi; beam = spike positions + top-K/bigram DP
 ctc_beam_k = 5               # beam: acoustic candidates per spike (the soft "bucket")
 ctc_beam_lm = 0.5            # beam: bigram weight (tuned on gold+train, never on test)

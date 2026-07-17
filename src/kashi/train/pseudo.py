@@ -226,8 +226,22 @@ def _test_ytids(cfg) -> set[str]:
         return {r["ID"] for r in csv.DictReader(f, delimiter="\t") if r["Index"] in want}
 
 
+# S17c (2026-07-17): frozen-test 89-92 are all Kotone (天神子兎音); these pool
+# recordings are the same singer under different ytids — self-training on them
+# contaminates the test's unseen-singer role. Blocked alongside the ytid check.
+SINGER_BLOCKLIST = {
+    "2qZvvLyKIG4",  # テオ
+    "ZgKDt3zvf9Q",  # Calc.
+    "yK66sZSqEO8",  # アイ情劣等生
+    "0BSzmOkQoaQ",  # 二息歩行
+    "J9ZT1Y3mcKw",  # 東京テディベア
+    "r6-gB_ypjsM",  # クノイチ
+}
+
+
 def _leak_filtered(cfg, files: list[Path]) -> tuple[list[Path], list[str]]:
-    """Drop pool songs whose [YouTube id] matches a frozen-test song."""
+    """Drop pool songs whose [YouTube id] matches a frozen-test song, or a
+    blocklisted same-singer-as-test recording (S17c)."""
     leak_ids = _test_ytids(cfg)
     kept, skipped = [], []
     for f in files:
@@ -235,6 +249,9 @@ def _leak_filtered(cfg, files: list[Path]) -> tuple[list[Path], list[str]]:
         if m and m.group(1) in leak_ids:
             skipped.append(f.parent.name)
             print(f"[pseudo] LEAK EXCLUDED (frozen-test song): {f.parent.name}")
+        elif m and m.group(1) in SINGER_BLOCKLIST:
+            skipped.append(f.parent.name)
+            print(f"[pseudo] LEAK EXCLUDED (test-singer recording, S17c): {f.parent.name}")
         else:
             kept.append(f)
     return kept, skipped

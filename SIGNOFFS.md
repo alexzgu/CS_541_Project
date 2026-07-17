@@ -4,9 +4,16 @@ Reply per ID. Decided items stay for the record.
 
 ## Open
 
-| ID | Question | Provisional state |
+*(none — S16/S17 approved 2026-07-17, see below)*
+
+## Decided (2026-07-17)
+
+| ID | Decision | Status |
 |---|---|---|
-| S16 corpus-152 champion | Ratify promotion of `artifacts/ctc_t1/out/ctc_model` (covers champion +8ep on the 152-song corpus after T1 admission)? Letter of the adopt-only-if-better gate: SER passes big (0.2570→**0.2450**), timed-F1 misses by 0.0011 (0.7156→0.7145, noise-level; bF1@50 identical 0.7237). Gold arbitration: SER **exactly tied** (256 errors / 1,459 tokens for both models, differently distributed — candidate much better on the hardest gold song 19: 0.438→0.390), gold timed-F1 **favors the candidate** +0.0054 (0.7414→0.7469) | **Promoted provisionally 2026-07-17** (config points at ctc_t1; one-line revert). Same shape as the approved S11 exception but with a 15× smaller timing delta and positive gold timing. Full numbers: `runs/leaderboard.csv` row `ctc_t1_152`, logs `artifacts/ctc_t1/` |
+| S16 corpus-152 champion | **yes — RATIFIED** | `ctc_model = artifacts/ctc_t1/out/ctc_model`. Gate detail: SER 0.2570→0.2450, timed-F1 −0.0011 (noise), bF1@50 identical; gold SER exactly tied (256/1,459 both), gold timed-F1 +0.0054 candidate. Leaderboard `ctc_t1_152` |
+| S17a phonetic labels (train) | **yes — APPLIED 2026-07-17** (`kashi.data.phonetic`; worklist 1,289 + blanket 160 relabels, 610 composite rows decomposed, 145 adjacent overlaps midpointed, 47 unfixable→excluded; gold relabel-only 20+1, timings/`<noise>` untouched; `data.version=clean_v3`, priors 81,490 segs, admit gate hardened; manifest `data/clean_v3/CHANGES.tsv`) | clean_v3: blanket を→お/づ→ず/ぢ→じ; 1,269 flanked ro-verified は/へ relabels auto; T1 repairs (661 mangled rows, 249 overlaps, id-52 silences); gold_v3 same; review waves for 136 near-desync + ~248 unguided は/へ queued |
+| S17b test refs | **yes — Option A, APPLIED** | 21 flanked relabels on 81/83/85; **NEW OFFICIAL BASELINE (v3 refs, ctc_v3 champion): SER 0.2516 / timed-F1 0.7200 / bF1@50 0.7312**. Test SER carries a quantified ~+0.01 seam — the model sings phonetically but 89–92 refs stay orthographic until the ear wave (~39 tokens). Gold (fully phonetic) shows the true effect: SER 0.1885→**0.1583**, timed-F1 0.7365→**0.7672** |
+| S17c Kotone contamination | **yes** | 6 different-ytid Kotone pool recordings blocklisted from harvests; standing caveat: 89–92 measure same-singer performance, 81/83/85 are the unseen-singer readout |
 
 ## Decided (2026-07-15, second batch)
 

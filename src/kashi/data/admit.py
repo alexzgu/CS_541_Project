@@ -32,10 +32,19 @@ MIN_SIL_S = 0.4
 
 
 def reading_of(token: str) -> str | None:
-    """kana reading of a T1 token, or None if unmappable (ascii/symbols)."""
+    """kana reading of a T1 token, or None if unmappable (ascii/symbols).
+
+    S17 hardening: the kana regex alone admitted bare ー/small-kana readings
+    that don't decompose into inventory morae (661 wasted rows in the first
+    admission). Readings must now survive phonetic.decompose (ー needs an
+    in-reading anchor here; row-context repair is phonetic.repair_rows' job)."""
     t = _FURI.sub(lambda m: m.group(2), token)
     t = "".join(_KATA.get(ch, ch) for ch in t)
-    return t if _KANA_OK.match(t) else None
+    if not _KANA_OK.match(t):
+        return None
+    from .phonetic import decompose
+    morae = decompose(t, None)
+    return t if morae else None
 
 
 def convert_t1(src: Path) -> list[dict]:
